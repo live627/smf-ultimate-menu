@@ -1,0 +1,14 @@
+[color=#c63][size=11pt][b]Ultimate Menu[/b] 1.0[/size][/color][hr]
+John "live627" Rayes
+
+[color=#c63][size=11pt][b]Installation notes[/b][/size][/color][hr][list]
+[li]If you currently have any version of any menu editor installed, [color=red][b]make sure to [u]uninstall it first[/u]!![/b][/color] If you don't do it, Ultimate Menu simply will not work. Or all would appear to be normal on the surface and the conflicts lurk in the shadows waiting to roar. rOAr! And eat you.[/li]
+[li]Setup this mod at Administration Center » Configuration » Ultimate Menu.[/li]
+[li]Should "just work" with all other mods that add their own buttons, such as portals.[/li]
+[/list]
+
+[color=#c63][size=11pt][b]License[/b][/size][/color][hr][list type=none]
+[li][url=http://opensource.org/licenses/MIT]MIT[/url][/li]
+[/list]
+
+All right? You may now proceed. Please, enjoy using this mod!
