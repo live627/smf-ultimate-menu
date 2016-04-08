@@ -1,4 +1,6 @@
 # Ultimate Menu
+[![MIT license](http://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT) [![Support](https://supporter.60devs.com/api/b/axlsj1o8o0amepfrr5eqlcjza)](https://supporter.60devs.com/give/axlsj1o8o0amepfrr5eqlcjza)
+
 Add custom buttons to the main menu within SMF
 ## Introduction:
 This is a tool for configuring the main menu within SMF, allowing custom buttons to be added at will, complete with children and grandchildren menus (so, a main menu item, a dropdown and a follow-on dropdown)
