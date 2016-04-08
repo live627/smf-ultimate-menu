@@ -13,6 +13,10 @@
 		<require-file name="ManageUltimateMenu.php" destination="$sourcedir" />
 		<require-file name="ManageUltimateMenu.template.php" destination="$themedir" />
 		<require-file name="ManageUltimateMenu.english.php" destination="$languagedir" />
+		<require-file name="ManageUltimateMenu.turkish.php" destination="$languagedir" />
+		<require-file name="ManageUltimateMenu.turkish-utf8.php" destination="$languagedir" />
+		<require-file name="ManageUltimateMenu.spanish_latin.php" destination="$languagedir" />
+		<require-file name="ManageUltimateMenu.spanish_latin-utf8.php" destination="$languagedir" />
 	</install>
 
 	<uninstall for="2.0 - 2.0.99">
@@ -23,6 +27,10 @@
 		<remove-file name="$sourcedir/ManageUltimateMenu.php" />
 		<remove-file name="$themedir/ManageUltimateMenu.template.php" />
 		<remove-file name="$languagedir/ManageUltimateMenu.english.php" />
+		<remove-file name="$languagedir/ManageUltimateMenu.turkish.php" />
+		<remove-file name="$languagedir/ManageUltimateMenu.turkish-utf8.php" />
+		<remove-file name="$languagedir/ManageUltimateMenu.spanish_latin.php" />
+		<remove-file name="$languagedir/ManageUltimateMenu.spanish_latin-utf8.php" />
 	</uninstall>
 
 </package-info>
