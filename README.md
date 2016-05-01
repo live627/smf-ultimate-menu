@@ -1,5 +1,7 @@
 # Ultimate Menu
-[![MIT license](http://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT) [![Support](https://supporter.60devs.com/api/b/axlsj1o8o0amepfrr5eqlcjza)](https://supporter.60devs.com/give/axlsj1o8o0amepfrr5eqlcjza)
+[![MIT license](http://img.shields.io/badge/license-MIT-009999.svg)](http://opensource.org/licenses/MIT)
+[![GitHub issues](https://img.shields.io/github/issues/live627/smf-ultimate-menu.svg)](https://github.com/live627/smf-ultimate-menu/issues)
+[![Latest Version](https://img.shields.io/github/release/live627/smf-ultimate-menu.svg)](https://github.com/live627/smf-ultimate-menu/releases) [![Support](https://supporter.60devs.com/api/b/axlsj1o8o0amepfrr5eqlcjza)](https://supporter.60devs.com/give/axlsj1o8o0amepfrr5eqlcjza)
 
 Add custom buttons to the main menu within SMF
 ## Introduction:
@@ -15,6 +17,3 @@ This is a tool for configuring the main menu within SMF, allowing custom buttons
 -  Use closures (PHP 5.3+)
 -  Use late statiic bindigs (PHP 5.3+)
 -  any suggestion that would come up in the topic
-
-### License:
-{% include license.MD param="MIT" %}
