@@ -60,8 +60,7 @@ $txt['um_menu_new_tab'] = 'New Tab';
 $txt['um_menu_not_found'] = 'The button you tried to edit does not exist!';
 $txt['um_menu_errors_create'] = 'The following error or errors occurred while adding your  Button:';
 $txt['um_menu_errors_modify'] = 'The following error or errors occurred while editing your  Button:';
-$txt['um_menu_numeric_desc'] = 'The button name you chose is all numeric. You must use a name that contains at least one none numeric character.<br />
-1e5 is considered numeric (scientific notation) 1.5 is considered numeric (decimal number)';
+$txt['um_menu_numeric_desc'] = 'The button name you chose is all numeric. You must use a name that contains at least one non-numeric character.<br />1e5 is considered numeric (scientific notation) 1.5 is considered numeric (decimal number)';
 $txt['um_menu_empty_name'] = 'The name was left empty.';
 $txt['um_menu_empty_link'] = 'The link was left empty.';
 $txt['um_menu_empty_parent'] = 'The parent was left empty.';
@@ -69,5 +68,3 @@ $txt['um_menu_depend_desc'] = 'You must move or remove all child and/or grandchi
 $txt['um_menu_before_child_title'] = 'Make this a child button';
 $txt['um_menu_before_child_desc'] = 'Use Child Of to make buttons the child of another!';
 $txt['um_menu_mysql'] = 'The button name you chose is already in use!';
-
-?>

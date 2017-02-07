@@ -7,7 +7,7 @@
  * @license http://opensource.org/licenses/MIT MIT
  */
 
- /**
+ /*
  * Latin Spanish translation services by RockLee_BC http://www.bombercode.org/
  */
 
@@ -73,5 +73,3 @@ $txt['um_menu_depend_desc'] = 'Debe eliminar todos los botones de la parte infer
 $txt['um_menu_before_child_title'] = 'Haga este botón inferior';
 $txt['um_menu_before_child_desc'] = 'Utilice el botón el botón inferior en el botón inferior para hacer otra!';
 $txt['um_menu_mysql'] = 'El nombre del botón que eligió ya está en uso!';
-
-?>

@@ -1,5 +1,7 @@
 <?php
-/*türkçe çeviri http://smf.konusal.com hizmetidir */
+
+/* türkçe çeviri http://smf.konusal.com hizmetidir */
+
 /**
  * @package Ultimate Menu mod
  * @version 1.0
@@ -69,5 +71,3 @@ $txt['um_menu_depend_desc'] = 'Taşımadan veya değiştirmeden önce bu butonun
 $txt['um_menu_before_child_title'] = 'Bunu alt buton yapın';
 $txt['um_menu_before_child_desc'] = 'butonları başka alt buton yapmak için alt butonu kullanın!';
 $txt['um_menu_mysql'] = 'Seçtiğiniz buton adı zaten kullanılıyor!';
-
-?>

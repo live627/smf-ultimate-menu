@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Ultimate Menu mod
  * @version 1.0
@@ -7,7 +8,7 @@
  * @license http://opensource.org/licenses/MIT MIT
  */
 
- /**
+ /*
  * Latin Spanish translation services by RockLee_BC http://www.bombercode.org/
  */
 
@@ -73,5 +74,3 @@ $txt['um_menu_depend_desc'] = 'Debe eliminar todos los botones de la parte infer
 $txt['um_menu_before_child_title'] = 'Haga este bot&oacute;n inferior';
 $txt['um_menu_before_child_desc'] = 'Utilice el bot&oacute;n el bot&oacute;n inferior en el bot&oacute;n inferior para hacer otra!';
 $txt['um_menu_mysql'] = 'El nombre del bot&oacute;n que eligi&oacute; ya est&aacute; en uso!';
-
-?>
