@@ -1,7 +1,7 @@
 # Ultimate Menu
 [![MIT license](http://img.shields.io/badge/license-MIT-009999.svg)](http://opensource.org/licenses/MIT)
 [![GitHub issues](https://img.shields.io/github/issues/live627/smf-ultimate-menu.svg)](https://github.com/live627/smf-ultimate-menu/issues)
-[![Latest Version](https://img.shields.io/github/release/live627/smf-ultimate-menu.svg)](https://github.com/live627/smf-ultimate-menu/releases) [![Support](https://supporter.60devs.com/api/b/axlsj1o8o0amepfrr5eqlcjza)](https://supporter.60devs.com/give/axlsj1o8o0amepfrr5eqlcjza)
+[![Latest Version](https://img.shields.io/github/release/live627/smf-ultimate-menu.svg)](https://github.com/live627/smf-ultimate-menu/releases) [![Support](http://img.shields.io/badge/PayPal-$-009966.svg)](https://www.paypal.me/JohnRayes)
 
 Add custom buttons to the main menu within SMF
 ## Introduction:
@@ -10,7 +10,7 @@ This is a tool for configuring the main menu within SMF, allowing custom buttons
 ## Known issues:
 -  Grandchild butons cannot be added using 'before'  or 'after'; not sure how to fix this
 
-###Future plans:
+### Future plans:
 -  Complete rewrite using objects
 -  Follow PSR-2 and PSR-4
 -  Use generators (PHP 5.5+)
