@@ -29,8 +29,7 @@ function um_load_menu(&$menu_buttons)
 	if (empty($db_buttons))
 		return $menu_buttons;
 
-	reset($db_buttons);
-	while (list ($key, $row) = each($db_buttons))
+	foreach ($db_buttons as $key => $row)
 	{
 		$temp_menu = array(
 			'title' => $row['name'],
