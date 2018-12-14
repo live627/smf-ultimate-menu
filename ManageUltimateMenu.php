@@ -508,13 +508,12 @@ function rebuild_um_menu()
 	global $smcFunc;
 
 	$request = $smcFunc['db_query']('', '
-		SELECT *
+		SELECT id_button, name, target, type, position, link, status, permissions, parent
 		FROM {db_prefix}um_menu');
 
 	$db_buttons = array();
 	while ($row = $smcFunc['db_fetch_assoc']($request))
 		$db_buttons[$row['id_button']] = $row;
-
 	$smcFunc['db_free_result']($request);
 	updateSettings(
 		array(

@@ -46,14 +46,14 @@ function um_load_menu(&$menu_buttons)
 				{
 					if (array_key_exists($row['parent'], $menu_buttons))
 					{
-						insert_button(array($row['slug'] => $temp_menu), $menu_buttons, $row['parent'], $row['position']);
+						insert_button(array('um_'. $key => $temp_menu), $menu_buttons, $row['parent'], $row['position']);
 						break;
 					}
 				}
 
 				if ($row['position'] == 'child_of')
 				{
-					$info['sub_buttons'][$row['slug']] = $temp_menu;
+					$info['sub_buttons']['um_'. $key] = $temp_menu;
 					break;
 				}
 			}
@@ -62,12 +62,12 @@ function um_load_menu(&$menu_buttons)
 			{
 				if ($row['position'] == 'before' || $row['position'] == 'after')
 				{
-					insert_button(array($row['slug'] => $temp_menu), $info['sub_buttons'], $row['parent'], $row['position']);
+					insert_button(array('um_'. $key => $temp_menu), $info['sub_buttons'], $row['parent'], $row['position']);
 					break;
 				}
 				if ($row['position'] == 'child_of')
 				{
-					$info['sub_buttons'][$row['parent']]['sub_buttons'][$row['slug']] = $temp_menu;
+					$info['sub_buttons'][$row['parent']]['sub_buttons']['um_'. $key] = $temp_menu;
 					break;
 				}
 			}
