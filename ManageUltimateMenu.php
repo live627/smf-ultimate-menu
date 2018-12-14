@@ -425,7 +425,7 @@ function PrepareContext()
 			'target' => '_self',
 			'type' => 'forum',
 			'position' => 'before',
-			'status' => '1',
+			'status' => 'active',
 			'permissions' => list_groups('-3', 1),
 			'parent' => 'home',
 			'id' => 0,
