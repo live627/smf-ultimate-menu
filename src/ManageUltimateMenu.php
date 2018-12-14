@@ -196,8 +196,7 @@ function ManageUltimateMenu()
 				'data' => array(
 					'function' => function($rowData) use ($txt)
 					{
-						$isChecked = $rowData['status'] == 'inactive' ? '' : ' checked="checked"';
-						return sprintf('<span>%3$s</span>&nbsp;<input type="checkbox" name="status[%1$s]" id="status_%1$s" value="%1$s"%2$s />', $rowData['id_button'], $isChecked, $txt[$rowData['status']], $rowData['status']);
+						return sprintf('<input type="checkbox" name="status[%1$s]" id="status_%1$s" value="%1$s"%2$s />', $rowData['id_button'], $rowData['status'] == 'inactive' ? '' : ' checked="checked"');
 					},
 					'class' => 'centertext',
 				),
