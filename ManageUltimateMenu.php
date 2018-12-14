@@ -339,10 +339,10 @@ function SaveButton()
 				$smcFunc['db_insert']('insert',
 					'{db_prefix}um_menu',
 						array(
-							'slug' => 'string', 'name' => 'string', 'type' => 'string', 'target' => 'string', 'position' => 'string', 'link' => 'string', 'status' => 'string', 'permissions' => 'string', 'parent' => 'string',
+							'name' => 'string', 'type' => 'string', 'target' => 'string', 'position' => 'string', 'link' => 'string', 'status' => 'string', 'permissions' => 'string', 'parent' => 'string',
 						),
 						array(
-							md5($name) . '-' . time(), $name, $type, $target, $position, $link, $status, $permissions, $parent,
+							$name, $type, $target, $position, $link, $status, $permissions, $parent,
 						),
 						array('id_button')
 					);
