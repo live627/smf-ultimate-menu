@@ -211,7 +211,7 @@ function ManageUltimateMenu()
 				),
 				'data' => array(
 					'sprintf' => array(
-						'format' => '<a href="' . $scripturl . '?action=admin;area=umen;sa=addbutton;edit;in=%1$d">' . $txt['modify'] . '</a>',
+						'format' => '<a href="' . strtr($scripturl, array('%' => '%%')) . '?action=admin;area=umen;sa=addbutton;edit;in=%1$d">' . $txt['modify'] . '</a>',
 						'params' => array(
 							'id_button' => false,
 						),
