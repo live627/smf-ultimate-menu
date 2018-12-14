@@ -180,6 +180,7 @@ function insert_button($needle, &$haystack, $insertion_point, $where = 'after')
 					$offset--;
 
 				$haystack[$stack] = array_slice($haystack[$stack], 0, $offset, true) + $needle + array_slice($haystack[$stack], $offset, null, true);
+				break;
 			}
 }
 
