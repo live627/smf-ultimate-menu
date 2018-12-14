@@ -148,11 +148,10 @@ function ManageUltimateMenu()
 					'value' => $txt['um_menu_button_type'],
 				),
 				'data' => array(
-					'function' => create_function('$rowData', '
-						global $txt;
-
-						return $txt[$rowData[\'type\'] . \'_link\'];
-					'),
+					'function' => function($rowData) use ($txt)
+					{
+						return $txt[$rowData['type'] . '_link'];
+					},
 					'class' => 'centertext',
 				),
 				'sort' => array(
@@ -165,11 +164,10 @@ function ManageUltimateMenu()
 					'value' => $txt['um_menu_button_position'],
 				),
 				'data' => array(
-					'function' => create_function('$rowData', '
-						global $txt;
-
-						return $txt[\'mboards_order_\' . $rowData[\'position\']] . \' \' . ucwords($rowData[\'parent\']);
-					'),
+					'function' => function($rowData) use ($txt)
+					{
+						return $txt['mboards_order_' . $rowData['position']] . ' ' . ucwords($rowData['parent']);
+					},
 					'class' => 'centertext',
 				),
 				'sort' => array(
@@ -195,11 +193,11 @@ function ManageUltimateMenu()
 					'value' => $txt['um_menu_button_active'],
 				),
 				'data' => array(
-					'function' => create_function('$rowData', '
-						global $txt;
-						$isChecked = $rowData[\'status\'] == \'inactive\' ? \'\' : \' checked="checked"\';
-						return sprintf(\'<span>%3$s</span>&nbsp;<input type="checkbox" name="status[%1$s]" id="status_%1$s" value="%1$s"%2$s />\', $rowData[\'id_button\'], $isChecked, $txt[$rowData[\'status\']], $rowData[\'status\']);
-					'),
+					'function' => function($rowData) use ($txt)
+					{
+						$isChecked = $rowData['status'] == 'inactive' ? '' : ' checked="checked"';
+						return sprintf('<span>%3$s</span>&nbsp;<input type="checkbox" name="status[%1$s]" id="status_%1$s" value="%1$s"%2$s />', $rowData['id_button'], $isChecked, $txt[$rowData['status']], $rowData['status']);
+					},
 					'class' => 'centertext',
 				),
 				'sort' => array(
