@@ -114,6 +114,7 @@ function ManageUltimateMenu()
 		redirectexit('action=admin;area=umen;sa=addbutton');
 
 	loadLanguage('ManageBoards');
+	$button_names = getButtonNames();
 
 	// Our options for our list.
 	$listOptions = array(
@@ -164,9 +165,9 @@ function ManageUltimateMenu()
 					'value' => $txt['um_menu_button_position'],
 				),
 				'data' => array(
-					'function' => function($rowData) use ($txt)
+					'function' => function($rowData) use ($txt, $button_names)
 					{
-						return $txt['mboards_order_' . $rowData['position']] . ' ' . ucwords($rowData['parent']);
+						return $txt['mboards_order_' . $rowData['position']] . ' ' . (isset($button_names[$rowData['parent']]) ? $button_names[$rowData['parent']] : ucwords($rowData['parent']));
 					},
 					'class' => 'centertext',
 				),
@@ -506,4 +507,31 @@ function rebuild_um_menu()
 	);
 }
 
-?>
+function getButtonNames()
+{
+	global $context, $smcFunc;
+
+	// It's expected to be present.
+	$context['user']['unread_messages'] = 0;
+
+	// Load SMF's default menu context
+	setupMenuContext();
+
+	$button_names = [];
+	foreach ($context['menu_buttons'] as $buttonIndex => $buttonData)
+	{
+		$button_names[$buttonIndex] = $buttonData['title'];
+
+		if (!empty($buttonData['sub_buttons']))
+		{
+			foreach ($buttonData['sub_buttons'] as $childButton => $childButtonData)
+				$button_names[$childButton] = $childButtonData['title'];
+
+			if (!empty($childButtonData['sub_buttons']))
+				foreach ($childButtonData['sub_buttons'] as $grandChildButton => $grandChildButtonData)
+					$button_names[$grandChildButton] = $grandChildButtonData['title'];
+		}
+	}
+
+	return $button_names;
+}
