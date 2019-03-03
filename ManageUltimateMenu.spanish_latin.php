@@ -6,10 +6,8 @@
  * @author John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2014, John Rayes
  * @license http://opensource.org/licenses/MIT MIT
- */
-
- /*
- * Latin Spanish translation services by RockLee_BC http://www.bombercode.org/
+ *
+ * Latin Spanish translation services by RockLee https://www.bombercode.net/
  */
 
 $txt['um_admin_menu'] = 'Men&uacute; avanzado';
@@ -40,8 +38,8 @@ $txt['unchanged'] = 'Sin alterar';
 $txt['after'] = 'Despu&eacute;s';
 $txt['um_menu_remove_selected'] = 'Quitar botones seleccionados';
 $txt['um_menu_remove_all'] = 'Retirar todos los botones';
-$txt['um_menu_remove_confirm'] = '¿Seguro que desea eliminar los botones seleccionados?';
-$txt['um_menu_remove_all_confirm'] = '¿Est&aacute; seguro de que desea eliminar todos los botones?';
+$txt['um_menu_remove_confirm'] = 'Â¿Seguro que desea eliminar los botones seleccionados?';
+$txt['um_menu_remove_all_confirm'] = 'Â¿Est&aacute; seguro de que desea eliminar todos los botones?';
 $txt['um_menu_add_title'] = 'A&ntilde;adir bot&oacute;n';
 $txt['um_menu_edit_title'] = 'Editar Bot&oacute;n';
 $txt['um_menu_button_name'] = 'Nombre del bot&oacute;n';
