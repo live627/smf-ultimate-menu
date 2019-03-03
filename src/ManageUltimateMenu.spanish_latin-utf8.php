@@ -5,10 +5,8 @@
  * @author John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2014, John Rayes
  * @license http://opensource.org/licenses/MIT MIT
- */
-
- /*
- * Latin Spanish translation services by RockLee_BC http://www.bombercode.org/
+ * 
+ * Latin Spanish translation services by RockLee https://www.bombercode.net/ 
  */
 
 $txt['um_admin_menu'] = 'Menú avanzado';
