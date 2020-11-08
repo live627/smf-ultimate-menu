@@ -18,7 +18,7 @@ function um_load_menu(&$menu_buttons)
 	// Make damn sure we ALWAYS losd last. Priority: 100!
 	$hooks = explode(',', $modSettings['integrate_menu_buttons']);
 	$hook = end($hooks);
-	if (strpos($hook, 'um_load_menu') !== false)
+	if (strpos($hook, 'um_load_menu') === false)
 	{
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
