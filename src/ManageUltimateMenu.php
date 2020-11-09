@@ -140,8 +140,8 @@ function ManageUltimateMenu()
 					'class' => 'centertext',
 				),
 				'sort' => array(
-					'default' => 'men.name',
-					'reverse' => 'men.name DESC',
+					'default' => 'name',
+					'reverse' => 'name DESC',
 				),
 			),
 			'type' => array(
@@ -156,8 +156,8 @@ function ManageUltimateMenu()
 					'class' => 'centertext',
 				),
 				'sort' => array(
-					'default' => 'men.type',
-					'reverse' => 'men.type DESC',
+					'default' => 'type',
+					'reverse' => 'type DESC',
 				),
 			),
 			'poition' => array(
@@ -172,8 +172,8 @@ function ManageUltimateMenu()
 					'class' => 'centertext',
 				),
 				'sort' => array(
-					'default' => 'men.position',
-					'reverse' => 'men.position DESC',
+					'default' => 'position',
+					'reverse' => 'position DESC',
 				),
 			),
 			'link' => array(
@@ -185,8 +185,8 @@ function ManageUltimateMenu()
 					'class' => 'centertext',
 				),
 				'sort' => array(
-					'default' => 'men.link',
-					'reverse' => 'men.link DESC',
+					'default' => 'link',
+					'reverse' => 'link DESC',
 				),
 			),
 			'status' => array(
@@ -201,8 +201,8 @@ function ManageUltimateMenu()
 					'class' => 'centertext',
 				),
 				'sort' => array(
-					'default' => 'men.status',
-					'reverse' => 'men.status DESC',
+					'default' => 'status',
+					'reverse' => 'status DESC',
 				),
 			),
 			'actions' => array(
@@ -301,15 +301,13 @@ function SaveButton()
 			SELECT id_button
 			FROM {db_prefix}um_menu
 			WHERE name = {string:name}
-			AND id_button != {int:id}',
+				AND id_button != {int:id}',
 			array(
 				'name' => $name,
 				'id' => $id,
 			)
 		);
-
 		$check = $smcFunc['db_num_rows']($request);
-
 		$smcFunc['db_free_result']($request);
 
 		if ($check > 0)
@@ -442,12 +440,12 @@ function total_getMenu()
 	$request = $smcFunc['db_query']('', '
 		SELECT id_button, name, target, type, position, link, status, permissions, parent
 		FROM {db_prefix}um_menu');
-
-	$um_menu = array();
+	$buttons = array();
 	while ($row = $smcFunc['db_fetch_assoc']($request))
-		$um_menu[] = $row;
+		$buttons[] = $row;
+	$smcFunc['db_free_result']($request);
 
-	return $um_menu;
+	return $buttons;
 }
 
 function list_getMenu($start, $items_per_page, $sort)
@@ -456,7 +454,7 @@ function list_getMenu($start, $items_per_page, $sort)
 
 	$request = $smcFunc['db_query']('', '
 		SELECT id_button, name, target, type, position, link, status, permissions, parent
-		FROM {db_prefix}um_menu AS men
+		FROM {db_prefix}um_menu
 		ORDER BY {raw:sort}
 		LIMIT {int:offset}, {int:limit}',
 		array(
@@ -465,12 +463,12 @@ function list_getMenu($start, $items_per_page, $sort)
 			'limit' => $items_per_page,
 		)
 	);
-
-	$um_menu = array();
+	$buttons = array();
 	while ($row = $smcFunc['db_fetch_assoc']($request))
-		$um_menu[] = $row;
+		$buttons[] = $row;
+	$smcFunc['db_free_result']($request);
 
-	return $um_menu;
+	return $buttons;
 }
 
 function list_getNumButtons()
