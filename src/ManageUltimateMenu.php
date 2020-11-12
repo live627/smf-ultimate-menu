@@ -339,10 +339,10 @@ function SaveButton()
 				$smcFunc['db_insert']('insert',
 					'{db_prefix}um_menu',
 						array(
-							'slug' => 'string', 'name' => 'string', 'type' => 'string', 'target' => 'string', 'position' => 'string', 'link' => 'string', 'status' => 'string', 'permissions' => 'string', 'parent' => 'string',
+							'name' => 'string', 'type' => 'string', 'target' => 'string', 'position' => 'string', 'link' => 'string', 'status' => 'string', 'permissions' => 'string', 'parent' => 'string',
 						),
 						array(
-							md5($name) . '-' . time(), $name, $type, $target, $position, $link, $status, $permissions, $parent,
+							$name, $type, $target, $position, $link, $status, $permissions, $parent,
 						),
 						array('id_button')
 					);
@@ -492,18 +492,17 @@ function rebuild_um_menu()
 	global $smcFunc;
 
 	$request = $smcFunc['db_query']('', '
-		SELECT *
+		SELECT id_button, name, target, type, position, link, status, permissions, parent
 		FROM {db_prefix}um_menu');
 
-	$db_buttons = array();
+	$buttons = array();
 	while ($row = $smcFunc['db_fetch_assoc']($request))
-		$db_buttons[$row['id_button']] = $row;
-
+		$buttons['um_button_' . $row['id_button']] = json_encode($row);
 	$smcFunc['db_free_result']($request);
 	updateSettings(
 		array(
-			'um_menu' => serialize($db_buttons),
-		)
+			'um_count' => count($buttons),
+		) + $buttons
 	);
 }
 

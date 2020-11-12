@@ -24,13 +24,16 @@ function um_load_menu(&$menu_buttons)
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 	}
 
-	$db_buttons = @unserialize($modSettings['um_menu']);
+	$num_buttons = isset($modSettings['um_count'])
+		? $modSettings['um_count']
+		: 0;
 
-	if (empty($db_buttons))
-		return $menu_buttons;
-
-	foreach ($db_buttons as $key => $row)
+	for ($i = 1; $i <= $num_buttons; $i++)
 	{
+		$key = 'um_button_' . $i;
+		if (!isset($modSettings[$key]))
+			break;
+		$row = json_decode($modSettings[$key], true);
 		$temp_menu = array(
 			'title' => $row['name'],
 			'href' => ($row['type'] == 'forum' ? $scripturl . '?' : '') . $row['link'],
@@ -46,28 +49,26 @@ function um_load_menu(&$menu_buttons)
 				{
 					if (array_key_exists($row['parent'], $menu_buttons))
 					{
-						insert_button(array($row['slug'] => $temp_menu), $menu_buttons, $row['parent'], $row['position']);
+						insert_button(array($key => $temp_menu), $menu_buttons, $row['parent'], $row['position']);
 						break;
 					}
 				}
-
-				if ($row['position'] == 'child_of')
+				elseif ($row['position'] == 'child_of')
 				{
-					$info['sub_buttons'][$row['slug']] = $temp_menu;
+					$info['sub_buttons'][$key] = $temp_menu;
 					break;
 				}
 			}
-
-			if (isset($info['sub_buttons'][$row['parent']]))
+			elseif (isset($info['sub_buttons'][$row['parent']]))
 			{
 				if ($row['position'] == 'before' || $row['position'] == 'after')
 				{
-					insert_button(array($row['slug'] => $temp_menu), $info['sub_buttons'], $row['parent'], $row['position']);
+					insert_button(array($key => $temp_menu), $info['sub_buttons'], $row['parent'], $row['position']);
 					break;
 				}
-				if ($row['position'] == 'child_of')
+				elseif ($row['position'] == 'child_of')
 				{
-					$info['sub_buttons'][$row['parent']]['sub_buttons'][$row['slug']] = $temp_menu;
+					$info['sub_buttons'][$row['parent']]['sub_buttons'][$key] = $temp_menu;
 					break;
 				}
 			}
