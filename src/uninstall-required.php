@@ -9,8 +9,8 @@
  */
 
 // If SSI.php is in the same place as this file, and SMF isn't defined...
-if (file_exists(dirname(__FILE__) . '/SSI.php') && !defined('SMF'))
-	require_once(dirname(__FILE__) . '/SSI.php');
+if (file_exists(__DIR__ . '/SSI.php') && !defined('SMF'))
+	require_once __DIR__ . '/SSI.php';
 
 // Hmm... no SSI.php and no SMF?
 elseif (!defined('SMF'))
@@ -19,5 +19,3 @@ elseif (!defined('SMF'))
 remove_integration_function('integrate_pre_include', '$sourcedir/Subs-UltimateMenu.php');
 remove_integration_function('integrate_menu_buttons', 'um_load_menu');
 remove_integration_function('integrate_admin_areas', 'um_admin_areas');
-
-?>
