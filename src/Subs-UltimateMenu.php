@@ -191,7 +191,9 @@ function um_admin_areas(&$admin_areas)
 	$admin_areas['config']['areas']['umen'] = array(
 		'label' => $txt['um_admin_menu'],
 		'file' => 'ManageUltimateMenu.php',
-		'function' => 'Menu',
+		'function' => function () {
+			new ManageUltimateMenu;
+		},
 		'icon' => 'umen.png',
 		'subsections' => array(
 			'manmenu' => array($txt['um_admin_manage_menu'], ''),
