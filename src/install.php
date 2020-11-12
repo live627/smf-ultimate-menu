@@ -9,8 +9,8 @@
  */
 
 // If SSI.php is in the same place as this file, and SMF isn't defined...
-if (file_exists(dirname(__FILE__) . '/SSI.php') && !defined('SMF'))
-	require_once(dirname(__FILE__) . '/SSI.php');
+if (file_exists(__DIR__ . '/SSI.php') && !defined('SMF'))
+	require_once __DIR__ . '/SSI.php';
 
 // Hmm... no SSI.php and no SMF?
 elseif (!defined('SMF'))
@@ -31,11 +31,6 @@ $tables = array(
 				'name' => 'name',
 				'type' => 'varchar',
 				'size' => 65,
-			),
-			array(
-				'name' => 'slug',
-				'type' => 'varchar',
-				'size' => 80,
 			),
 			array(
 				'name' => 'type',

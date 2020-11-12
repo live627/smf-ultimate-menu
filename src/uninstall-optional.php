@@ -9,8 +9,8 @@
  */
 
 // If SSI.php is in the same place as this file, and SMF isn't defined...
-if (file_exists(dirname(__FILE__) . '/SSI.php') && !defined('SMF'))
-	require_once(dirname(__FILE__) . '/SSI.php');
+if (file_exists(__DIR__ . '/SSI.php') && !defined('SMF'))
+	require_once __DIR__ . '/SSI.php';
 
 // Hmm... no SSI.php and no SMF?
 elseif (!defined('SMF'))
@@ -30,4 +30,5 @@ $smcFunc['db_query']('', '
 		'setting0' => 'um_menu',
 		'setting1' => 'um_count',
 		'setting2' => 'um_button%',
+	)
 );
