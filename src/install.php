@@ -82,8 +82,6 @@ $tables = array(
 	)
 );
 
-db_extend('packages');
-
 foreach ($tables as $table)
 {
 	$smcFunc['db_create_table']('{db_prefix}' . $table['name'], $table['columns'], $table['indexes'], array(), 'update');
@@ -92,9 +90,21 @@ foreach ($tables as $table)
 		$smcFunc['db_insert']('ignore', '{db_prefix}' . $table['name'], $table['default']['columns'], $table['default']['values'], $table['default']['keys']);
 }
 
+$request = $smcFunc['db_query']('', '
+	SELECT id_button, name, target, type, position, link, status, permissions, parent
+	FROM {db_prefix}um_menu');
+
+$buttons = array();
+while ($row = $smcFunc['db_fetch_assoc']($request))
+	$buttons['um_button_' . $row['id_button']] = json_encode($row);
+$smcFunc['db_free_result']($request);
+updateSettings(
+	array(
+		'um_count' => count($buttons),
+	) + $buttons
+);
+
 // Now presenting... *drumroll*
 add_integration_function('integrate_pre_include', '$sourcedir/Subs-UltimateMenu.php');
 add_integration_function('integrate_menu_buttons', 'um_load_menu');
 add_integration_function('integrate_admin_areas', 'um_admin_areas');
-
-?>

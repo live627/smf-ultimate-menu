@@ -493,14 +493,14 @@ function rebuild_um_menu()
 		SELECT id_button, name, target, type, position, link, status, permissions, parent
 		FROM {db_prefix}um_menu');
 
-	$db_buttons = array();
+	$buttons = array();
 	while ($row = $smcFunc['db_fetch_assoc']($request))
-		$db_buttons[$row['id_button']] = $row;
+		$buttons['um_button_' . $row['id_button']] = json_encode($row);
 	$smcFunc['db_free_result']($request);
 	updateSettings(
 		array(
-			'um_menu' => serialize($db_buttons),
-		)
+			'um_count' => count($buttons),
+		) + $buttons
 	);
 }
 
