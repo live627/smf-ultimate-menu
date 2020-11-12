@@ -13,7 +13,7 @@ class ManageUltimateMenu
 
 	function __construct()
 	{
-		global $context, $txt;
+		global $context, $sourcedir, $txt;
 
 		isAllowedTo('admin_forum');
 
@@ -31,6 +31,8 @@ class ManageUltimateMenu
 			),
 		);
 		loadTemplate('ManageUltimateMenu');
+		require_once $sourcedir . '/Class-UltimateMenu.php';
+		$this->um = new UltimateMenu;
 
 		$subActions = array(
 			'manmenu' => 'ManageUltimateMenu',
@@ -44,22 +46,18 @@ class ManageUltimateMenu
 
 	function ManageUltimateMenu()
 	{
-		global $context, $txt, $modSettings, $scripturl, $sourcedir, $smcFunc;
+		global $context, $txt, $scripturl;
 
 		// Get rid of all of em!
 		if (!empty($_POST['removeAll']))
 		{
 			checkSession();
-
-			$smcFunc['db_query']('', '
-				TRUNCATE {db_prefix}um_menu');
-
-			$this->rebuildMenu();
+			$this->um->deleteallButtons();
+			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen');
 		}
-
 		// User pressed the 'remove selection button'.
-		if (!empty($_POST['removeButtons']) && !empty($_POST['remove']) && is_array($_POST['remove']))
+		elseif (!empty($_POST['removeButtons']) && !empty($_POST['remove']) && is_array($_POST['remove']))
 		{
 			checkSession();
 
@@ -67,48 +65,24 @@ class ManageUltimateMenu
 			foreach ($_POST['remove'] as $index => $page_id)
 				$_POST['remove'][(int) $index] = (int) $page_id;
 
-			// Delete the page!
-			$smcFunc['db_query']('', '
-				DELETE FROM {db_prefix}um_menu
-				WHERE id_button IN ({array_int:button_list})',
-				array(
-					'button_list' => $_POST['remove'],
-				)
-			);
-			$this->rebuildMenu();
+			// Delete the page(s)!
+			$this->um->deleteButton($_POST['remove']);
+			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen');
 		}
-
 		// Changing the status?
-		if (isset($_POST['save']))
+		elseif (isset($_POST['save']))
 		{
 			checkSession();
-			foreach ($this->total_getMenu() as $item)
-			{
-				$status = !empty($_POST['status'][$item['id_button']]) ? 'active' : 'inactive';
-				if ($status != $item['status'])
-					$smcFunc['db_query']('', '
-						UPDATE {db_prefix}um_menu
-						SET status = {string:status}
-						WHERE id_button = {int:item}',
-						array(
-							'status' => $status,
-							'item' => $item['id_button'],
-						)
-					);
-			}
-			$this->rebuildMenu();
+			$this->um->updateButton($_POST);
+			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen');
 		}
-
 		// New item?
-		if (isset($_POST['new']))
+		elseif (isset($_POST['new']))
 			redirectexit('action=admin;area=umen;sa=addbutton');
 
-		loadLanguage('ManageBoards');
-		$button_names = $this->getButtonNames();
-
-		// Our options for our list.
+		$button_names = $this->um->getButtonNames();
 		$listOptions = array(
 			'id' => 'menu_list',
 			'items_per_page' => 20,
@@ -116,10 +90,10 @@ class ManageUltimateMenu
 			'default_sort_col' => 'name',
 			'default_sort_dir' => 'desc',
 			'get_items' => array(
-				'function' => 'list_getMenu',
+				'function' => array($this->um, 'list_getMenu'),
 			),
 			'get_count' => array(
-				'function' => 'list_getNumButtons',
+				'function' => array($this->um, 'list_getNumButtons'),
 			),
 			'no_items_label' => $txt['um_menu_no_buttons'],
 			'columns' => array(
@@ -241,10 +215,8 @@ class ManageUltimateMenu
 				),
 			),
 		);
-
-		require_once($sourcedir . '/Subs-List.php');
+		require_once $sourcedir . '/Subs-List.php';
 		createList($listOptions);
-
 		$context['sub_template'] = 'show_list';
 		$context['default_list'] = 'menu_list';
 	}
@@ -289,55 +261,16 @@ class ManageUltimateMenu
 				$post_errors['name'] = 'um_menu_numeric';
 
 			// Let's make sure you're not trying to make a name that's already taken.
-			$request = $smcFunc['db_query']('', '
-				SELECT id_button
-				FROM {db_prefix}um_menu
-				WHERE name = {string:name}
-					AND id_button != {int:id}',
-				array(
-					'name' => $name,
-					'id' => $id,
-				)
-			);
-			$check = $smcFunc['db_num_rows']($request);
-			$smcFunc['db_free_result']($request);
-
+			$check = $this->um->checkButton($menu_entry['id'], $menu_entry['name']);
 			if ($check > 0)
 				$post_errors['name'] = 'um_menu_mysql';
 
+			// I see you made it to the final stage, my young padawan.
 			if (empty($post_errors))
 			{
-				// I see you made it to the final stage, my young padawan.
-				if (!empty($id))
-					$smcFunc['db_query']('','
-						UPDATE {db_prefix}um_menu
-						SET name = {string:name}, type = {string:type}, target = {string:target}, position = {string:position}, link = {string:link}, status = {string:status}, permissions = {string:permissions}, parent = {string:parent}
-						WHERE id_button = {int:id}',
-						array(
-							'id' => $id,
-							'name' => $name,
-							'type' => $type,
-							'target' => $target,
-							'position' => $position,
-							'link' => $link,
-							'status' => $status,
-							'permissions' => $permissions,
-							'parent' => $parent,
-						)
-					);
-				else
-					$smcFunc['db_insert']('insert',
-						'{db_prefix}um_menu',
-							array(
-								'name' => 'string', 'type' => 'string', 'target' => 'string', 'position' => 'string', 'link' => 'string', 'status' => 'string', 'permissions' => 'string', 'parent' => 'string',
-							),
-							array(
-								$name, $type, $target, $position, $link, $status, $permissions, $parent,
-							),
-							array('id_button')
-						);
+				$this->um->saveButton($menu_entry);
+				$this->um->rebuildMenu();
 
-				$this->rebuildMenu();
 
 				// Before we leave, we must clear the cache. See, SMF
 				// caches its menu at level 2 or higher.
@@ -347,49 +280,36 @@ class ManageUltimateMenu
 			}
 			else
 			{
-				$context['post_error'] = $post_errors;
-				$context['error_title'] = empty($id) ? 'um_menu_errors_create' : 'um_menu_errors_modify';
-
-				$context['button_data'] = array(
-					'name' => $name,
-					'type' => $type,
-					'target' => $target,
-					'position' => $position,
-					'link' => $link,
-					'parent' => $parent,
-					'permissions' => list_groups($permissions, 1),
-					'status' => $status,
-					'id' => $id,
-				);
-
 				$context['page_title'] = $txt['um_menu_edit_title'];
+				$context['post_error'] = $post_errors;
+				$context['error_title'] = empty($menu_entry['id'])
+					? 'um_menu_errors_create'
+					: 'um_menu_errors_modify';
+				$context['button_data'] = array(
+					'name' => $menu_entry['name'],
+					'type' => $menu_entry['type'],
+					'target' => $menu_entry['target'],
+					'position' => $menu_entry['position'],
+					'link' => $menu_entry['link'],
+					'parent' => $menu_entry['parent'],
+					'permissions' => $this->um->list_groups(
+						implode(',', array_filter($menu_entry['permissions'], 'strlen')),
+						1
+					),
+					'status' => $menu_entry['status'],
+					'id' => $menu_entry['id'],
+				);
 			}
 		}
 	}
 
 	function PrepareContext()
 	{
-		global $context, $smcFunc, $txt, $sourcedir;
-
-		// It's expected to be present.
-		$context['user']['unread_messages'] = 0;
-
-		// Load SMF's default menu context
-		setupMenuContext();
+		global $context, $txt;
 
 		if (isset($_GET['in']))
 		{
-			$request = $smcFunc['db_query']('', '
-				SELECT name, target, type, position, link, status, permissions, parent
-				FROM {db_prefix}um_menu
-				WHERE id_button = {int:button}
-				LIMIT 1',
-				array(
-					'button' => (int) $_GET['in'],
-				)
-			);
-
-			$row = $smcFunc['db_fetch_assoc']($request);
+			$row = $this->um->fetchButton($_GET['in']);
 
 			$context['button_data'] = array(
 				'id' => $_GET['in'],
@@ -397,7 +317,7 @@ class ManageUltimateMenu
 				'target' => $row['target'],
 				'type' => $row['type'],
 				'position' => $row['position'],
-				'permissions' => list_groups($row['permissions'], 1),
+				'permissions' => $this->um->list_groups($row['permissions'], 1),
 				'link' => $row['link'],
 				'status' => $row['status'],
 				'parent' => $row['parent'],
@@ -412,111 +332,12 @@ class ManageUltimateMenu
 				'type' => 'forum',
 				'position' => 'before',
 				'status' => 'active',
-				'permissions' => list_groups('-3', 1),
+				'permissions' => $this->um->list_groups('-3', 1),
 				'parent' => 'home',
 				'id' => 0,
 			);
 
 			$context['page_title'] = $txt['um_menu_add_title'];
 		}
-	}
-
-	function total_getMenu()
-	{
-		global $smcFunc;
-
-		$request = $smcFunc['db_query']('', '
-			SELECT id_button, name, target, type, position, link, status, permissions, parent
-			FROM {db_prefix}um_menu');
-		$buttons = array();
-		while ($row = $smcFunc['db_fetch_assoc']($request))
-			$buttons[] = $row;
-		$smcFunc['db_free_result']($request);
-
-		return $buttons;
-	}
-
-	function list_getMenu($start, $items_per_page, $sort)
-	{
-		global $smcFunc;
-
-		$request = $smcFunc['db_query']('', '
-			SELECT id_button, name, target, type, position, link, status, permissions, parent
-			FROM {db_prefix}um_menu
-			ORDER BY {raw:sort}
-			LIMIT {int:offset}, {int:limit}',
-			array(
-				'sort' => $sort,
-				'offset' => $start,
-				'limit' => $items_per_page,
-			)
-		);
-		$buttons = array();
-		while ($row = $smcFunc['db_fetch_assoc']($request))
-			$buttons[] = $row;
-		$smcFunc['db_free_result']($request);
-
-		return $buttons;
-	}
-
-	function list_getNumButtons()
-	{
-		global $smcFunc;
-
-		$request = $smcFunc['db_query']('', '
-			SELECT COUNT(*)
-			FROM {db_prefix}um_menu');
-		list ($numButtons) = $smcFunc['db_fetch_row']($request);
-		$smcFunc['db_free_result']($request);
-
-		return $numButtons;
-	}
-
-	function rebuildMenu()
-	{
-		global $smcFunc;
-
-		$request = $smcFunc['db_query']('', '
-			SELECT id_button, name, target, type, position, link, status, permissions, parent
-			FROM {db_prefix}um_menu');
-
-		$buttons = array();
-		while ($row = $smcFunc['db_fetch_assoc']($request))
-			$buttons['um_button_' . $row['id_button']] = json_encode($row);
-		$smcFunc['db_free_result']($request);
-		updateSettings(
-			array(
-				'um_count' => count($buttons),
-			) + $buttons
-		);
-	}
-
-	function getButtonNames()
-	{
-		global $context, $smcFunc;
-
-		// It's expected to be present.
-		$context['user']['unread_messages'] = 0;
-
-		// Load SMF's default menu context
-		setupMenuContext();
-
-		$button_names = [];
-		foreach ($context['menu_buttons'] as $buttonIndex => $buttonData)
-		{
-			$button_names[$buttonIndex] = $buttonData['title'];
-
-			if (!empty($buttonData['sub_buttons']))
-			{
-				foreach ($buttonData['sub_buttons'] as $childButton => $childButtonData)
-					$button_names[$childButton] = $childButtonData['title'];
-
-				if (!empty($childButtonData['sub_buttons']))
-					foreach ($childButtonData['sub_buttons'] as $grandChildButton => $grandChildButtonData)
-						$button_names[$grandChildButton] = $grandChildButtonData['title'];
-			}
-		}
-
-		return $button_names;
 	}
 }
