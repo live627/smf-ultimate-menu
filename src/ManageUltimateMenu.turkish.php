@@ -1,6 +1,6 @@
 <?php
 
-/* türkçe çeviri http://smf.konusal.com hizmetidir */
+/* tï¿½rkï¿½e ï¿½eviri http://smf.konusal.com hizmetidir */
 
 /**
  * @package Ultimate Menu mod
@@ -10,64 +10,64 @@
  * @license http://opensource.org/licenses/MIT MIT
  */
 
-$txt['um_admin_menu'] = 'Geliþmiþ Menü';
+$txt['um_admin_menu'] = 'Geliï¿½miï¿½ Menï¿½';
 $txt['um_admin_add_button'] = 'Buton Ekle';
-$txt['um_admin_manage_menu'] = 'Menü Düzenle';
+$txt['um_admin_manage_menu'] = 'Menï¿½ Dï¿½zenle';
 
-$txt['admin_menu'] = 'Menü';
-$txt['admin_menu_title'] = 'Menü Ayarlarý';
-$txt['admin_menu_desc'] = 'Bu sayfa özel menü butonlarý eklemeyi ve düzenlemeyi saðlar.';
+$txt['admin_menu'] = 'Menï¿½';
+$txt['admin_menu_title'] = 'Menï¿½ Ayarlarï¿½';
+$txt['admin_menu_desc'] = 'Bu sayfa ï¿½zel menï¿½ butonlarï¿½ eklemeyi ve dï¿½zenlemeyi saï¿½lar.';
 
-$txt['admin_manage_menu_submit'] = 'Gönder';
-$txt['admin_manage_menu_desc'] = 'Oluþturduðunuz Menü Butonlarýný yönetin';
-$txt['admin_menu_add_button_desc'] = 'Menüye Yeni Butonlar Ekleyin';
-$txt['external_link'] = 'Forum Dýþý Link';
-$txt['forum_link'] = 'Forum içi Link';
-$txt['active'] = 'Aktif';
-$txt['inactive'] = 'Pasif';
-$txt['um_menu_no_buttons'] = 'Henüz Buton Bulunmamaktadýr...';
+$txt['admin_manage_menu_submit'] = 'Gï¿½nder';
+$txt['admin_manage_menu_desc'] = 'Oluï¿½turduï¿½unuz Menï¿½ Butonlarï¿½nï¿½ yï¿½netin';
+$txt['admin_menu_add_button_desc'] = 'Menï¿½ye Yeni Butonlar Ekleyin';
+
+$txt['um_menu_external_link'] = 'Forum Dï¿½ï¿½ï¿½ Link';
+$txt['um_menu_forum_link'] = 'Forum iï¿½i Link';
+$txt['um_menu_active'] = 'Aktif';
+$txt['um_menu_inactive'] = 'Pasif';
+$txt['um_menu_no_buttons'] = 'Henï¿½z Buton Bulunmamaktadï¿½r...';
 $txt['um_menu_button_id'] = 'Buton ID';
-$txt['um_menu_button_name'] = 'Buton Ýsmi';
-$txt['um_menu_button_type'] = 'Buton Türü';
+$txt['um_menu_button_name'] = 'Buton ï¿½smi';
+$txt['um_menu_button_type'] = 'Buton Tï¿½rï¿½';
 $txt['um_menu_button_position'] = 'Buton pozisyonu';
 $txt['um_menu_button_link'] = 'Buton Link';
-$txt['um_menu_actions'] = 'Ýþlemler';
-$txt['modify'] = 'Düzenle';
-$txt['before'] = 'Önce';
-$txt['unchanged'] = 'deðiþtirilmemiþ';
-$txt['after'] = 'Sonra';
-$txt['um_menu_remove_selected'] = 'Seçilmiþ Butonlarý kaldýr';
-$txt['um_menu_remove_all'] = 'Tüm Butonlarý kaldýr';
-$txt['um_menu_remove_confirm'] = 'Seçilen Butonlarý kaldýrmak istediðinizden emin misiniz?';
-$txt['um_menu_remove_all_confirm'] = 'Bütün Butonlarý kaldýrmak istediðinizden emin misiniz?';
+$txt['um_menu_actions'] = 'ï¿½ï¿½lemler';
+$txt['um_menu_modify'] = 'Dï¿½zenle';
+$txt['um_menu_before'] = 'ï¿½nce';
+$txt['unchanged'] = 'deï¿½iï¿½tirilmemiï¿½';
+$txt['um_menu_remove_selected'] = 'Seï¿½ilmiï¿½ Butonlarï¿½ kaldï¿½r';
+$txt['um_menu_remove_all'] = 'Tï¿½m Butonlarï¿½ kaldï¿½r';
+$txt['um_menu_remove_confirm'] = 'Seï¿½ilen Butonlarï¿½ kaldï¿½rmak istediï¿½inizden emin misiniz?';
+$txt['um_menu_remove_all_confirm'] = 'Bï¿½tï¿½n Butonlarï¿½ kaldï¿½rmak istediï¿½inizden emin misiniz?';
 $txt['um_menu_add_title'] = 'Buton Ekle';
-$txt['um_menu_edit_title'] = 'Buton Düzenle';
-$txt['um_menu_button_name'] = 'Buton Ýsmi';
-$txt['um_menu_button_type'] = 'Buton Türü';
-$txt['um_menu_external'] = 'Forum Dýþý Link';
-$txt['um_menu_forum'] = 'Forum içi Link';
-$txt['um_menu_button_link_desc'] = 'Forum içi Linklerde "index.php?" sonraki kýsýmý koyabilirsiniz';
+$txt['um_menu_edit_title'] = 'Buton Dï¿½zenle';
+$txt['um_menu_button_name'] = 'Buton ï¿½smi';
+$txt['um_menu_button_type'] = 'Buton Tï¿½rï¿½';
+$txt['um_menu_external'] = 'Forum Dï¿½ï¿½ï¿½ Link';
+$txt['um_menu_forum'] = 'Forum iï¿½i Link';
+$txt['um_menu_button_link_desc'] = 'Forum iï¿½i Linklerde "index.php?" sonraki kï¿½sï¿½mï¿½ koyabilirsiniz';
 $txt['um_menu_button_link'] = 'Buton Link';
-$txt['um_menu_button_perms'] = 'Ýzin Gruplar';
-$txt['um_menu_button_guest'] = 'Ziyaretçiler';
+$txt['um_menu_button_perms'] = 'ï¿½zin Gruplar';
+$txt['um_menu_button_guest'] = 'Ziyaretï¿½iler';
 $txt['um_menu_button_position'] = 'Buton pozisyonu';
 $txt['um_menu_button_status'] = 'Buton Durumu';
 $txt['um_menu_button_active'] = 'Aktif';
 $txt['um_menu_button_inactive'] = 'Pasif';
-$txt['um_menu_link_type'] = 'Link Türü';
-$txt['um_menu_same_window'] = 'Ayný Pencere';
+$txt['um_menu_link_type'] = 'Link Tï¿½rï¿½';
+$txt['um_menu_same_window'] = 'Aynï¿½ Pencere';
 $txt['um_menu_new_tab'] = 'Yeni Sekme';
 
 // Submission errors
-$txt['um_menu_not_found'] = 'Mevcut Olmayan Bir Butonu Düzenlemeye Çalýþtýnýz!';
-$txt['um_menu_errors_create'] = 'Butonunuz eklenirken þu hatalar oluþtu:';
-$txt['um_menu_errors_modify'] = 'Butonunuz düzenlenirken þu hatalar oluþtu:';
-$txt['um_menu_numeric_desc'] = 'Seçtiðiniz buton adý tümü sayýsal ise. En azýndan olmayan bir sayýsal karakter içeren bir ad kullanmanýz gerekir..<br />
-1E5 sayýsal (bilimsel gösterim) olarak kabul edilir. 1.5 Sayýsal (ondalýk sayý) olarak kabul edilir';
-$txt['um_menu_empty_name'] = 'Buton Ýsmi alaný boþ býrakýlmýþtýr.';
-$txt['um_menu_empty_link'] = 'Buton Link boþ býrakýlmýþtýr.';
-$txt['um_menu_empty_parent'] = 'Ebeveyni boþ býrakýlmýþtýr.';
-$txt['um_menu_depend_desc'] = 'Taþýmadan veya deðiþtirmeden önce bu butonun tüm alt butonlarýný kaldýrmalýsýnýz.';
-$txt['um_menu_before_child_title'] = 'Bunu alt buton yapýn';
-$txt['um_menu_before_child_desc'] = 'butonlarý baþka alt buton yapmak için alt butonu kullanýn!';
-$txt['um_menu_mysql'] = 'Seçtiðiniz buton adý zaten kullanýlýyor!';
+$txt['um_menu_not_found'] = 'Mevcut Olmayan Bir Butonu Dï¿½zenlemeye ï¿½alï¿½ï¿½tï¿½nï¿½z!';
+$txt['um_menu_errors_create'] = 'Butonunuz eklenirken ï¿½u hatalar oluï¿½tu:';
+$txt['um_menu_errors_modify'] = 'Butonunuz dï¿½zenlenirken ï¿½u hatalar oluï¿½tu:';
+$txt['um_menu_numeric_desc'] = 'Seï¿½tiï¿½iniz buton adï¿½ tï¿½mï¿½ sayï¿½sal ise. En azï¿½ndan olmayan bir sayï¿½sal karakter iï¿½eren bir ad kullanmanï¿½z gerekir..<br />
+1E5 sayï¿½sal (bilimsel gï¿½sterim) olarak kabul edilir. 1.5 Sayï¿½sal (ondalï¿½k sayï¿½) olarak kabul edilir';
+$txt['um_menu_empty_name'] = 'Buton ï¿½smi alanï¿½ boï¿½ bï¿½rakï¿½lmï¿½ï¿½tï¿½r.';
+$txt['um_menu_empty_link'] = 'Buton Link boï¿½ bï¿½rakï¿½lmï¿½ï¿½tï¿½r.';
+$txt['um_menu_empty_parent'] = 'Ebeveyni boï¿½ bï¿½rakï¿½lmï¿½ï¿½tï¿½r.';
+$txt['um_menu_depend_desc'] = 'Taï¿½ï¿½madan veya deï¿½iï¿½tirmeden ï¿½nce bu butonun tï¿½m alt butonlarï¿½nï¿½ kaldï¿½rmalï¿½sï¿½nï¿½z.';
+$txt['um_menu_before_child_title'] = 'Bunu alt buton yapï¿½n';
+$txt['um_menu_before_child_desc'] = 'butonlarï¿½ baï¿½ka alt buton yapmak iï¿½in alt butonu kullanï¿½n!';
+$txt['um_menu_mysql'] = 'Seï¿½tiï¿½iniz buton adï¿½ zaten kullanï¿½lï¿½yor!';

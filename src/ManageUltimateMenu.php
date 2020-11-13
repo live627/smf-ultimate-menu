@@ -116,7 +116,7 @@ class ManageUltimateMenu
 					'data' => array(
 						'function' => function($rowData) use ($txt)
 						{
-							return $txt[$rowData['type'] . '_link'];
+							return $txt['um_menu_' . $rowData['type'] . '_link'];
 						},
 					),
 					'sort' => array(
@@ -131,7 +131,13 @@ class ManageUltimateMenu
 					'data' => array(
 						'function' => function($rowData) use ($txt, $button_names)
 						{
-							return $txt['mboards_order_' . $rowData['position']] . ' ' . (isset($button_names[$rowData['parent']]) ? $button_names[$rowData['parent']] : ucwords($rowData['parent']));
+							return sprintf(
+								'%s %s',
+								$txt['um_menu_' . $rowData['position']],
+								isset($button_names[$rowData['parent']])
+									? $button_names[$rowData['parent']]
+									: ucwords($rowData['parent'])
+							);
 						},
 					),
 					'sort' => array(
