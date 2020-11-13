@@ -85,7 +85,7 @@ class ManageUltimateMenu
 
 	public function ListButtons()
 	{
-		global $context, $txt, $scripturl;
+		global $context, $txt, $scripturl, $sourcedir;
 
 		$button_names = $this->um->getButtonNames();
 		$listOptions = array(
