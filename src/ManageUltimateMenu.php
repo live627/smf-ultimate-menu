@@ -223,13 +223,7 @@ class ManageUltimateMenu
 
 	function SaveButton()
 	{
-		global $context, $smcFunc, $txt, $sourcedir;
-
-		// It's expected to be present.
-		$context['user']['unread_messages'] = 0;
-
-		// Load SMF's default menu context
-		setupMenuContext();
+		global $context, $txt;
 
 		if (isset($_POST['submit']))
 		{
