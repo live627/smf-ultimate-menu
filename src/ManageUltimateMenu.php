@@ -103,7 +103,6 @@ class ManageUltimateMenu
 					),
 					'data' => array(
 						'db_htmlsafe' => 'name',
-						'class' => 'centertext',
 					),
 					'sort' => array(
 						'default' => 'name',
@@ -119,7 +118,6 @@ class ManageUltimateMenu
 						{
 							return $txt[$rowData['type'] . '_link'];
 						},
-						'class' => 'centertext',
 					),
 					'sort' => array(
 						'default' => 'type',
@@ -135,7 +133,6 @@ class ManageUltimateMenu
 						{
 							return $txt['mboards_order_' . $rowData['position']] . ' ' . (isset($button_names[$rowData['parent']]) ? $button_names[$rowData['parent']] : ucwords($rowData['parent']));
 						},
-						'class' => 'centertext',
 					),
 					'sort' => array(
 						'default' => 'position',
@@ -148,7 +145,6 @@ class ManageUltimateMenu
 					),
 					'data' => array(
 						'db_htmlsafe' => 'link',
-						'class' => 'centertext',
 					),
 					'sort' => array(
 						'default' => 'link',
@@ -158,6 +154,7 @@ class ManageUltimateMenu
 				'status' => array(
 					'header' => array(
 						'value' => $txt['um_menu_button_active'],
+						'class' => 'centertext',
 					),
 					'data' => array(
 						'function' => function($rowData) use ($txt)
@@ -174,6 +171,7 @@ class ManageUltimateMenu
 				'actions' => array(
 					'header' => array(
 						'value' => $txt['um_menu_actions'],
+						'class' => 'centertext',
 					),
 					'data' => array(
 						'sprintf' => array(
@@ -188,6 +186,7 @@ class ManageUltimateMenu
 				'check' => array(
 					'header' => array(
 						'value' => '<input type="checkbox" onclick="invertAll(this, this.form);" class="input_check" />',
+						'class' => 'centertext',
 					),
 					'data' => array(
 						'sprintf' => array(
