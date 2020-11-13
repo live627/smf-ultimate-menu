@@ -225,7 +225,7 @@ class ManageUltimateMenu
 	{
 		global $context, $txt;
 
-		if (isset($_REQUEST['submit']))
+		if (isset($_POST['submit']))
 		{
 			$post_errors = array();
 			$required_fields = array(
@@ -233,25 +233,76 @@ class ManageUltimateMenu
 				'link',
 				'parent',
 			);
+			$member_groups = array_column($this->um->list_groups('-3', 1), 'id');
+			$button_names = $this->um->getButtonNames();
+			$args = array(
+				'in' => FILTER_VALIDATE_INT,
+				'name' => FILTER_UNSAFE_RAW,
+				'position' => array(
+					'filter' => FILTER_CALLBACK,
+					'options' => function ($v)
+					{
+						return in_array($v, ['before', 'child_of', 'after']) ? $v : false;
+					},
+				),
+				'parent' => array(
+					'filter' => FILTER_CALLBACK,
+					'options' => function ($v) use ($button_names)
+					{
+						return isset($button_names[$v]) ? $v : false;
+					},
+				),
+				'type' => array(
+					'filter' => FILTER_CALLBACK,
+					'options' => function ($v)
+					{
+						return in_array($v, ['forum', 'external']) ? $v : false;
+					},
+				),
+				'link' => FILTER_UNSAFE_RAW,
+				'permissions' => array(
+					'filter' => FILTER_CALLBACK,
+					'flags' => FILTER_REQUIRE_ARRAY,
+					'options' => function ($v) use ($member_groups)
+					{
+						return in_array($v, $member_groups) ? $v : false;
+					},
+				),
+				'status' => array(
+					'filter' => FILTER_CALLBACK,
+					'options' => function ($v)
+					{
+						return in_array($v, ['active', 'inactive']) ? $v : false;
+					},
+				),
+				'target' => array(
+					'filter' => FILTER_CALLBACK,
+					'options' => function ($v)
+					{
+						return in_array($v, ['_self', '_blank']) ? $v : false;
+					},
+				),
+			);
 
 			// Make sure we grab all of the content
-			$id = isset($_REQUEST['in']) ? (int) $_REQUEST['in'] : 0;
-			$name = isset($_REQUEST['name']) ? $_REQUEST['name'] : '';
-			$position = isset($_REQUEST['position']) ? $_REQUEST['position'] : 'before';
-			$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'forum';
-			$link = isset($_REQUEST['link']) ? $_REQUEST['link'] : '';
-			$permissions = isset($_REQUEST['permissions']) ? implode(',', array_intersect($_REQUEST['permissions'], array_keys(list_groups(-3, 1)))) : '1';
-			$status = isset($_REQUEST['status']) ? $_REQUEST['status'] : 'active';
-			$parent = isset($_REQUEST['parent']) ? $_REQUEST['parent'] : 'home';
-			$target = isset($_REQUEST['target']) ? $_REQUEST['target'] : '_self';
+			$menu_entry = array_replace(
+				array(
+					'target' => '_self',
+					'type' => 'forum',
+					'position' => 'before',
+					'status' => 'active',
+					'parent' => 'home',
+				),
+				filter_input_array(INPUT_POST, $args)
+			);
 
 			// These fields are required!
 			foreach ($required_fields as $required_field)
-				if ($_POST[$required_field] == '')
+				if (empty($menu_entry[$required_field]))
 					$post_errors[$required_field] = 'um_menu_empty_' . $required_field;
 
 			// Stop making numeric names!
-			if (is_numeric($name))
+			if (is_numeric($menu_entry['name']))
 				$post_errors['name'] = 'um_menu_numeric';
 
 			// Let's make sure you're not trying to make a name that's already taken.
