@@ -80,7 +80,7 @@ class ManageUltimateMenu
 		elseif (isset($_POST['new']))
 			redirectexit('action=admin;area=umen;sa=addbutton');
 
-		ListButtons();
+		$this->ListButtons();
 	}
 
 	public function ListButtons()
