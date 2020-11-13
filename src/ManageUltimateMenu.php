@@ -184,7 +184,7 @@ class ManageUltimateMenu
 						'class' => 'centertext',
 					),
 					'data' => array(
-						'function' => function($rowData) use ($txt)
+						'function' => function($rowData) use ($scripturl, $txt)
 						{
 							return sprintf(
 								'<a href="%s?action=admin;area=umen;sa=addbutton;edit;in=%d">%s</a>',
