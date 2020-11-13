@@ -11,7 +11,7 @@ class ManageUltimateMenu
 {
 	private $um;
 
-	function __construct()
+	public function __construct()
 	{
 		global $context, $sourcedir, $txt;
 
@@ -44,7 +44,7 @@ class ManageUltimateMenu
 		$this->$subActions[$_GET['sa']]();
 	}
 
-	function ManageUltimateMenu()
+	public function ManageUltimateMenu()
 	{
 		global $context, $txt, $scripturl;
 
@@ -233,7 +233,7 @@ class ManageUltimateMenu
 		$context['default_list'] = 'menu_list';
 	}
 
-	function SaveButton()
+	public function SaveButton()
 	{
 		global $context, $txt;
 
@@ -328,7 +328,6 @@ class ManageUltimateMenu
 				$this->um->saveButton($menu_entry);
 				$this->um->rebuildMenu();
 
-
 				// Before we leave, we must clear the cache. See, SMF
 				// caches its menu at level 2 or higher.
 				clean_cache('menu_buttons');
@@ -360,7 +359,7 @@ class ManageUltimateMenu
 		}
 	}
 
-	function PrepareContext()
+	public function PrepareContext()
 	{
 		global $context, $txt;
 

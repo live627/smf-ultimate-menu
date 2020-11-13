@@ -22,7 +22,7 @@ class UltimateMenu
 	 *
 	 * @return array all the membergroups filtered according to the parameters; empty array if something went wrong.
 	 */
-	function list_groups($checked, $disallowed = '', $inherited = false, $permission = null, $board_id = null)
+	public function list_groups($checked, $disallowed = '', $inherited = false, $permission = null, $board_id = null)
 	{
 		global $modSettings, $smcFunc, $sourcedir, $txt;
 
@@ -69,7 +69,7 @@ class UltimateMenu
 				'min_posts' => -1,
 			)
 		);
-		while ($row = $this->db->fetch_assoc($request))
+		while ($row = $smcFunc['db_fetch_assoc']($request))
 		{
 			if (!in_array($row['id_group'], $disallowed))
 				$groups[(int) $row['id_group']] = array(
@@ -79,7 +79,7 @@ class UltimateMenu
 					'is_post_group' => $row['min_posts'] != -1,
 				);
 		}
-		$this->db->free_result($request);
+		$smcFunc['db_free_result']($request);
 
 		asort($groups);
 
@@ -91,7 +91,7 @@ class UltimateMenu
 	 *
 	 * @return string[]
 	 */
-	function total_getMenu()
+	public function total_getMenu()
 	{
 		global $smcFunc;
 
@@ -101,7 +101,7 @@ class UltimateMenu
 			FROM {db_prefix}um_menu'
 		);
 		$buttons = array();
-		while ($row = $this->db->fetch_assoc($request))
+		while ($row = $smcFunc['db_fetch_assoc']($request))
 			$buttons[] = $row;
 
 		return $buttons;
@@ -116,7 +116,7 @@ class UltimateMenu
 	 *
 	 * @return string[]
 	 */
-	function list_getMenu($start, $items_per_page, $sort)
+	public function list_getMenu($start, $items_per_page, $sort)
 	{
 		global $smcFunc;
 
@@ -133,7 +133,7 @@ class UltimateMenu
 			)
 		);
 		$buttons = array();
-		while ($row = $this->db->fetch_assoc($request))
+		while ($row = $smcFunc['db_fetch_assoc']($request))
 			$buttons[] = $row;
 
 		return $buttons;
@@ -144,7 +144,7 @@ class UltimateMenu
 	 * 
 	 * @return int
 	 */
-	function list_getNumButtons()
+	public function list_getNumButtons()
 	{
 		global $smcFunc;
 
@@ -152,8 +152,8 @@ class UltimateMenu
 			SELECT COUNT(*)
 			FROM {db_prefix}um_menu'
 		);
-		list ($numButtons) = $this->db->fetch_row($request);
-		$this->db->free_result($request);
+		list ($numButtons) = $smcFunc['db_fetch_row']($request);
+		$smcFunc['db_free_result']($request);
 
 		return $numButtons;
 	}
@@ -163,7 +163,7 @@ class UltimateMenu
 	 *
 	 * Called whenever the menu structure is updated in the ACP
 	 */
-	function rebuildMenu()
+	public function rebuildMenu()
 	{
 		global $smcFunc;
 
@@ -172,9 +172,9 @@ class UltimateMenu
 			FROM {db_prefix}um_menu'
 		);
 		$buttons = array();
-		while ($row = $this->db->fetch_assoc($request))
+		while ($row = $smcFunc['db_fetch_assoc']($request))
 			$buttons['um_button_' . $row['id_button']] = json_encode($row);
-		$this->db->free_result($request);
+		$smcFunc['db_free_result']($request);
 		updateSettings(
 			array(
 				'um_count' => count($buttons),
@@ -187,7 +187,7 @@ class UltimateMenu
 	 *
 	 * @param int[] $ids
 	 */
-	function deleteButton($ids)
+	public function deleteButton(array $ids)
 	{
 		global $smcFunc;
 
@@ -203,10 +203,9 @@ class UltimateMenu
 	/**
 	 * Changes the status of a button from active to inactive
 	 *
-	 * @param int    $id
-	 * @param string $updates
+	 * @param array $updates
 	 */
-	function updateButton($id, $updates)
+	public function updateButton(array $updates)
 	{
 		global $smcFunc;
 
@@ -234,7 +233,7 @@ class UltimateMenu
 	 *
 	 * @return int
 	 */
-	function checkButton($id, $name)
+	public function checkButton($id, $name)
 	{
 		global $smcFunc;
 
@@ -248,8 +247,8 @@ class UltimateMenu
 				'id' => $id ?: 0,
 			)
 		);
-		$check = $this->db->num_rows($request);
-		$this->db->free_result($request);
+		$check = $smcFunc['db_num_rows']($request);
+		$smcFunc['db_free_result']($request);
 
 		return $check;
 	}
@@ -257,7 +256,7 @@ class UltimateMenu
 	/**
 	 * Saves a new or updates an existing button
 	 */
-	function saveButton($menu_entry)
+	public function saveButton(array $menu_entry)
 	{
 		global $smcFunc;
 
@@ -290,7 +289,7 @@ class UltimateMenu
 		}
 		else
 		{
-			$this->db->insert(
+			$smcFunc['db_insert'](
 				'insert',
 				'{db_prefix}um_menu',
 				array(
@@ -323,9 +322,9 @@ class UltimateMenu
 	 *
 	 * @param int $id
 	 *
-	 * @return mixed[]
+	 * @return array
 	 */
-	function fetchButton($id)
+	public function fetchButton($id)
 	{
 		global $smcFunc;
 
@@ -338,8 +337,8 @@ class UltimateMenu
 				'button' => $id,
 			)
 		);
-		$row = $this->db->fetch_assoc($request);
-		$this->db->free_result($request);
+		$row = $smcFunc['db_fetch_assoc']($request);
+		$smcFunc['db_free_result']($request);
 
 		return $row;
 	}
@@ -347,7 +346,7 @@ class UltimateMenu
 	/**
 	 * Removes all buttons
 	 */
-	function deleteallButtons()
+	public function deleteallButtons()
 	{
 		global $smcFunc;
 
@@ -359,9 +358,9 @@ class UltimateMenu
 	/**
 	 * Fetches the names of all SMF menu buttons.
 	 *
-	 * @return string[]
+	 * @return array
 	 */
-	function getButtonNames()
+	public function getButtonNames()
 	{
 		global $context;
 
