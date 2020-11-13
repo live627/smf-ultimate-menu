@@ -88,7 +88,6 @@ foreach ($tables as $table)
 $request = $smcFunc['db_query']('', '
 	SELECT id_button, name, target, type, position, link, status, permissions, parent
 	FROM {db_prefix}um_menu');
-
 $buttons = array();
 while ($row = $smcFunc['db_fetch_assoc']($request))
 	$buttons['um_button_' . $row['id_button']] = json_encode($row);
@@ -97,6 +96,14 @@ updateSettings(
 	array(
 		'um_count' => count($buttons),
 	) + $buttons
+);
+
+$smcFunc['db_query']('', '
+	DELETE FROM {db_prefix}settings
+	WHERE variable = {string:setting}',
+	array(
+		'setting' => 'um_menu',
+	)
 );
 
 // Now presenting... *drumroll*

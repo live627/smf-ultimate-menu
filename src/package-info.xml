@@ -10,6 +10,7 @@
 		<readme type="file" parsebbc="true">install.txt</readme>
 		<database>install.php</database>
 		<require-file name="Subs-UltimateMenu.php" destination="$sourcedir" />
+		<require-file name="Class-UltimateMenu.php" destination="$sourcedir" />
 		<require-file name="ManageUltimateMenu.php" destination="$sourcedir" />
 		<require-file name="ManageUltimateMenu.template.php" destination="$themedir" />
 		<require-file name="ManageUltimateMenu.english.php" destination="$languagedir" />
@@ -20,13 +21,14 @@
 		<require-file name="ManageUltimateMenu.russian.php" destination="$languagedir" />
 		<require-file name="ManageUltimateMenu.russian-utf8.php" destination="$languagedir" />
  		<require-file name="umen.png" destination="$themes_dir/default/images/admin" />
-		<redirect url="?action=admin;area=umen" />
+		<redirect url="action=admin;area=umen" />
 	</install>
 
 	<uninstall for="2.0 - 2.0.99">
 		<readme type="file" parsebbc="true">uninstall.txt</readme>
 		<database>uninstall-optional.php</database>
 		<code>uninstall-required.php</code>
+		<remove-file name="$sourcedir/Class-UltimateMenu.php" />
 		<remove-file name="$sourcedir/Subs-UltimateMenu.php" />
 		<remove-file name="$sourcedir/ManageUltimateMenu.php" />
 		<remove-file name="$themedir/ManageUltimateMenu.template.php" />

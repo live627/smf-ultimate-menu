@@ -74,82 +74,6 @@ function um_load_menu(&$menu_buttons)
 	}
 }
 
-/**
- * Gets all membergroups and filters them according to the parameters.
- *
- * @param string $checked comma-seperated list of all id_groups to be checked (have a mark in the checkbox). Default is an empty array.
- * @param string $disallowed comma-seperated list of all id_groups that are skipped. Default is an empty array.
- * @param bool $inherited whether or not to filter out the inherited groups. Default is false.
- * @return array all the membergroups filtered according to the parameters; empty array if something went wrong.
- * @since 1.0
- */
-function list_groups($checked, $disallowed = '', $inherited = false, $permission = null, $board_id = null)
-{
-	global $context, $modSettings, $smcFunc, $sourcedir, $txt;
-
-	// We'll need this for loading up the names of each group.
-	if (!loadLanguage('ManageBoards'))
-		loadLanguage('ManageBoards');
-
-	$checked = explode(',', $checked);
-	$disallowed = explode(',', $disallowed);
-
-	// Are we also looking up permissions?
-	if ($permission !== null)
-	{
-		require_once($sourcedir . '/Subs-Members.php');
-		$member_groups = groupsAllowedTo($permission, $board_id);
-		$disallowed = array_diff(array_keys(list_groups(-3)), $member_groups['allowed']);
-	}
-
-	$groups = array();
-
-	if (!in_array(-1, $disallowed))
-		// Guests
-		$groups[-1] = array(
-			'id' => -1,
-			'name' => $txt['parent_guests_only'],
-			'checked' => in_array(-1, $checked) || in_array(-3, $checked),
-			'is_post_group' => false,
-		);
-
-	if (!in_array(0, $disallowed))
-		// Regular Members
-		$groups[0] = array(
-			'id' => 0,
-			'name' => $txt['parent_members_only'],
-			'checked' => in_array(0, $checked) || in_array(-3, $checked),
-			'is_post_group' => false,
-		);
-
-	// Load membergroups.
-	$request = $smcFunc['db_query']('', '
-		SELECT group_name, id_group, min_posts
-		FROM {db_prefix}membergroups
-		WHERE id_group > {int:is_zero}' . (!$inherited ? '
-			AND id_parent = {int:not_inherited}' : '') . (!$inherited && empty($modSettings['permission_enable_postgroups']) ? '
-			AND min_posts = {int:min_posts}' : ''),
-		array(
-			'is_zero' => 0,
-			'not_inherited' => -2,
-			'min_posts' => -1,
-		)
-	);
-	while ($row = $smcFunc['db_fetch_assoc']($request))
-		if (!in_array($row['id_group'], $disallowed))
-			$groups[(int) $row['id_group']] = array(
-				'id' => $row['id_group'],
-				'name' => trim($row['group_name']),
-				'checked' => in_array($row['id_group'], $checked) || in_array(-3, $checked),
-				'is_post_group' => $row['min_posts'] != -1,
-			);
-	$smcFunc['db_free_result']($request);
-
-	asort($groups);
-
-	return $groups;
-}
-
 function insert_button($needle, &$haystack, $insertion_point, $where = 'after')
 {
 	if (array_key_exists($insertion_point, $haystack))
@@ -191,7 +115,9 @@ function um_admin_areas(&$admin_areas)
 	$admin_areas['config']['areas']['umen'] = array(
 		'label' => $txt['um_admin_menu'],
 		'file' => 'ManageUltimateMenu.php',
-		'function' => 'Menu',
+		'function' => function () {
+			new ManageUltimateMenu;
+		},
 		'icon' => 'umen.png',
 		'subsections' => array(
 			'manmenu' => array($txt['um_admin_manage_menu'], ''),
