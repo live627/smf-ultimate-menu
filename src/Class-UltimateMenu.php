@@ -219,7 +219,7 @@ class UltimateMenu
 					WHERE id_button = {int:item}',
 					array(
 						'status' => $status,
-						'item' => $id,
+						'item' => $item['id_button'],
 					)
 				);
 		}
