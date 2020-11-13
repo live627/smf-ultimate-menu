@@ -126,7 +126,7 @@ class ManageUltimateMenu
 						'reverse' => 'type DESC',
 					),
 				),
-				'poition' => array(
+				'position' => array(
 					'header' => array(
 						'value' => $txt['um_menu_button_position'],
 					),
