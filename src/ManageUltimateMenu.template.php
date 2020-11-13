@@ -51,10 +51,16 @@ function template_main()
 							<strong>', $txt['um_menu_button_position'], ':</strong>
 						</dt>
 						<dd>
-							<select name="position" size="10" style="width: 22%;" onchange="this.form.position.disabled = this.options[this.selectedIndex].value == \'\';">
-								<option value="after"', $context['button_data']['position'] == 'after' ? ' selected="selected"' : '', '>' . $txt['mboards_order_after'] . '...</option>
-								<option value="child_of"', $context['button_data']['position'] == 'child_of' ? ' selected="selected"' : '', '>' . $txt['mboards_order_child_of'] . '...</option>
-								<option value="before"', $context['button_data']['position'] == 'before' ? ' selected="selected"' : '', '>' . $txt['mboards_order_before'] . '...</option>
+							<select name="position" size="10" style="width: 22%;" onchange="this.form.position.disabled = this.options[this.selectedIndex].value == \'\';">';
+
+	foreach (['after', 'child_of', 'before'] as $v)
+		printf('
+								<option value="%s"%s>%s...</option>',
+			$v,
+			$context['button_data']['position'] ==  $v ? ' selected="selected"' : '',
+			$txt['um_menu_' . $v]);
+
+	echo '
 							</select>
 							<select name="parent" size="10" style="width: 75%;">';
 
