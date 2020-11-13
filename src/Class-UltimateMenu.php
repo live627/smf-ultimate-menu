@@ -13,34 +13,18 @@ class UltimateMenu
 	/**
 	 * Gets all membergroups and filters them according to the parameters.
 	 *
-	 * @param string $checked    comma-seperated list of all id_groups to be checked (have a mark in the checkbox). Default
+	 * @param int[] $checked    comma-seperated list of all id_groups to be checked (have a mark in the checkbox). Default
 	 *                           is an empty array.
-	 * @param string $disallowed comma-seperated list of all id_groups that are skipped. Default is an empty array.
-	 * @param bool   $inherited  whether or not to filter out the inherited groups. Default is false.
-	 * @param null   $permission
-	 * @param null   $board_id
+	 * @param int[] $disallowed comma-seperated list of all id_groups that are skipped. Default is an empty array.
+	 * @param bool  $inherited  whether or not to filter out the inherited groups. Default is false.
 	 *
 	 * @return array all the membergroups filtered according to the parameters; empty array if something went wrong.
 	 */
-	public function list_groups($checked, $disallowed = '', $inherited = false, $permission = null, $board_id = null)
+	public function listGroups($checked, $disallowed = '', $inherited = false, $permission = null, $board_id = null)
 	{
 		global $modSettings, $smcFunc, $sourcedir, $txt;
 
-		// We'll need this for loading up the names of each group.
-		if (!loadLanguage('ManageBoards'))
-			loadLanguage('ManageBoards');
-
-		$checked = explode(',', $checked);
-		$disallowed = explode(',', $disallowed);
-
-		// Are we also looking up permissions?
-		if ($permission !== null)
-		{
-			require_once($sourcedir . '/Subs-Members.php');
-			$member_groups = groupsAllowedTo($permission, $board_id);
-			$disallowed = array_diff(array_keys(list_groups(-3)), $member_groups['allowed']);
-		}
-
+		loadLanguage('ManageBoards');
 		$groups = array();
 		if (!in_array(-1, $disallowed))
 			$groups[-1] = array(
@@ -330,7 +314,7 @@ class UltimateMenu
 
 		$request = $smcFunc['db_query']('', '
 			SELECT
-				name, target, type, position, link, status, permissions, parent
+				id_button, name, target, type, position, link, status, permissions, parent
 			FROM {db_prefix}um_menu
 			WHERE id_button = {int:button}',
 			array(
@@ -340,7 +324,17 @@ class UltimateMenu
 		$row = $smcFunc['db_fetch_assoc']($request);
 		$smcFunc['db_free_result']($request);
 
-		return $row;
+		return array(
+			'id' => $row['id_button'],
+			'name' => $row['name'],
+			'target' => $row['target'],
+			'type' => $row['type'],
+			'position' => $row['position'],
+			'permissions' => explode(',', $row['permissions']),
+			'link' => $row['link'],
+			'status' => $row['status'],
+			'parent' => $row['parent'],
+		);
 	}
 
 	/**

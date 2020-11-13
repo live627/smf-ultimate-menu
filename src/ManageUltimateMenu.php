@@ -257,7 +257,7 @@ class ManageUltimateMenu
 				'link',
 				'parent',
 			);
-			$member_groups = array_column($this->um->list_groups('-3', 1), 'id');
+			$member_groups = array_column($this->um->listGroups([-3'], [1]), 'id');
 			$button_names = $this->um->getButtonNames();
 			$args = array(
 				'in' => FILTER_VALIDATE_INT,
@@ -360,9 +360,9 @@ class ManageUltimateMenu
 					'position' => $menu_entry['position'],
 					'link' => $menu_entry['link'],
 					'parent' => $menu_entry['parent'],
-					'permissions' => $this->um->list_groups(
-						implode(',', array_filter($menu_entry['permissions'], 'strlen')),
-						1
+					'permissions' => $this->um->listGroups(
+						array_filter($menu_entry['permissions'], 'strlen'),
+						[1]
 					),
 					'status' => $menu_entry['status'],
 					'id' => $menu_entry['id'],
@@ -380,12 +380,12 @@ class ManageUltimateMenu
 			$row = $this->um->fetchButton($_GET['in']);
 
 			$context['button_data'] = array(
-				'id' => $_GET['in'],
+				'id' => $row['id'],
 				'name' => $row['name'],
 				'target' => $row['target'],
 				'type' => $row['type'],
 				'position' => $row['position'],
-				'permissions' => $this->um->list_groups($row['permissions'], 1),
+				'permissions' => $this->um->listGroups($row['permissions'], [1]),
 				'link' => $row['link'],
 				'status' => $row['status'],
 				'parent' => $row['parent'],
@@ -400,7 +400,7 @@ class ManageUltimateMenu
 				'type' => 'forum',
 				'position' => 'before',
 				'status' => 'active',
-				'permissions' => $this->um->list_groups('-3', 1),
+				'permissions' => $this->um->listGroups([-3'], [1]),
 				'parent' => 'home',
 				'id' => 0,
 			);
