@@ -46,8 +46,6 @@ class ManageUltimateMenu
 
 	public function ManageUltimateMenu()
 	{
-		global $context, $txt, $scripturl;
-
 		// Get rid of all of em!
 		if (!empty($_POST['removeAll']))
 		{
@@ -81,6 +79,13 @@ class ManageUltimateMenu
 		// New item?
 		elseif (isset($_POST['new']))
 			redirectexit('action=admin;area=umen;sa=addbutton');
+
+		ListButtons();
+	}
+
+	public function ListButtons()
+	{
+		global $context, $txt, $scripturl;
 
 		$button_names = $this->um->getButtonNames();
 		$listOptions = array(
