@@ -218,11 +218,18 @@ class ManageUltimateMenu
 			'additional_rows' => array(
 				array(
 					'position' => 'below_table_data',
-					'value' => '
-						<input type="submit" name="removeButtons" value="' . $txt['um_menu_remove_selected'] . '" onclick="return confirm(\'' . $txt['um_menu_remove_confirm'] . '\');" class="button_submit" />
-						<input type="submit" name="removeAll" value="' . $txt['um_menu_remove_all'] . '" onclick="return confirm(\'' . $txt['um_menu_remove_all_confirm'] . '\');" class="button_submit" />
-						<input type="submit" name="new" value="' . $txt['um_admin_add_button'] . '" class="button_submit" />
-						<input type="submit" name="save" value="' . $txt['save'] . '" class="button_submit" />',
+					'value' => sprintf('
+						<input type="submit" name="removeButtons" value="%s" onclick="return confirm(\'%s\');" class="button_submit" />
+						<input type="submit" name="removeAll" value="%s" onclick="return confirm(\'%s\');" class="button_submit" />
+						<input type="submit" name="new" value="%s" class="button_submit" />
+						<input type="submit" name="save" value="%s" class="button_submit" />',
+						$txt['um_menu_remove_selected'],
+						$txt['um_menu_remove_confirm'],
+						$txt['um_menu_remove_all'],
+						$txt['um_menu_remove_all_confirm'],
+						$txt['um_admin_add_button'],
+						$txt['save']
+					),
 					'class' => 'righttext',
 				),
 			),
