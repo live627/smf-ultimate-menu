@@ -262,7 +262,7 @@ class UltimateMenu
 
 		if (!empty($menu_entry['id']))
 		{
-			$request = $smcFunc['db_query']('', '
+			$smcFunc['db_query']('', '
 				UPDATE {db_prefix}um_menu
 				SET
 					name = {string:name},
