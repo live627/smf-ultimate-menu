@@ -72,7 +72,7 @@ class UltimateMenu
 		while ($row = $smcFunc['db_fetch_assoc']($request))
 		{
 			if (!in_array($row['id_group'], $disallowed))
-				$groups[(int) $row['id_group']] = array(
+				$groups[$row['id_group']] = array(
 					'id' => $row['id_group'],
 					'name' => trim($row['group_name']),
 					'checked' => in_array($row['id_group'], $checked) || in_array(-3, $checked),
