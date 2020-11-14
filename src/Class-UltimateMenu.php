@@ -40,15 +40,20 @@ class UltimateMenu
 				'checked' => in_array(0, $checked) || in_array(-3, $checked),
 				'is_post_group' => false,
 			);
+		$where = [];
+		if (!$inherited)
+		{
+			$where[] = 'id_parent = {int:not_inherited}';
+			if (empty($modSettings['permission_enable_postgroups']))
+				$where[] = 'min_posts = {int:min_posts}';
+		}
 		$request = $smcFunc['db_query']('', '
 			SELECT
 				group_name, id_group, min_posts
 			FROM {db_prefix}membergroups
-			WHERE id_group > {int:is_zero}' . (!$inherited ? '
-				AND id_parent = {int:not_inherited}' : '') . (!$inherited && empty($modSettings['permission_enable_postgroups']) ? '
-				AND min_posts = {int:min_posts}' : ''),
+			WHERE ' . implode('
+				AND '$where),
 			array(
-				'is_zero' => 0,
 				'not_inherited' => -2,
 				'min_posts' => -1,
 			)
