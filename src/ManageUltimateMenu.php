@@ -398,6 +398,7 @@ class ManageUltimateMenu
 				$context['button_data']['permissions'],
 				array_flip($row['permissions'])
 			));
+			$context['page_title'] = $txt['um_menu_edit_title'];
 		}
 		else
 		{
