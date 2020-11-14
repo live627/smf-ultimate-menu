@@ -134,7 +134,7 @@ class ManageUltimateMenu
 								'%s %s',
 								$txt['um_menu_' . $rowData['position']],
 								isset($button_names[$rowData['parent']])
-									? $button_names[$rowData['parent']]
+									? $button_names[$rowData['parent']][1]
 									: ucwords($rowData['parent'])
 							);
 						},
@@ -343,6 +343,7 @@ class ManageUltimateMenu
 			else
 			{
 				$context['page_title'] = $txt['um_menu_edit_title'];
+				$context['button_names'] = $button_names;
 				$context['post_error'] = $post_errors;
 				$context['error_title'] = empty($menu_entry['id'])
 					? 'um_menu_errors_create'
@@ -408,5 +409,6 @@ class ManageUltimateMenu
 			$context['all_groups_checked'] = true;
 			$context['page_title'] = $txt['um_menu_add_title'];
 		}
+		$context['button_names'] = $this->um->getButtonNames();
 	}
 }
