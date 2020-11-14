@@ -48,7 +48,7 @@ class UltimateMenu
 				group_name, id_group, min_posts
 			FROM {db_prefix}membergroups
 			WHERE ' . implode('
-				AND '$where),
+				AND ',$where),
 			array(
 				'not_inherited' => -2,
 				'min_posts' => -1,
