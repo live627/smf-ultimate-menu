@@ -245,6 +245,7 @@ class ManageUltimateMenu
 
 		if (isset($_POST['submit']))
 		{
+			checkSession();
 			$post_errors = array();
 			$required_fields = array(
 				'name',
