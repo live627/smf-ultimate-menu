@@ -15,32 +15,30 @@ class UltimateMenu
 	 *
 	 * @param int[] $checked    list of all id_groups to be checked (have a mark in the checkbox).
 	 *                          Default is an empty array.
-	 * @param int[] $disallowed list of all id_groups that are skipped. Default is an empty array.
 	 * @param bool  $inherited  whether or not to filter out the inherited groups. Default is false.
 	 *
 	 * @return array all the membergroups filtered according to the parameters; empty array if something went wrong.
 	 */
-	public function listGroups(array $checked = [], array $disallowed = [], $inherited = false)
+	public function listGroups(array $checked = [], $inherited = false)
 	{
 		global $modSettings, $smcFunc, $sourcedir, $txt;
 
 		loadLanguage('ManageBoards');
-		$groups = array();
-		if (!in_array(-1, $disallowed))
-			$groups[-1] = array(
+		$groups = array(
+			-1 => array(
 				'id' => -1,
 				'name' => $txt['parent_guests_only'],
 				'checked' => in_array(-1, $checked) || in_array(-3, $checked),
 				'is_post_group' => false,
-			);
-		if (!in_array(0, $disallowed))
-			$groups[0] = array(
+			),
+			0 => array(
 				'id' => 0,
 				'name' => $txt['parent_members_only'],
 				'checked' => in_array(0, $checked) || in_array(-3, $checked),
 				'is_post_group' => false,
-			);
-		$where = [];
+			)
+		);
+		$where = ['id_group NOT IN (1, 3)'];
 		if (!$inherited)
 		{
 			$where[] = 'id_parent = {int:not_inherited}';
@@ -59,18 +57,13 @@ class UltimateMenu
 			)
 		);
 		while ($row = $smcFunc['db_fetch_assoc']($request))
-		{
-			if (!in_array($row['id_group'], $disallowed))
-				$groups[$row['id_group']] = array(
-					'id' => $row['id_group'],
-					'name' => trim($row['group_name']),
-					'checked' => in_array($row['id_group'], $checked) || in_array(-3, $checked),
-					'is_post_group' => $row['min_posts'] != -1,
-				);
-		}
+			$groups[$row['id_group']] = array(
+				'id' => $row['id_group'],
+				'name' => trim($row['group_name']),
+				'checked' => in_array($row['id_group'], $checked) || in_array(-3, $checked),
+				'is_post_group' => $row['min_posts'] != -1,
+			);
 		$smcFunc['db_free_result']($request);
-
-		asort($groups);
 
 		return $groups;
 	}
