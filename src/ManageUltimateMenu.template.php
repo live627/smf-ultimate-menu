@@ -79,7 +79,7 @@ function template_main()
 
 	foreach ($context['button_names'] as $idx => $title)
 		printf('
-								<option value="%s"%s>%s...</option>',
+								<option value="%s"%s>%s</option>',
 			$idx,
 			$context['button_data']['position'] ==  $idx ? ' selected="selected"' : '',
 			empty($title[0]) ? $title[1] : str_repeat('&emsp;', $title[0]) . $title[1]
