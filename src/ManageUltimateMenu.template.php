@@ -64,23 +64,13 @@ function template_main()
 							</select>
 							<select name="parent" size="10" style="width: 75%;">';
 
-	foreach ($context['menu_buttons'] as $buttonIndex => $buttonData)
-	{
-		echo '
-									<option value="', $buttonIndex, '"', $context['button_data']['parent'] == $buttonIndex ? ' selected="selected"' : '', '>', $buttonData['title'], '</option>';
-
-		if (!empty($buttonData['sub_buttons']))
-		{
-			foreach ($buttonData['sub_buttons'] as $childButton => $childButtonData)
-				echo '
-									<option value="', $childButton, '"', $context['button_data']['parent'] == $childButton ? ' selected="selected"' : '', '>-- ', $childButtonData['title'], '</option>';
-
-			if (!empty($childButtonData['sub_buttons']))
-				foreach ($childButtonData['sub_buttons'] as $grandChildButton => $grandChildButtonData)
-					echo '
-									<option value="', $grandChildButton, '"', $context['button_data']['parent'] == $grandChildButton ? ' selected="selected"' : '', '>---- ', $grandChildButtonData['title'], '</option>';
-		}
-	}
+	foreach ($context['button_names'] as $idx => $title)
+		printf('
+								<option value="%s"%s>%s...</option>',
+			$idx,
+			$context['button_data']['position'] ==  $idx ? ' selected="selected"' : '',
+			empty($title[0])?$title[1]:str_repeat('-',$title[0]*2).$title[1]
+		);
 
 	echo '
 							</select>
