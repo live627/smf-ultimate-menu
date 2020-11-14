@@ -8,9 +8,9 @@
  * @license http://opensource.org/licenses/MIT MIT
  */
 
-function template_main()
+function template_form_above()
 {
-	global $context, $scripturl, $txt, $settings;
+	global $context, $scripturl;
 
 	echo '
 		<form action="', $scripturl, '?action=admin;area=umen;sa=savebutton" method="post" accept-charset="', $context['character_set'], '" name="postmodify" id="postmodify" class="flow_hidden">
@@ -21,8 +21,12 @@ function template_main()
 			</div>
 			<span class="upperframe"><span></span></span>
 				<div class="roundframe">';
+}
 
-	// If an error occurred, explain what happened.
+function template_errors_above()
+{
+	global $context, $txt;
+
 	if (!empty($context['post_error']))
 	{
 		echo '
@@ -38,6 +42,15 @@ function template_main()
 						</ul>
 					</div>';
 	}
+}
+
+function template_errors_below()
+{
+}
+
+function template_main()
+{
+	global $context, $txt, $scripturl;
 
 	echo '
 					<dl class="settings">
@@ -135,7 +148,14 @@ function template_main()
 							<input type="radio" class="input_check" name="status" value="active"', $context['button_data']['status'] == 'active' ? ' checked="checked"' : '', ' />', $txt['um_menu_button_active'], ' <br />
 							<input type="radio" class="input_check" name="status" value="inactive"', $context['button_data']['status'] == 'inactive' ? ' checked="checked"' : '', ' />', $txt['um_menu_button_inactive'], '
 						</dd>
-					</dl>
+					</dl>';
+}
+
+function template_form_below()
+{
+	global $context, $txt;
+
+	echo '
 					<input name="in" value="', $context['button_data']['id'], '" type="hidden" />
 					<div class="righttext padding">
 						<input name="submit" value="', $txt['admin_manage_menu_submit'], '" class="button_submit" type="submit" />
@@ -145,5 +165,3 @@ function template_main()
 			<span class="lowerframe"><span></span></span>
 			<br class="clear" />';
 }
-
-?>
