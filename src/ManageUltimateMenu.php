@@ -257,7 +257,7 @@ class ManageUltimateMenu
 				'link',
 				'parent',
 			);
-			$member_groups = array_column($this->um->listGroups([-3'], [1]), 'id');
+			$member_groups = array_column($this->um->listGroups([-3'], [1], 'id');
 			$button_names = $this->um->getButtonNames();
 			$args = array(
 				'in' => FILTER_VALIDATE_INT,
