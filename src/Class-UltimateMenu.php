@@ -13,14 +13,14 @@ class UltimateMenu
 	/**
 	 * Gets all membergroups and filters them according to the parameters.
 	 *
-	 * @param int[] $checked    comma-seperated list of all id_groups to be checked (have a mark in the checkbox). Default
-	 *                           is an empty array.
-	 * @param int[] $disallowed comma-seperated list of all id_groups that are skipped. Default is an empty array.
+	 * @param int[] $checked    list of all id_groups to be checked (have a mark in the checkbox).
+	 *                          Default is an empty array.
+	 * @param int[] $disallowed list of all id_groups that are skipped. Default is an empty array.
 	 * @param bool  $inherited  whether or not to filter out the inherited groups. Default is false.
 	 *
 	 * @return array all the membergroups filtered according to the parameters; empty array if something went wrong.
 	 */
-	public function listGroups($checked, $disallowed = '', $inherited = false, $permission = null, $board_id = null)
+	public function listGroups(array $checked = [], array $disallowed = [], $inherited = false)
 	{
 		global $modSettings, $smcFunc, $sourcedir, $txt;
 
