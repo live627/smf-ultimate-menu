@@ -64,7 +64,7 @@ function template_main()
 							<strong>', $txt['um_menu_button_position'], ':</strong>
 						</dt>
 						<dd>
-							<select name="position" size="10" style="width: 22%;" onchange="this.form.position.disabled = this.options[this.selectedIndex].value == \'\';">';
+							<select name="position" size="10" style="width: 22%;">';
 
 	foreach (['after', 'child_of', 'before'] as $v)
 		printf('
@@ -114,7 +114,7 @@ function template_main()
 						</dt>
 						<dd>
 							<fieldset id="group_perms">
-								<legend><a href="#" onclick="this.parentNode.parentNode.style.display = \'none\';document.getElementById(\'group_perms_groups_link\').style.display = \'block\'; return false;">', $txt['avatar_select_permission'], '</a></legend>';
+								<legend>', $txt['avatar_select_permission'], '</legend>';
 
 	foreach ($context['button_data']['permissions'] as $id => $permission)
 	{
@@ -132,14 +132,9 @@ function template_main()
 	}
 
 	echo '
-								<input type="checkbox" class="input_check" onclick="invertAll(this, this.form, \'permissions[]\');" id="check_group_all"', $context['all_groups_checked'] ? ' checked="checked"' : '', ' />
+								<input type="checkbox" class="input_check" id="check_group_all"', $context['all_groups_checked'] ? ' checked="checked"' : '', ' />
 								<label for="check_group_all"><em>', $txt['check_all'], '</em></label><br />
 							</fieldset>
-							<a href="#" onclick="document.getElementById(\'group_perms\').style.display = \'block\'; this.style.display = \'none\'; return false;" id="group_perms_groups_link" style="display: none;">[ ', $txt['avatar_select_permission'], ' ]</a>
-							<script type="text/javascript"><!-- // --><![CDATA[
-								document.getElementById("group_perms").style.display = "none";
-								document.getElementById("group_perms_groups_link").style.display = "";
-							// ]]></script>
 						</dd>
 						<dt>
 							<strong>', $txt['um_menu_button_status'], ':</strong>
@@ -164,5 +159,39 @@ function template_form_below()
 				</div>
 			</form>
 			<span class="lowerframe"><span></span></span>
-			<br class="clear" />';
+			<script>
+				document.getElementById("check_group_all").addEventListener("click", function(event)
+				{
+					invertAll(this, this.form, "permissions[]");
+				});
+				var
+					el = document.createElement("a"),
+					div = document.getElementById("group_perms"),
+					l = div.firstElementChild
+					a = document.createElement("a");
+				el.innerHTML = "[ " + l.innerHTML + " ]";
+				el.href = "#";
+				el.style.display = "";
+				el.addEventListener("click", function(event)
+				{
+					div.style.display = "";
+					this.style.display = "none";
+					event.stopPropagation();
+					event.preventDefault();
+				});
+				div.style.display = "none";
+				div.parentNode.appendChild(el);
+				a.innerHTML = l.innerHTML;
+				a.href = "#";
+				a.style.display = "";
+				a.addEventListener("click", function(event)
+				{
+					div.style.display = "none";
+					el.style.display = "";
+					event.stopPropagation();
+					event.preventDefault();
+				});
+				l.innerHTML = "";
+				l.appendChild(a);
+			</script>';
 }
