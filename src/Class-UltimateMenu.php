@@ -26,13 +26,11 @@ class UltimateMenu
 		loadLanguage('ManageBoards');
 		$groups = array(
 			-1 => array(
-				'id' => -1,
 				'name' => $txt['parent_guests_only'],
 				'checked' => in_array(-1, $checked) || in_array(-3, $checked),
 				'is_post_group' => false,
 			),
 			0 => array(
-				'id' => 0,
 				'name' => $txt['parent_members_only'],
 				'checked' => in_array(0, $checked) || in_array(-3, $checked),
 				'is_post_group' => false,
@@ -58,7 +56,6 @@ class UltimateMenu
 		);
 		while ($row = $smcFunc['db_fetch_assoc']($request))
 			$groups[$row['id_group']] = array(
-				'id' => $row['id_group'],
 				'name' => trim($row['group_name']),
 				'checked' => in_array($row['id_group'], $checked) || in_array(-3, $checked),
 				'is_post_group' => $row['min_posts'] != -1,

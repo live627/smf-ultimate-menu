@@ -116,15 +116,19 @@ function template_main()
 	$all_checked = true;
 
 	// List all the groups to configure permissions for.
-	foreach ($context['button_data']['permissions'] as $permission)
+	foreach ($context['button_data']['permissions'] as $id => $permission)
 	{
 		echo '
-								<div id="permissions_', $permission['id'], '">
-									<label for="check_group', $permission['id'], '">
-										<input type="checkbox" class="input_check" name="permissions[]" value="', $permission['id'], '" id="check_group', $permission['id'], '"', $permission['checked'] ? ' checked="checked"' : '', ' />
-										<span', ($permission['is_post_group'] ? ' class="border-bottom" title="' . $txt['mboards_groups_post_group'] . '"' : ''), '>', $permission['name'], '</span>
-									</label>
-								</div>';
+								<label>
+									<input type="checkbox" class="input_check" name="permissions[]" value="', $id, '"', $permission['checked'] ? ' checked="checked"' : '', ' />
+									<span';
+
+		if  ($permission['is_post_group'])
+			echo ' title="' . $txt['mboards_groups_post_group'] . '"';
+
+		echo '>', $permission['name'], '</span>
+								</label>
+								<br>';
 
 		if (!$permission['checked'])
 			$all_checked = false;
