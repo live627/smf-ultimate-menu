@@ -251,7 +251,7 @@ class ManageUltimateMenu
 				'link',
 				'parent',
 			);
-			$member_groups = array_column($this->um->listGroups([-3'], 'id');
+			$member_groups = $this->um->listGroups([-3']);
 			$button_names = $this->um->getButtonNames();
 			$args = array(
 				'in' => FILTER_VALIDATE_INT,
@@ -283,7 +283,7 @@ class ManageUltimateMenu
 					'flags' => FILTER_REQUIRE_ARRAY,
 					'options' => function ($v) use ($member_groups)
 					{
-						return in_array($v, $member_groups) ? $v : false;
+						return isset($member_groups[$v]) ? $v : false;
 					},
 				),
 				'status' => array(
