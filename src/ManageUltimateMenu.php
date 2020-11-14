@@ -365,6 +365,8 @@ class ManageUltimateMenu
 					$context['button_data']['permissions'],
 					array_flip(array_filter($menu_entry['permissions'], 'strlen'))
 				));
+				$context['template_layers'][] = 'form';
+				$context['template_layers'][] = 'errors';
 			}
 		}
 	}
@@ -410,5 +412,6 @@ class ManageUltimateMenu
 			$context['page_title'] = $txt['um_menu_add_title'];
 		}
 		$context['button_names'] = $this->um->getButtonNames();
+		$context['template_layers'][] = 'form';
 	}
 }
