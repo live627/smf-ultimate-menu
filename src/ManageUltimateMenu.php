@@ -409,7 +409,7 @@ class ManageUltimateMenu
 				'type' => 'forum',
 				'position' => 'before',
 				'status' => 'active',
-				'permissions' => $this->um->listGroups([-3']),
+				'permissions' => $this->um->listGroups([-3]),
 				'parent' => 'home',
 				'id' => 0,
 			);
