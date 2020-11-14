@@ -55,16 +55,10 @@ class ManageUltimateMenu
 			redirectexit('action=admin;area=umen');
 		}
 		// User pressed the 'remove selection button'.
-		elseif (!empty($_POST['removeButtons']) && !empty($_POST['remove']) && is_array($_POST['remove']))
+		elseif (isset($_POST['removeButtons'], $_POST['remove']) && is_array($_POST['remove']))
 		{
 			checkSession();
-
-			// Make sure every entry is a proper integer.
-			foreach ($_POST['remove'] as $index => $page_id)
-				$_POST['remove'][(int) $index] = (int) $page_id;
-
-			// Delete the page(s)!
-			$this->um->deleteButton($_POST['remove']);
+			$this->um->deleteButton(array_filter($_POST['remove'], 'ctype_digit'));
 			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen');
 		}
