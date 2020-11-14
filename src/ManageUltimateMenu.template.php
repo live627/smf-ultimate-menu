@@ -113,9 +113,6 @@ function template_main()
 							<fieldset id="group_perms">
 								<legend><a href="#" onclick="this.parentNode.parentNode.style.display = \'none\';document.getElementById(\'group_perms_groups_link\').style.display = \'block\'; return false;">', $txt['avatar_select_permission'], '</a></legend>';
 
-	$all_checked = true;
-
-	// List all the groups to configure permissions for.
 	foreach ($context['button_data']['permissions'] as $id => $permission)
 	{
 		echo '
@@ -129,13 +126,10 @@ function template_main()
 		echo '>', $permission['name'], '</span>
 								</label>
 								<br>';
-
-		if (!$permission['checked'])
-			$all_checked = false;
 	}
 
 	echo '
-								<input type="checkbox" class="input_check" onclick="invertAll(this, this.form, \'permissions[]\');" id="check_group_all"', $all_checked ? ' checked="checked"' : '', ' />
+								<input type="checkbox" class="input_check" onclick="invertAll(this, this.form, \'permissions[]\');" id="check_group_all"', $context['all_groups_checked'] ? ' checked="checked"' : '', ' />
 								<label for="check_group_all"><em>', $txt['check_all'], '</em></label><br />
 							</fieldset>
 							<a href="#" onclick="document.getElementById(\'group_perms\').style.display = \'block\'; this.style.display = \'none\'; return false;" id="group_perms_groups_link" style="display: none;">[ ', $txt['avatar_select_permission'], ' ]</a>

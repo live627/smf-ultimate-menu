@@ -360,6 +360,10 @@ class ManageUltimateMenu
 					'status' => $menu_entry['status'],
 					'id' => $menu_entry['id'],
 				);
+				$context['all_groups_checked'] = empty(array_diff_key(
+					$context['button_data']['permissions'],
+					array_flip(array_filter($menu_entry['permissions'], 'strlen'))
+				));
 			}
 		}
 	}
@@ -383,6 +387,10 @@ class ManageUltimateMenu
 				'status' => $row['status'],
 				'parent' => $row['parent'],
 			);
+			$context['all_groups_checked'] = empty(array_diff_key(
+				$context['button_data']['permissions'],
+				array_flip($row['permissions'])
+			));
 		}
 		else
 		{
@@ -397,7 +405,7 @@ class ManageUltimateMenu
 				'parent' => 'home',
 				'id' => 0,
 			);
-
+			$context['all_groups_checked'] = true;
 			$context['page_title'] = $txt['um_menu_add_title'];
 		}
 	}
