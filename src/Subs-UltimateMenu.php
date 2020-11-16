@@ -76,35 +76,16 @@ function um_load_menu(&$menu_buttons)
 
 function insert_button($needle, &$haystack, $insertion_point, $where = 'after')
 {
-	if (array_key_exists($insertion_point, $haystack))
-	{
-		$offset = 0;
+	$offset = 0;
 
-		foreach ($haystack as $area => $dummy)
-			if (++$offset && $area == $insertion_point)
-				break;
+	foreach ($haystack as $area => $dummy)
+		if (++$offset && $area == $insertion_point)
+			break;
 
-		if ($where == 'before')
-			$offset--;
+	if ($where == 'before')
+		$offset--;
 
-		$haystack = array_slice($haystack, 0, $offset, true) + $needle + array_slice($haystack, $offset, null, true);
-	}
-	else
-		foreach ($haystack as $stack)
-			if (array_key_exists($insertion_point, $haystack[$stack]))
-			{
-				$offset = 0;
-
-				foreach ($haystack[$stack] as $area => $dummy)
-					if (++$offset && $area == $insertion_point)
-						break;
-
-				if ($where == 'before')
-					$offset--;
-
-				$haystack[$stack] = array_slice($haystack[$stack], 0, $offset, true) + $needle + array_slice($haystack[$stack], $offset, null, true);
-				break;
-			}
+	$haystack = array_slice($haystack, 0, $offset, true) + $needle + array_slice($haystack, $offset, null, true);
 }
 
 function um_admin_areas(&$admin_areas)
