@@ -161,6 +161,16 @@ class UltimateMenu
 		);
 		list ($max) = $smcFunc['db_fetch_row']($request);
 		$smcFunc['db_free_result']($request);
+
+		$smcFunc['db_query']('', '
+			DELETE FROM {db_prefix}settings
+			WHERE variable LIKE {string:settings_search}
+				AND variable NOT IN ({array_string:settings})',
+			array(
+				'settings_search' => 'um_button%',
+				'settings' => array_keys($buttons),
+			)
+		);
 		updateSettings(
 			array(
 				'um_count' => $max,
