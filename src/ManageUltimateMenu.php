@@ -36,12 +36,13 @@ class ManageUltimateMenu
 
 		$subActions = array(
 			'manmenu' => 'ManageUltimateMenu',
-			'addbutton' => 'PrepareContext',
+			'addbutton' => 'AddButton',
+			'editbutton' => 'EditButton',
 			'savebutton' => 'SaveButton',
 		);
 		if (!isset($_GET['sa']) || !isset($subActions[$_GET['sa']]))
 			$_GET['sa'] = 'manmenu';
-		$this->$subActions[$_GET['sa']]();
+		$this->{$subActions[$_GET['sa']]}();
 	}
 
 	public function ManageUltimateMenu()
@@ -186,7 +187,7 @@ class ManageUltimateMenu
 						'function' => function($rowData) use ($scripturl, $txt)
 						{
 							return sprintf(
-								'<a href="%s?action=admin;area=umen;sa=addbutton;edit;in=%d">%s</a>',
+								'<a href="%s?action=admin;area=umen;sa=editbutton;in=%d">%s</a>',
 								$scripturl,
 								$rowData['id_button'],
 								$txt['modify']
@@ -328,8 +329,7 @@ class ManageUltimateMenu
 				$post_errors['name'] = 'um_menu_numeric';
 
 			// Let's make sure you're not trying to make a name that's already taken.
-			$check = $this->um->checkButton($menu_entry['id'], $menu_entry['name']);
-			if ($check > 0)
+			if (!empty($this->um->checkButton($menu_entry['in'], $menu_entry['name'])))
 				$post_errors['name'] = 'um_menu_mysql';
 
 			// I see you made it to the final stage, my young padawan.
@@ -349,7 +349,7 @@ class ManageUltimateMenu
 				$context['page_title'] = $txt['um_menu_edit_title'];
 				$context['button_names'] = $button_names;
 				$context['post_error'] = $post_errors;
-				$context['error_title'] = empty($menu_entry['id'])
+				$context['error_title'] = empty($menu_entry['in'])
 					? 'um_menu_errors_create'
 					: 'um_menu_errors_modify';
 				$context['button_data'] = array(
@@ -363,7 +363,7 @@ class ManageUltimateMenu
 						array_filter($menu_entry['permissions'], 'strlen')
 					),
 					'status' => $menu_entry['status'],
-					'id' => $menu_entry['id'],
+					'id' => $menu_entry['in'],
 				);
 				$context['all_groups_checked'] = empty(array_diff_key(
 					$context['button_data']['permissions'],
@@ -375,47 +375,52 @@ class ManageUltimateMenu
 		}
 	}
 
-	public function PrepareContext()
+	public function EditButton()
 	{
 		global $context, $txt;
 
 		if (isset($_GET['in']))
-		{
 			$row = $this->um->fetchButton($_GET['in']);
+		elseif (empty($row))
+			fatal_lang_error('no_access', false);
 
-			$context['button_data'] = array(
-				'id' => $row['id'],
-				'name' => $row['name'],
-				'target' => $row['target'],
-				'type' => $row['type'],
-				'position' => $row['position'],
-				'permissions' => $this->um->listGroups($row['permissions']),
-				'link' => $row['link'],
-				'status' => $row['status'],
-				'parent' => $row['parent'],
-			);
-			$context['all_groups_checked'] = empty(array_diff_key(
-				$context['button_data']['permissions'],
-				array_flip($row['permissions'])
-			));
-			$context['page_title'] = $txt['um_menu_edit_title'];
-		}
-		else
-		{
-			$context['button_data'] = array(
-				'name' => '',
-				'link' => '',
-				'target' => '_self',
-				'type' => 'forum',
-				'position' => 'before',
-				'status' => 'active',
-				'permissions' => $this->um->listGroups([-3]),
-				'parent' => 'home',
-				'id' => 0,
-			);
-			$context['all_groups_checked'] = true;
-			$context['page_title'] = $txt['um_menu_add_title'];
-		}
+		$context['button_data'] = array(
+			'id' => $row['id'],
+			'name' => $row['name'],
+			'target' => $row['target'],
+			'type' => $row['type'],
+			'position' => $row['position'],
+			'permissions' => $this->um->listGroups($row['permissions']),
+			'link' => $row['link'],
+			'status' => $row['status'],
+			'parent' => $row['parent'],
+		);
+		$context['all_groups_checked'] = empty(array_diff_key(
+			$context['button_data']['permissions'],
+			array_flip($row['permissions'])
+		));
+		$context['page_title'] = $txt['um_menu_edit_title'];
+		$context['button_names'] = $this->um->getButtonNames();
+		$context['template_layers'][] = 'form';
+	}
+
+	public function AddButton()
+	{
+		global $context, $txt;
+
+		$context['button_data'] = array(
+			'name' => '',
+			'link' => '',
+			'target' => '_self',
+			'type' => 'forum',
+			'position' => 'before',
+			'status' => 'active',
+			'permissions' => $this->um->listGroups([-3]),
+			'parent' => 'home',
+			'id' => 0,
+		);
+		$context['all_groups_checked'] = true;
+		$context['page_title'] = $txt['um_menu_add_title'];
 		$context['button_names'] = $this->um->getButtonNames();
 		$context['template_layers'][] = 'form';
 	}

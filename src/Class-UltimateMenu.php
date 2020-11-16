@@ -239,7 +239,7 @@ class UltimateMenu
 	{
 		global $smcFunc;
 
-		if (!empty($menu_entry['id']))
+		if (!empty($menu_entry['in']))
 		{
 			$smcFunc['db_query']('', '
 				UPDATE {db_prefix}um_menu
@@ -254,7 +254,7 @@ class UltimateMenu
 					parent = {string:parent}
 				WHERE id_button = {int:id}',
 				array(
-					'id' => $menu_entry['id'],
+					'id' => $menu_entry['in'],
 					'name' => $menu_entry['name'],
 					'type' => $menu_entry['type'],
 					'target' => $menu_entry['target'],
