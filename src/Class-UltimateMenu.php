@@ -154,9 +154,16 @@ class UltimateMenu
 		while ($row = $smcFunc['db_fetch_assoc']($request))
 			$buttons['um_button_' . $row['id_button']] = json_encode($row);
 		$smcFunc['db_free_result']($request);
+
+		$request = $smcFunc['db_query']('', '
+			SELECT MAX(id_button)
+			FROM {db_prefix}um_menu'
+		);
+		list ($max) = $smcFunc['db_fetch_row']($request);
+		$smcFunc['db_free_result']($request);
 		updateSettings(
 			array(
-				'um_count' => count($buttons),
+				'um_count' => $max,
 			) + $buttons
 		);
 	}
