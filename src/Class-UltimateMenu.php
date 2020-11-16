@@ -376,14 +376,14 @@ class UltimateMenu
 			$button_names[$button_index] = [0, $button_data['title']];
 
 			if (!empty($button_data['sub_buttons']))
-			{
 				foreach ($button_data['sub_buttons'] as $child_button => $child_button_data)
+				{
 					$button_names[$child_button] = [1,  $child_button_data['title']];
 
-				if (!empty($child_button_data['sub_buttons']))
-					foreach ($child_button_data['sub_buttons'] as $grand_child_button => $grand_child_button_data)
-						$button_names[$grand_child_button] = [ 2,  $grand_child_button_data['title']];
-			}
+					if (!empty($child_button_data['sub_buttons']))
+						foreach ($child_button_data['sub_buttons'] as $grand_child_button => $grand_child_button_data)
+							$button_names[$grand_child_button] = [ 2,  $grand_child_button_data['title']];
+				}
 		}
 
 		return $button_names;
