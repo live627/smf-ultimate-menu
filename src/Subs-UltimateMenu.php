@@ -30,7 +30,7 @@ function um_load_menu(&$menu_buttons)
 	{
 		$key = 'um_button_' . $i;
 		if (!isset($modSettings[$key]))
-			break;
+			continue;
 		$row = json_decode($modSettings[$key], true);
 		$temp_menu = array(
 			'title' => $row['name'],
