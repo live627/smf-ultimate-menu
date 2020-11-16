@@ -16,7 +16,7 @@ function um_load_menu(&$menu_buttons)
 	global $smcFunc, $user_info, $scripturl, $context, $modSettings;
 
 	// Make damn sure we ALWAYS load last. Priority: 100!
-	if (substr($modSettings['integrate_menu_buttons'], -12) === 'um_load_menu')
+	if (substr($modSettings['integrate_menu_buttons'], -12) !== 'um_load_menu')
 	{
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
