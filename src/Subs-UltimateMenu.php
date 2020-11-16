@@ -74,7 +74,7 @@ function um_load_menu(&$menu_buttons)
 	}
 }
 
-function insert_button($needle, &$haystack, $insertion_point, $where = 'after')
+function insert_button(array $needle, array &$haystack, $insertion_point, $where = 'after')
 {
 	$offset = 0;
 
