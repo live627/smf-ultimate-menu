@@ -373,6 +373,8 @@ class ManageUltimateMenu
 				$context['template_layers'][] = 'errors';
 			}
 		}
+		else
+			fatal_lang_error('no_access', false);
 	}
 
 	public function EditButton()
