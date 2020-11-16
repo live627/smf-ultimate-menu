@@ -370,6 +370,12 @@ class UltimateMenu
 	{
 		global $context;
 
+		// It's expected to be present.
+		$context['user']['unread_messages'] = 0;
+
+		// Load SMF's default menu context
+		setupMenuContext();
+
 		$button_names = [];
 		foreach ($context['menu_buttons'] as $button_index => $button_data)
 		{
