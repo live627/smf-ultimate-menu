@@ -39,38 +39,29 @@ function um_load_menu(&$menu_buttons)
 			'show' => (allowedTo('admin_forum') || count(array_intersect($user_info['groups'], explode(',', $row['permissions']))) >= 1) && $row['status'] == 'active',
 		);
 
-		foreach ($menu_buttons as $area => &$info)
+		recursive_button($temp_menu, $menu_buttons, $row['parent'], $row['position'], $key);
+	}
+}
+
+function recursive_button(array $needle, array &$haystack, $insertion_point, $where, $key)
+{
+	foreach ($haystack as $area => &$info)
+	{
+		if ($area == $insertion_point)
 		{
-			if ($area == $row['parent'])
+			if ($where == 'before' || $where == 'after')
 			{
-				if ($row['position'] == 'before' || $row['position'] == 'after')
-				{
-					if (array_key_exists($row['parent'], $menu_buttons))
-					{
-						insert_button(array($key => $temp_menu), $menu_buttons, $row['parent'], $row['position']);
-						break;
-					}
-				}
-				elseif ($row['position'] == 'child_of')
-				{
-					$info['sub_buttons'][$key] = $temp_menu;
-					break;
-				}
+				insert_button(array($key => $needle), $haystack, $insertion_point, $where);
+				break;
 			}
-			elseif (isset($info['sub_buttons'][$row['parent']]))
+			elseif ($where == 'child_of')
 			{
-				if ($row['position'] == 'before' || $row['position'] == 'after')
-				{
-					insert_button(array($key => $temp_menu), $info['sub_buttons'], $row['parent'], $row['position']);
-					break;
-				}
-				elseif ($row['position'] == 'child_of')
-				{
-					$info['sub_buttons'][$row['parent']]['sub_buttons'][$key] = $temp_menu;
-					break;
-				}
+				$info['sub_buttons'][$key] = $needle;
+				break;
 			}
 		}
+		elseif (!empty($info['sub_buttons']))
+			recursive_button($needle, $info['sub_buttons'], $insertion_point, $where, $key);
 	}
 }
 
