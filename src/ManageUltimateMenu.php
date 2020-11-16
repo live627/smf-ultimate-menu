@@ -326,8 +326,7 @@ class ManageUltimateMenu
 				$post_errors['name'] = 'um_menu_numeric';
 
 			// Let's make sure you're not trying to make a name that's already taken.
-			$check = $this->um->checkButton($menu_entry['id'], $menu_entry['name']);
-			if ($check > 0)
+			if (!empty($this->um->checkButton($menu_entry['in'], $menu_entry['name'])))
 				$post_errors['name'] = 'um_menu_mysql';
 
 			// I see you made it to the final stage, my young padawan.
@@ -347,7 +346,7 @@ class ManageUltimateMenu
 				$context['page_title'] = $txt['um_menu_edit_title'];
 				$context['button_names'] = $button_names;
 				$context['post_error'] = $post_errors;
-				$context['error_title'] = empty($menu_entry['id'])
+				$context['error_title'] = empty($menu_entry['in'])
 					? 'um_menu_errors_create'
 					: 'um_menu_errors_modify';
 				$context['button_data'] = array(
@@ -361,7 +360,7 @@ class ManageUltimateMenu
 						array_filter($menu_entry['permissions'], 'strlen')
 					),
 					'status' => $menu_entry['status'],
-					'id' => $menu_entry['id'],
+					'id' => $menu_entry['in'],
 				);
 				$context['all_groups_checked'] = empty(array_diff_key(
 					$context['button_data']['permissions'],
