@@ -41,7 +41,7 @@ class ManageUltimateMenu
 		);
 		if (!isset($_GET['sa']) || !isset($subActions[$_GET['sa']]))
 			$_GET['sa'] = 'manmenu';
-		$this->$subActions[$_GET['sa']]();
+		$this->{$subActions[$_GET['sa']]}();
 	}
 
 	public function ManageUltimateMenu()
