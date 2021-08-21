@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FORCE_COLOR: 1
-      MOD_NAME: custom-forms
+      MOD_NAME: ultimate-menu
     steps:
       - uses: GoogleCloudPlatform/release-please-action@v2
         id: release
