@@ -314,6 +314,10 @@ class ManageUltimateMenu
 				filter_input_array(INPUT_POST, $args)
 			);
 
+			// If your session timed out, show an error, but do allow to re-submit.
+			if (checkSession('post', '', false) != '')
+				$post_errors[] = 'um_menu_session_verify_fail';
+
 			// These fields are required!
 			foreach ($required_fields as $required_field)
 				if (empty($menu_entry[$required_field]))

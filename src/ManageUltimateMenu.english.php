@@ -58,6 +58,7 @@ $txt['um_menu_same_window'] = 'Same Window';
 $txt['um_menu_new_tab'] = 'New Tab';
 
 // Submission errors
+$txt['um_menu_session_verify_fail'] = 'Session verification failed. Please then try again.';
 $txt['um_menu_not_found'] = 'The button you tried to edit does not exist!';
 $txt['um_menu_errors_create'] = 'The following error or errors occurred while adding your  Button:';
 $txt['um_menu_errors_modify'] = 'The following error or errors occurred while editing your  Button:';

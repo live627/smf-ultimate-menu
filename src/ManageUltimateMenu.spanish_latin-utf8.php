@@ -59,6 +59,7 @@ $txt['um_menu_new_tab'] = 'Nueva pestaña';
 
 
 // Submission errors
+$txt['um_menu_session_verify_fail'] = 'Session verification failed. Please then try again.';
 $txt['um_menu_not_found'] = 'El botón que trató de editar no existe!';
 $txt['um_menu_errors_create'] = 'Se ha producido el siguiente error o errores al tiempo de añadir su botón:';
 $txt['um_menu_errors_modify'] = 'Se ha producido el siguiente error o errores durante la edición de su botón:';

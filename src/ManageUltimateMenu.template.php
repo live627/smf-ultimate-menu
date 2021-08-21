@@ -156,6 +156,7 @@ function template_form_below()
 	global $context, $txt;
 
 	echo '
+					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 					<input name="in" value="', $context['button_data']['id'], '" type="hidden" />
 					<div class="righttext padding">
 						<input name="submit" value="', $txt['admin_manage_menu_submit'], '" class="button_submit" type="submit" />

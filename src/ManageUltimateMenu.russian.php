@@ -54,6 +54,7 @@ $txt['um_menu_same_window'] = 'В том же окне';
 $txt['um_menu_new_tab'] = 'В новой вкладке';
 
 // Submission errors
+$txt['um_menu_session_verify_fail'] = 'Session verification failed. Please then try again.';
 $txt['um_menu_not_found'] = 'Такой пункт меню не существует!';
 $txt['um_menu_errors_create'] = 'Возникла ошибка при добавлении пункта меню:';
 $txt['um_menu_errors_modify'] = 'Возникла ошибка при редактировании пункта меню:';

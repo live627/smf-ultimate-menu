@@ -59,6 +59,7 @@ $txt['um_menu_same_window'] = 'Aynı Pencere';
 $txt['um_menu_new_tab'] = 'Yeni Sekme';
 
 // Submission errors
+$txt['um_menu_session_verify_fail'] = 'Session verification failed. Please then try again.';
 $txt['um_menu_not_found'] = 'Mevcut Olmayan Bir Butonu Düzenlemeye Çalıştınız!';
 $txt['um_menu_errors_create'] = 'Butonunuz eklenirken şu hatalar oluştu:';
 $txt['um_menu_errors_modify'] = 'Butonunuz düzenlenirken şu hatalar oluştu:';

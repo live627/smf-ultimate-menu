@@ -60,6 +60,7 @@ $txt['um_menu_new_tab'] = 'Nueva pesta&ntilde;a';
 
 
 // Submission errors
+$txt['um_menu_session_verify_fail'] = 'Session verification failed. Please then try again.';
 $txt['um_menu_not_found'] = 'El bot&oacute;n que trat&oacute; de editar no existe!';
 $txt['um_menu_errors_create'] = 'Se ha producido el siguiente error o errores al tiempo de a&ntilde;adir su bot&oacute;n:';
 $txt['um_menu_errors_modify'] = 'Se ha producido el siguiente error o errores durante la edici&oacute;n de su bot&oacute;n:';
