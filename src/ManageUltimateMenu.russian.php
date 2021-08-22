@@ -2,7 +2,7 @@
 
 /**
  * @package Ultimate Menu mod
- * @version   1.0.5
+ * @version   1.1.0
  * @author John Rayes <live627@gmail.com>
  * @translation digger <digger@mysmf.net>
  * @copyright Copyright (c) 2014, John Rayes
