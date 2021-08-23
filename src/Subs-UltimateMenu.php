@@ -8,9 +8,6 @@
  * @license http://opensource.org/licenses/MIT MIT
  */
 
-if (!defined('SMF'))
-	die('Hacking attempt...');
-
 function um_load_menu(&$menu_buttons)
 {
 	global $smcFunc, $user_info, $scripturl, $context, $modSettings;
