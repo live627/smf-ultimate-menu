@@ -23,5 +23,7 @@ jobs:
       run: composer install --prefer-dist --no-progress
     - name: Run test suite
       run: php vendor/bin/phpunit --colors
-    - name: Upload coverage report
-      run: wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.clover.xml
+    - name: Downloading scrutinizer ocular.phar
+      run: wget https://scrutinizer-ci.com/ocular.phar
+    - name: Uploading code coverage to scrutinize
+      run: php ocular.phar code-coverage:upload --format=php-clover coverage.clover.xml
