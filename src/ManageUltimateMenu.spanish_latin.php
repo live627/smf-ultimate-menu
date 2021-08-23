@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @package Ultimate Menu mod
  * @version   1.1.0
@@ -57,7 +59,6 @@ $txt['um_menu_button_inactive'] = 'No activo';
 $txt['um_menu_link_type'] = 'Tipo de enlace';
 $txt['um_menu_same_window'] = 'En la misma ventana';
 $txt['um_menu_new_tab'] = 'Nueva pesta&ntilde;a';
-
 
 // Submission errors
 $txt['um_menu_session_verify_fail'] = 'Session verification failed. Please then try again.';

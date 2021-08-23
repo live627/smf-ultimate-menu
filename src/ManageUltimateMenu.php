@@ -1,12 +1,14 @@
 <?php
+
+declare(strict_types=1);
+
 /**
- * @package Ultimate Menu mod
+ * @package   Ultimate Menu mod
  * @version   1.1.0
- * @author John Rayes <live627@gmail.com>
+ * @author    John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2014, John Rayes
  * @license   http://opensource.org/licenses/MIT MIT
  */
-
 class ManageUltimateMenu
 {
 	private $um;
@@ -18,34 +20,35 @@ class ManageUltimateMenu
 		isAllowedTo('admin_forum');
 
 		$context['page_title'] = $txt['admin_menu_title'];
-		$context[$context['admin_menu_name']]['tab_data'] = array(
+		$context[$context['admin_menu_name']]['tab_data'] = [
 			'title' => $txt['admin_menu'],
 			'description' => $txt['admin_menu_desc'],
-			'tabs' => array(
-				'manmenu' => array(
+			'tabs' => [
+				'manmenu' => [
 					'description' => $txt['admin_manage_menu_desc'],
-				),
-				'addbutton' => array(
+				],
+				'addbutton' => [
 					'description' => $txt['admin_menu_add_button_desc'],
-				),
-			),
-		);
+				],
+			],
+		];
 		loadTemplate('ManageUltimateMenu');
 		require_once $sourcedir . '/Class-UltimateMenu.php';
 		$this->um = new UltimateMenu;
 
-		$subActions = array(
+		$subActions = [
 			'manmenu' => 'ManageUltimateMenu',
 			'addbutton' => 'AddButton',
 			'editbutton' => 'EditButton',
 			'savebutton' => 'SaveButton',
-		);
+		];
+
 		if (!isset($_GET['sa']) || !isset($subActions[$_GET['sa']]))
 			$_GET['sa'] = 'manmenu';
 		$this->{$subActions[$_GET['sa']]}();
 	}
 
-	public function ManageUltimateMenu()
+	public function ManageUltimateMenu(): void
 	{
 		// Get rid of all of em!
 		if (!empty($_POST['removeAll']))
@@ -78,58 +81,58 @@ class ManageUltimateMenu
 		$this->ListButtons();
 	}
 
-	public function ListButtons()
+	public function ListButtons(): void
 	{
 		global $context, $txt, $scripturl, $sourcedir;
 
 		$button_names = $this->um->getButtonNames();
-		$listOptions = array(
+		$listOptions = [
 			'id' => 'menu_list',
 			'items_per_page' => 20,
 			'base_href' => $scripturl . '?action=admin;area=umen;sa=manmenu',
 			'default_sort_col' => 'name',
 			'default_sort_dir' => 'desc',
-			'get_items' => array(
-				'function' => array($this->um, 'list_getMenu'),
-			),
-			'get_count' => array(
-				'function' => array($this->um, 'list_getNumButtons'),
-			),
+			'get_items' => [
+				'function' => [$this->um, 'list_getMenu'],
+			],
+			'get_count' => [
+				'function' => [$this->um, 'list_getNumButtons'],
+			],
 			'no_items_label' => $txt['um_menu_no_buttons'],
-			'columns' => array(
-				'name' => array(
-					'header' => array(
+			'columns' => [
+				'name' => [
+					'header' => [
 						'value' => $txt['um_menu_button_name'],
-					),
-					'data' => array(
+					],
+					'data' => [
 						'db_htmlsafe' => 'name',
-					),
-					'sort' => array(
+					],
+					'sort' => [
 						'default' => 'name',
 						'reverse' => 'name DESC',
-					),
-				),
-				'type' => array(
-					'header' => array(
+					],
+				],
+				'type' => [
+					'header' => [
 						'value' => $txt['um_menu_button_type'],
-					),
-					'data' => array(
-						'function' => function($rowData) use ($txt)
+					],
+					'data' => [
+						'function' => function ($rowData) use ($txt)
 						{
 							return $txt['um_menu_' . $rowData['type'] . '_link'];
 						},
-					),
-					'sort' => array(
+					],
+					'sort' => [
 						'default' => 'type',
 						'reverse' => 'type DESC',
-					),
-				),
-				'position' => array(
-					'header' => array(
+					],
+				],
+				'position' => [
+					'header' => [
 						'value' => $txt['um_menu_button_position'],
-					),
-					'data' => array(
-						'function' => function($rowData) use ($txt, $button_names)
+					],
+					'data' => [
+						'function' => function ($rowData) use ($txt, $button_names)
 						{
 							return sprintf(
 								'%s %s',
@@ -139,31 +142,31 @@ class ManageUltimateMenu
 									: ucwords($rowData['parent'])
 							);
 						},
-					),
-					'sort' => array(
+					],
+					'sort' => [
 						'default' => 'position',
 						'reverse' => 'position DESC',
-					),
-				),
-				'link' => array(
-					'header' => array(
+					],
+				],
+				'link' => [
+					'header' => [
 						'value' => $txt['um_menu_button_link'],
-					),
-					'data' => array(
+					],
+					'data' => [
 						'db_htmlsafe' => 'link',
-					),
-					'sort' => array(
+					],
+					'sort' => [
 						'default' => 'link',
 						'reverse' => 'link DESC',
-					),
-				),
-				'status' => array(
-					'header' => array(
+					],
+				],
+				'status' => [
+					'header' => [
 						'value' => $txt['um_menu_button_active'],
 						'class' => 'centertext',
-					),
-					'data' => array(
-						'function' => function($rowData)
+					],
+					'data' => [
+						'function' => function ($rowData)
 						{
 							return sprintf(
 								'<input type="checkbox" name="status[%1$s]" id="status_%1$s" value="%1$s"%2$s />',
@@ -172,19 +175,19 @@ class ManageUltimateMenu
 							);
 						},
 						'class' => 'centertext',
-					),
-					'sort' => array(
+					],
+					'sort' => [
 						'default' => 'status',
 						'reverse' => 'status DESC',
-					),
-				),
-				'actions' => array(
-					'header' => array(
+					],
+				],
+				'actions' => [
+					'header' => [
 						'value' => $txt['um_menu_actions'],
 						'class' => 'centertext',
-					),
-					'data' => array(
-						'function' => function($rowData) use ($scripturl, $txt)
+					],
+					'data' => [
+						'function' => function ($rowData) use ($scripturl, $txt)
 						{
 							return sprintf(
 								'<a href="%s?action=admin;area=umen;sa=editbutton;in=%d">%s</a>',
@@ -194,31 +197,32 @@ class ManageUltimateMenu
 							);
 						},
 						'class' => 'centertext',
-					),
-				),
-				'check' => array(
-					'header' => array(
+					],
+				],
+				'check' => [
+					'header' => [
 						'value' => '<input type="checkbox" onclick="invertAll(this, this.form);" class="input_check" />',
 						'class' => 'centertext',
-					),
-					'data' => array(
-						'sprintf' => array(
+					],
+					'data' => [
+						'sprintf' => [
 							'format' => '<input type="checkbox" name="remove[]" value="%d" class="input_check" />',
-							'params' => array(
+							'params' => [
 								'id_button' => false,
-							),
-						),
+							],
+						],
 						'class' => 'centertext',
-					),
-				),
-			),
-			'form' => array(
+					],
+				],
+			],
+			'form' => [
 				'href' => $scripturl . '?action=admin;area=umen;sa=manmenu',
-			),
-			'additional_rows' => array(
-				array(
+			],
+			'additional_rows' => [
+				[
 					'position' => 'below_table_data',
-					'value' => sprintf('
+					'value' => sprintf(
+						'
 						<input type="submit" name="removeButtons" value="%s" onclick="return confirm(\'%s\');" class="button_submit" />
 						<input type="submit" name="removeAll" value="%s" onclick="return confirm(\'%s\');" class="button_submit" />
 						<input type="submit" name="new" value="%s" class="button_submit" />
@@ -231,87 +235,87 @@ class ManageUltimateMenu
 						$txt['save']
 					),
 					'class' => 'righttext',
-				),
-			),
-		);
+				],
+			],
+		];
 		require_once $sourcedir . '/Subs-List.php';
 		createList($listOptions);
 		$context['sub_template'] = 'show_list';
 		$context['default_list'] = 'menu_list';
 	}
 
-	public function SaveButton()
+	public function SaveButton(): void
 	{
 		global $context, $txt;
 
 		if (isset($_POST['submit']))
 		{
-			$post_errors = array();
-			$required_fields = array(
+			$post_errors = [];
+			$required_fields = [
 				'name',
 				'link',
 				'parent',
-			);
+			];
 			$member_groups = $this->um->listGroups([-3]);
 			$button_names = $this->um->getButtonNames();
-			$args = array(
+			$args = [
 				'in' => FILTER_VALIDATE_INT,
 				'name' => FILTER_UNSAFE_RAW,
-				'position' => array(
+				'position' => [
 					'filter' => FILTER_CALLBACK,
 					'options' => function ($v)
 					{
 						return in_array($v, ['before', 'child_of', 'after']) ? $v : false;
 					},
-				),
-				'parent' => array(
+				],
+				'parent' => [
 					'filter' => FILTER_CALLBACK,
 					'options' => function ($v) use ($button_names)
 					{
 						return isset($button_names[$v]) ? $v : false;
 					},
-				),
-				'type' => array(
+				],
+				'type' => [
 					'filter' => FILTER_CALLBACK,
 					'options' => function ($v)
 					{
 						return in_array($v, ['forum', 'external']) ? $v : false;
 					},
-				),
+				],
 				'link' => FILTER_UNSAFE_RAW,
-				'permissions' => array(
+				'permissions' => [
 					'filter' => FILTER_CALLBACK,
 					'flags' => FILTER_REQUIRE_ARRAY,
 					'options' => function ($v) use ($member_groups)
 					{
 						return isset($member_groups[$v]) ? $v : false;
 					},
-				),
-				'status' => array(
+				],
+				'status' => [
 					'filter' => FILTER_CALLBACK,
 					'options' => function ($v)
 					{
 						return in_array($v, ['active', 'inactive']) ? $v : false;
 					},
-				),
-				'target' => array(
+				],
+				'target' => [
 					'filter' => FILTER_CALLBACK,
 					'options' => function ($v)
 					{
 						return in_array($v, ['_self', '_blank']) ? $v : false;
 					},
-				),
-			);
+				],
+			];
 
 			// Make sure we grab all of the content
 			$menu_entry = array_replace(
-				array(
+				[
 					'target' => '_self',
 					'type' => 'forum',
 					'position' => 'before',
 					'status' => 'active',
 					'parent' => 'home',
-				),
+				],
 				filter_input_array(INPUT_POST, $args)
 			);
 
@@ -352,7 +356,7 @@ class ManageUltimateMenu
 				$context['error_title'] = empty($menu_entry['in'])
 					? 'um_menu_errors_create'
 					: 'um_menu_errors_modify';
-				$context['button_data'] = array(
+				$context['button_data'] = [
 					'name' => $menu_entry['name'],
 					'type' => $menu_entry['type'],
 					'target' => $menu_entry['target'],
@@ -364,7 +368,7 @@ class ManageUltimateMenu
 					),
 					'status' => $menu_entry['status'],
 					'id' => $menu_entry['in'],
-				);
+				];
 				$context['all_groups_checked'] = empty(array_diff_key(
 					$context['button_data']['permissions'],
 					array_flip(array_filter($menu_entry['permissions'], 'strlen'))
@@ -377,7 +381,7 @@ class ManageUltimateMenu
 			fatal_lang_error('no_access', false);
 	}
 
-	public function EditButton()
+	public function EditButton(): void
 	{
 		global $context, $txt;
 
@@ -386,7 +390,7 @@ class ManageUltimateMenu
 		elseif (empty($row))
 			fatal_lang_error('no_access', false);
 
-		$context['button_data'] = array(
+		$context['button_data'] = [
 			'id' => $row['id'],
 			'name' => $row['name'],
 			'target' => $row['target'],
@@ -396,7 +400,7 @@ class ManageUltimateMenu
 			'link' => $row['link'],
 			'status' => $row['status'],
 			'parent' => $row['parent'],
-		);
+		];
 		$context['all_groups_checked'] = empty(array_diff_key(
 			$context['button_data']['permissions'],
 			array_flip($row['permissions'])
@@ -406,11 +410,11 @@ class ManageUltimateMenu
 		$context['template_layers'][] = 'form';
 	}
 
-	public function AddButton()
+	public function AddButton(): void
 	{
 		global $context, $txt;
 
-		$context['button_data'] = array(
+		$context['button_data'] = [
 			'name' => '',
 			'link' => '',
 			'target' => '_self',
@@ -420,7 +424,7 @@ class ManageUltimateMenu
 			'permissions' => $this->um->listGroups([-3]),
 			'parent' => 'home',
 			'id' => 0,
-		);
+		];
 		$context['all_groups_checked'] = true;
 		$context['page_title'] = $txt['um_menu_add_title'];
 		$context['button_names'] = $this->um->getButtonNames();

@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 /**
- * @package Ultimate Menu mod
+ * @package   Ultimate Menu mod
  * @version   1.1.0
- * @author John Rayes <live627@gmail.com>
+ * @author    John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2014, John Rayes
- * @license http://opensource.org/licenses/MIT MIT
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
-function template_form_above()
+function template_form_above(): void
 {
 	global $context, $scripturl;
 
@@ -23,7 +25,7 @@ function template_form_above()
 				<div class="roundframe">';
 }
 
-function template_errors_above()
+function template_errors_above(): void
 {
 	global $context, $txt;
 
@@ -44,11 +46,11 @@ function template_errors_above()
 	}
 }
 
-function template_errors_below()
+function template_errors_below(): void
 {
 }
 
-function template_main()
+function template_main(): void
 {
 	global $context, $txt, $scripturl;
 
@@ -67,22 +69,25 @@ function template_main()
 							<select name="position" size="10" style="width: 22%;">';
 
 	foreach (['after', 'child_of', 'before'] as $v)
-		printf('
+		printf(
+			'
 								<option value="%s"%s>%s...</option>',
 			$v,
-			$context['button_data']['position'] ==  $v ? ' selected="selected"' : '',
-			$txt['um_menu_' . $v]);
+			$context['button_data']['position'] == $v ? ' selected="selected"' : '',
+			$txt['um_menu_' . $v]
+		);
 
 	echo '
 							</select>
 							<select name="parent" size="10" style="width: 75%;">';
 
 	foreach ($context['button_names'] as $idx => $title)
-		printf('
+		printf(
+			'
 								<option value="%s"%s>%s</option>',
 			$idx,
-			$context['button_data']['parent'] ==  $idx ? ' selected="selected"' : '',
-			str_repeat('&emsp;', $title[0]*2) . $title[1]
+			$context['button_data']['parent'] == $idx ? ' selected="selected"' : '',
+			str_repeat('&emsp;', $title[0] * 2) . $title[1]
 		);
 
 	echo '
@@ -123,7 +128,7 @@ function template_main()
 									<input type="checkbox" class="input_check" name="permissions[]" value="', $id, '"', $permission['checked'] ? ' checked="checked"' : '', ' />
 									<span';
 
-		if  ($permission['is_post_group'])
+		if ($permission['is_post_group'])
 			echo ' title="' . $txt['mboards_groups_post_group'] . '"';
 
 		echo '>', $permission['name'], '</span>
@@ -146,7 +151,7 @@ function template_main()
 					</dl>';
 }
 
-function template_form_below()
+function template_form_below(): void
 {
 	global $context, $txt;
 

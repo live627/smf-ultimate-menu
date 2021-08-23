@@ -1,6 +1,8 @@
 <?php
 
-/* t�rk�e �eviri http://smf.konusal.com hizmetidir */
+declare(strict_types=1);
+
+// t�rk�e �eviri http://smf.konusal.com hizmetidir
 
 /**
  * @package Ultimate Menu mod

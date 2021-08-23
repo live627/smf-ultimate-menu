@@ -1,9 +1,9 @@
 {
-  "repositories": [
-    {
-        "type":"package",
-        "package": {
-          "name": "simplemachines/smf",
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "simplemachines/smf",
                 "version": "2.0.18",
                 "dist": {
                     "url": "https://download.simplemachines.org/index.php/smf_2-0-18_install.zip",
@@ -11,10 +11,9 @@
                 }
             }
         }
-    
-  ],
-  "require-dev": {
-    "simplemachines/smf": "~2",
-    "phpunit/phpunit": "^9.5"
-  }
+    ],
+    "require-dev": {
+        "simplemachines/smf": "~2",
+        "phpunit/phpunit": "^9.5"
+    }
 }

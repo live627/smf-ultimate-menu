@@ -1,6 +1,8 @@
 <?php
 
-/* türkçe çeviri http://smf.konusal.com hizmetidir */
+declare(strict_types=1);
+
+// türkçe çeviri http://smf.konusal.com hizmetidir
 
 /**
  * @package Ultimate Menu mod

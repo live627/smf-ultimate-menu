@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @package Ultimate Menu mod
  * @version   1.1.0
@@ -16,70 +18,70 @@ if (file_exists(__DIR__ . '/SSI.php') && !defined('SMF'))
 elseif (!defined('SMF'))
 	die('<b>Error:</b> Cannot install - please verify you put this in the same place as SMF\'s index.php.');
 
-$tables = array(
-	array(
+$tables = [
+	[
 		'name' => 'um_menu',
-		'columns' => array(
-			array(
+		'columns' => [
+			[
 				'name' => 'id_button',
 				'type' => 'smallint',
 				'size' => 5,
 				'unsigned' => true,
 				'auto' => true,
-			),
-			array(
+			],
+			[
 				'name' => 'name',
 				'type' => 'varchar',
 				'size' => 65,
-			),
-			array(
+			],
+			[
 				'name' => 'type',
 				'type' => 'enum(\'forum\',\'external\')',
 				'default' => 'forum',
-			),
-			array(
+			],
+			[
 				'name' => 'target',
 				'type' => 'enum(\'_self\',\'_blank\')',
 				'default' => '_self',
-			),
-			array(
+			],
+			[
 				'name' => 'position',
 				'type' => 'varchar',
 				'size' => 65,
-			),
-			array(
+			],
+			[
 				'name' => 'link',
 				'type' => 'varchar',
 				'size' => 255,
-			),
-			array(
+			],
+			[
 				'name' => 'status',
 				'type' => 'enum(\'active\',\'inactive\')',
 				'default' => 'active',
-			),
-			array(
+			],
+			[
 				'name' => 'permissions',
 				'type' => 'varchar',
 				'size' => 255,
-			),
-			array(
+			],
+			[
 				'name' => 'parent',
 				'type' => 'varchar',
 				'size' => 65,
-			),
-		),
-		'indexes' => array(
-			array(
+			],
+		],
+		'indexes' => [
+			[
 				'type' => 'primary',
-				'columns' => array('id_button')
-			),
-		)
-	)
-);
+				'columns' => ['id_button']
+			],
+		]
+	]
+];
 
 foreach ($tables as $table)
 {
-	$smcFunc['db_create_table']('{db_prefix}' . $table['name'], $table['columns'], $table['indexes'], array(), 'update');
+	$smcFunc['db_create_table']('{db_prefix}' . $table['name'], $table['columns'], $table['indexes'], [], 'update');
 
 	if (isset($table['default']))
 		$smcFunc['db_insert']('ignore', '{db_prefix}' . $table['name'], $table['default']['columns'], $table['default']['values'], $table['default']['keys']);
@@ -88,22 +90,23 @@ foreach ($tables as $table)
 $request = $smcFunc['db_query']('', '
 	SELECT id_button, name, target, type, position, link, status, permissions, parent
 	FROM {db_prefix}um_menu');
-$buttons = array();
+$buttons = [];
+
 while ($row = $smcFunc['db_fetch_assoc']($request))
 	$buttons['um_button_' . $row['id_button']] = json_encode($row);
 $smcFunc['db_free_result']($request);
 updateSettings(
-	array(
+	[
 		'um_count' => count($buttons),
-	) + $buttons
+	] + $buttons
 );
 
 $smcFunc['db_query']('', '
 	DELETE FROM {db_prefix}settings
 	WHERE variable = {string:setting}',
-	array(
+	[
 		'setting' => 'um_menu',
-	)
+	]
 );
 
 // Now presenting... *drumroll*
