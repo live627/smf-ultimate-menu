@@ -244,97 +244,109 @@ class ManageUltimateMenu
 		$context['default_list'] = 'menu_list';
 	}
 
+	public function getInput(): array
+	{
+		$member_groups = $this->um->listGroups([-3]);
+		$button_names = $this->um->getButtonNames();
+		$args = [
+			'in' => FILTER_VALIDATE_INT,
+			'name' => FILTER_UNSAFE_RAW,
+			'position' => [
+				'filter' => FILTER_CALLBACK,
+				'options' => function ($v)
+				{
+					return in_array($v, ['before', 'child_of', 'after']) ? $v : false;
+				},
+			],
+			'parent' => [
+				'filter' => FILTER_CALLBACK,
+				'options' => function ($v) use ($button_names)
+				{
+					return isset($button_names[$v]) ? $v : false;
+				},
+			],
+			'type' => [
+				'filter' => FILTER_CALLBACK,
+				'options' => function ($v)
+				{
+					return in_array($v, ['forum', 'external']) ? $v : false;
+				},
+			],
+			'link' => FILTER_UNSAFE_RAW,
+			'permissions' => [
+				'filter' => FILTER_CALLBACK,
+				'flags' => FILTER_REQUIRE_ARRAY,
+				'options' => function ($v) use ($member_groups)
+				{
+					return isset($member_groups[$v]) ? $v : false;
+				},
+			],
+			'status' => [
+				'filter' => FILTER_CALLBACK,
+				'options' => function ($v)
+				{
+					return in_array($v, ['active', 'inactive']) ? $v : false;
+				},
+			],
+			'target' => [
+				'filter' => FILTER_CALLBACK,
+				'options' => function ($v)
+				{
+					return in_array($v, ['_self', '_blank']) ? $v : false;
+				},
+			],
+		];
+
+		// Make sure we grab all of the content
+		return array_replace(
+			[
+				'target' => '_self',
+				'type' => 'forum',
+				'position' => 'before',
+				'status' => 'active',
+				'parent' => 'home',
+			],
+			filter_input_array(INPUT_POST, $args) ?: []
+		);
+	}
+
+	public function validateInput(array $menu_entry): array
+	{
+		$post_errors = [];
+		$required_fields = [
+			'name',
+			'link',
+			'parent',
+		];
+
+		// If your session timed out, show an error, but do allow to re-submit.
+		if (checkSession('post', '', false) != '')
+			$post_errors[] = 'um_menu_session_verify_fail';
+
+		// These fields are required!
+		foreach ($required_fields as $required_field)
+			if (empty($menu_entry[$required_field]))
+				$post_errors[$required_field] = 'um_menu_empty_' . $required_field;
+
+		// Stop making numeric names!
+		if (is_numeric($menu_entry['name']))
+			$post_errors['name'] = 'um_menu_numeric';
+
+		// Let's make sure you're not trying to make a name that's already taken.
+		if (!empty($this->um->checkButton($menu_entry['in'], $menu_entry['name'])))
+			$post_errors['name'] = 'um_menu_mysql';
+
+		return $post_errors;
+	}
+
 	public function SaveButton(): void
 	{
 		global $context, $txt;
 
 		if (isset($_POST['submit']))
 		{
-			$post_errors = [];
-			$required_fields = [
-				'name',
-				'link',
-				'parent',
-			];
-			$member_groups = $this->um->listGroups([-3]);
-			$button_names = $this->um->getButtonNames();
-			$args = [
-				'in' => FILTER_VALIDATE_INT,
-				'name' => FILTER_UNSAFE_RAW,
-				'position' => [
-					'filter' => FILTER_CALLBACK,
-					'options' => function ($v)
-					{
-						return in_array($v, ['before', 'child_of', 'after']) ? $v : false;
-					},
-				],
-				'parent' => [
-					'filter' => FILTER_CALLBACK,
-					'options' => function ($v) use ($button_names)
-					{
-						return isset($button_names[$v]) ? $v : false;
-					},
-				],
-				'type' => [
-					'filter' => FILTER_CALLBACK,
-					'options' => function ($v)
-					{
-						return in_array($v, ['forum', 'external']) ? $v : false;
-					},
-				],
-				'link' => FILTER_UNSAFE_RAW,
-				'permissions' => [
-					'filter' => FILTER_CALLBACK,
-					'flags' => FILTER_REQUIRE_ARRAY,
-					'options' => function ($v) use ($member_groups)
-					{
-						return isset($member_groups[$v]) ? $v : false;
-					},
-				],
-				'status' => [
-					'filter' => FILTER_CALLBACK,
-					'options' => function ($v)
-					{
-						return in_array($v, ['active', 'inactive']) ? $v : false;
-					},
-				],
-				'target' => [
-					'filter' => FILTER_CALLBACK,
-					'options' => function ($v)
-					{
-						return in_array($v, ['_self', '_blank']) ? $v : false;
-					},
-				],
-			];
-
-			// Make sure we grab all of the content
-			$menu_entry = array_replace(
-				[
-					'target' => '_self',
-					'type' => 'forum',
-					'position' => 'before',
-					'status' => 'active',
-					'parent' => 'home',
-				],
-				filter_input_array(INPUT_POST, $args)
-			);
-
-			// If your session timed out, show an error, but do allow to re-submit.
-			if (checkSession('post', '', false) != '')
-				$post_errors[] = 'um_menu_session_verify_fail';
-
-			// These fields are required!
-			foreach ($required_fields as $required_field)
-				if (empty($menu_entry[$required_field]))
-					$post_errors[$required_field] = 'um_menu_empty_' . $required_field;
-
-			// Stop making numeric names!
-			if (is_numeric($menu_entry['name']))
-				$post_errors['name'] = 'um_menu_numeric';
-
-			// Let's make sure you're not trying to make a name that's already taken.
-			if (!empty($this->um->checkButton($menu_entry['in'], $menu_entry['name'])))
-				$post_errors['name'] = 'um_menu_mysql';
+			$menu_entry = $this->getInput();
+			$post_errors = $this->validateInput($menu_entry);
 
 			// I see you made it to the final stage, my young padawan.
 			if (empty($post_errors))
@@ -351,7 +363,7 @@ class ManageUltimateMenu
 			else
 			{
 				$context['page_title'] = $txt['um_menu_edit_title'];
-				$context['button_names'] = $button_names;
+				$context['button_names'] = $this->um->getButtonNames();
 				$context['post_error'] = $post_errors;
 				$context['error_title'] = empty($menu_entry['in'])
 					? 'um_menu_errors_create'
@@ -385,9 +397,8 @@ class ManageUltimateMenu
 	{
 		global $context, $txt;
 
-		if (isset($_GET['in']))
-			$row = $this->um->fetchButton($_GET['in']);
-		elseif (empty($row))
+		$row = isset($_GET['in']) ? $this->um->fetchButton($_GET['in']) : [];
+		if (empty($row))
 			fatal_lang_error('no_access', false);
 
 		$context['button_data'] = [
