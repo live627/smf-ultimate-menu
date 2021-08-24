@@ -1,7 +1,8 @@
 # Ultimate Menu
+[![Tests](https://github.com/live627/smf-ultimate-menu/actions/workflows/php.yml/badge.svg)](https://github.com/live627/smf-ultimate-menu/actions/workflows/php.yml)
+[![Code Coverage](https://scrutinizer-ci.com/g/live627/smf-ultimate-menu/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/live627/smf-ultimate-menu/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/live627/smf-ultimate-menu/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/live627/smf-ultimate-menu/?branch=master)
 [![MIT license](http://img.shields.io/badge/license-MIT-009999.svg)](http://opensource.org/licenses/MIT)
-[![GitHub issues](https://img.shields.io/github/issues/live627/smf-ultimate-menu.svg)](https://github.com/live627/smf-ultimate-menu/issues)
 [![Latest Version](https://img.shields.io/github/release/live627/smf-ultimate-menu.svg)](https://github.com/live627/smf-ultimate-menu/releases) [![Support](http://img.shields.io/badge/PayPal-$-009966.svg)](https://www.paypal.me/JohnRayes)
 
 Add custom buttons to the main menu within SMF
