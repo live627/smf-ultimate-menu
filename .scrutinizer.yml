@@ -171,9 +171,10 @@ coding_style:
                 general: lower
             constants:
                 true_false_null: lower
-build:
+tools:
     external_code_coverage:
         timeout: 300
+build:
     nodes:
         analysis:
             tests:
