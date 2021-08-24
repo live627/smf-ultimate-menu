@@ -172,6 +172,8 @@ coding_style:
             constants:
                 true_false_null: lower
 build:
+    external_code_coverage:
+        timeout: 300
     nodes:
         analysis:
             tests:
