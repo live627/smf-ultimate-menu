@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.1.1](https://www.github.com/live627/smf-ultimate-menu/compare/v1.1.0...v1.1.1) (2021-09-01)
+
+
+### Bug Fixes
+
+* Show button position even if it's nested too deep for SMF's menu ([ae9c87e](https://www.github.com/live627/smf-ultimate-menu/commit/ae9c87e95ebd3cad6eb4d87813070e97d436d410))
+
 ## [1.1.0](https://www.github.com/live627/smf-ultimate-menu/compare/v1.0.5...v1.1.0) (2021-08-22)
 
 
