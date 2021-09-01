@@ -417,4 +417,18 @@ final class Test extends TestCase
 		um_load_menu($dummy);
 		$this->assertEquals('my_func,um_load_menu', $modSettings['integrate_menu_buttons']);
 	}
+
+	public function testListButtons(): void
+	{
+		$haystack = (new UltimateMenu)->flatten([
+			'test' => [
+				'title' => 'link',
+				'sub_buttons' => ['sub' => ['title' => 'link1']],
+			],
+		]);
+		$this->assertArrayHasKey('test', $haystack);
+		$this->assertArrayHasKey('sub', $haystack);
+		$this->assertCount(2, $haystack);
+		$this->assertSame(['test' => [0, 'link'], 'sub' => [1, 'link1']], $haystack);
+	}
 }

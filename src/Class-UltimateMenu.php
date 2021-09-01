@@ -412,23 +412,18 @@ class UltimateMenu
 		// Load SMF's default menu context
 		setupMenuContext();
 
-		$button_names = [];
+		return $this->flatten($context['menu_buttons']);
+	}
 
-		foreach ($context['menu_buttons'] as $button_index => $button_data)
+	public function flatten(array $array, int $i = 0): array
+	{
+		$result = array();
+		foreach ($array as $key => $value)
 		{
-			$button_names[$button_index] = [0, $button_data['title']];
-
-			if (!empty($button_data['sub_buttons']))
-				foreach ($button_data['sub_buttons'] as $child_button => $child_button_data)
-				{
-					$button_names[$child_button] = [1, $child_button_data['title']];
-
-					if (!empty($child_button_data['sub_buttons']))
-						foreach ($child_button_data['sub_buttons'] as $grand_child_button => $grand_child_button_data)
-							$button_names[$grand_child_button] = [2, $grand_child_button_data['title']];
-				}
+			$result[$key] = [$i, $value['title']];
+			if (!empty($value['sub_buttons']))
+				$result += $this->flatten($value['sub_buttons'], ++$i);
 		}
-
-		return $button_names;
+		return $result;
 	}
 }
