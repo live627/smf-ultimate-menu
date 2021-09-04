@@ -19,13 +19,3 @@ This allows custom buttons to be added to the main menu within SMF at will, comp
 [li]Incompatible with [url=http://custom.simplemachines.org/mods/index.php?mod=3310]Menu Editor Lite / Pro[/url].[/li]
 [li]Plays very nicely with [url=http://custom.simplemachines.org/mods/index.php?mod=2650]Add or Remove buttons[/url].[/li]
 [/list]
-
-[font=Times New Roman][color=#c63][size=11pt][b]License[/b][/size][/color][/font][hr][list type=none]
-[li][url=http://opensource.org/licenses/MIT]MIT[/url][/li]
-[/list]
-
-[font=Times New Roman][color=#cc6633][size=3][b]Known issues:[/b][/size][/color][/font]
-[hr]
-[list]
-[li]Grandchild buttons cannot be added using 'before' or 'after'; not sure how to fix this[/li]
-[/list]
