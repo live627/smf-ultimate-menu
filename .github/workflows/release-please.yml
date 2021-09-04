@@ -46,7 +46,7 @@ jobs:
           git push
       - uses: actions/checkout@v2
         if: ${{ steps.release.outputs.release_created }}
-      - run: zip -r -j myfile.zip src/
+      - run: tar -czvf myfile.tgz -C src/ .
         if: ${{ steps.release.outputs.release_created }}
       - name: Upload release asset
         uses: actions/github-script@v2
@@ -58,10 +58,10 @@ jobs:
               url: "${{ steps.release.outputs.upload_url }}",
               repo: context.repo.repo,
               headers: {
-                "content-type": "application/zip",
-                "content-length": fs.statSync("./myfile.zip").size
+                "content-type": "application/gzip",
+                "content-length": fs.statSync("./myfile.tgz").size
               },
-              name: "${{ env.MOD_NAME }}_${{ steps.release.outputs.major }}-${{ steps.release.outputs.minor }}-${{ steps.release.outputs.patch }}.zip",
-              data: fs.readFileSync("./myfile.zip")
+              name: "${{ env.MOD_NAME }}_${{ steps.release.outputs.major }}-${{ steps.release.outputs.minor }}-${{ steps.release.outputs.patch }}.tgz",
+              data: fs.readFileSync("./myfile.tgz")
             });
         if: ${{ steps.release.outputs.release_created }}
