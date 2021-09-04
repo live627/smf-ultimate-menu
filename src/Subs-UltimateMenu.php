@@ -41,6 +41,13 @@ function um_load_menu(&$menu_buttons)
 	}
 }
 
+function um_replay_menu(&$menu_buttons)
+{
+	global $context;
+
+	$context['replayed_menu_buttons'] = $menu_buttons;
+}
+
 function recursive_button(array $needle, array &$haystack, $insertion_point, $where, $key)
 {
 	foreach ($haystack as $area => &$info)

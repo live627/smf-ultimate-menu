@@ -405,13 +405,19 @@ class UltimateMenu
 	{
 		global $context;
 
+		// Start an instant replay.
+		add_integration_function('integrate_menu_buttons', 'um_replay_menu', false);
+
 		// It's expected to be present.
 		$context['user']['unread_messages'] = 0;
 
-		// Load SMF's default menu context
+		// Load SMF's default menu context.
 		setupMenuContext();
 
-		return $this->flatten($context['menu_buttons']);
+		// We are in the endgame now.
+		remove_integration_function('integrate_menu_buttons', 'um_replay_menu');
+
+		return $this->flatten($context['replayed_menu_buttons']);
 	}
 
 	public function flatten(array $array, $i = 0)
@@ -421,7 +427,7 @@ class UltimateMenu
 		{
 			$result[$key] = [$i, $value['title']];
 			if (!empty($value['sub_buttons']))
-				$result += $this->flatten($value['sub_buttons'], ++$i);
+				$result += $this->flatten($value['sub_buttons'], $i + 1);
 		}
 		return $result;
 	}
