@@ -21,7 +21,7 @@
 		<require-file name="ManageUltimateMenu.russian.php" destination="$languagedir" />
 		<require-file name="ManageUltimateMenu.russian-utf8.php" destination="$languagedir" />
  		<require-file name="umen.png" destination="$themes_dir/default/images/admin" />
-		<redirect url="action=admin;area=umen" />
+		<redirect url="?action=admin;area=umen" />
 	</install>
 
 	<uninstall for="2.0 - 2.0.99">
