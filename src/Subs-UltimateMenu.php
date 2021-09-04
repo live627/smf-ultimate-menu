@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @package   Ultimate Menu mod
  * @version   1.1.1
@@ -10,7 +8,7 @@ declare(strict_types=1);
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-function um_load_menu(&$menu_buttons): void
+function um_load_menu(&$menu_buttons)
 {
 	global $smcFunc, $user_info, $scripturl, $modSettings;
 
@@ -21,7 +19,11 @@ function um_load_menu(&$menu_buttons): void
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 	}
 
-	for ($i = 1; $i <= ($modSettings['um_count'] ?? 0); $i++)
+	$num_buttons = isset($modSettings['um_count'])
+		? $modSettings['um_count']
+		: 0;
+
+	for ($i = 1; $i <= $num_buttons; $i++)
 	{
 		$key = 'um_button_' . $i;
 
@@ -39,7 +41,7 @@ function um_load_menu(&$menu_buttons): void
 	}
 }
 
-function recursive_button(array $needle, array &$haystack, $insertion_point, $where, $key): void
+function recursive_button(array $needle, array &$haystack, $insertion_point, $where, $key)
 {
 	foreach ($haystack as $area => &$info)
 	{
@@ -62,7 +64,7 @@ function recursive_button(array $needle, array &$haystack, $insertion_point, $wh
 	}
 }
 
-function insert_button(array $needle, array &$haystack, $insertion_point, $where = 'after'): void
+function insert_button(array $needle, array &$haystack, $insertion_point, $where = 'after')
 {
 	$offset = 0;
 
@@ -76,7 +78,7 @@ function insert_button(array $needle, array &$haystack, $insertion_point, $where
 	$haystack = array_slice($haystack, 0, $offset, true) + $needle + array_slice($haystack, $offset, null, true);
 }
 
-function um_admin_areas(&$admin_areas): void
+function um_admin_areas(&$admin_areas)
 {
 	global $txt;
 

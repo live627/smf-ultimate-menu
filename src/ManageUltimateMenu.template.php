@@ -1,16 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @package   Ultimate Menu mod
  * @version   1.1.1
  * @author    John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2014, John Rayes
- * @license   http://opensource.org/licenses/MIT MIT
+ * @license http://opensource.org/licenses/MIT MIT
  */
 
-function template_form_above(): void
+function template_form_above()
 {
 	global $context, $scripturl;
 
@@ -25,7 +23,7 @@ function template_form_above(): void
 				<div class="roundframe">';
 }
 
-function template_errors_above(): void
+function template_errors_above()
 {
 	global $context, $txt;
 
@@ -46,11 +44,11 @@ function template_errors_above(): void
 	}
 }
 
-function template_errors_below(): void
+function template_errors_below()
 {
 }
 
-function template_main(): void
+function template_main()
 {
 	global $context, $txt, $scripturl;
 
@@ -151,7 +149,7 @@ function template_main(): void
 					</dl>';
 }
 
-function template_form_below(): void
+function template_form_below()
 {
 	global $context, $txt;
 

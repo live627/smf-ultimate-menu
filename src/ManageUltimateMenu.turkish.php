@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 // t�rk�e �eviri http://smf.konusal.com hizmetidir
 
 /**

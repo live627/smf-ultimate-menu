@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @package   Ultimate Menu mod
  * @version   1.1.1
@@ -148,7 +146,7 @@ class UltimateMenu
 			SELECT COUNT(*)
 			FROM {db_prefix}um_menu'
 		);
-		 [$numButtons] = $smcFunc['db_fetch_row']($request);
+		list ($numButtons) = $smcFunc['db_fetch_row']($request);
 		$smcFunc['db_free_result']($request);
 
 		return $numButtons;
@@ -159,7 +157,7 @@ class UltimateMenu
 	 *
 	 * Called whenever the menu structure is updated in the ACP
 	 */
-	public function rebuildMenu(): void
+	public function rebuildMenu()
 	{
 		global $smcFunc;
 
@@ -181,7 +179,7 @@ class UltimateMenu
 			SELECT MAX(id_button)
 			FROM {db_prefix}um_menu'
 		);
-		 [$max] = $smcFunc['db_fetch_row']($request);
+		list ($max) = $smcFunc['db_fetch_row']($request);
 		$smcFunc['db_free_result']($request);
 
 		$smcFunc['db_query'](
@@ -207,7 +205,7 @@ class UltimateMenu
 	 *
 	 * @param int[] $ids
 	 */
-	public function deleteButton(array $ids): void
+	public function deleteButton(array $ids)
 	{
 		global $smcFunc;
 
@@ -225,8 +223,9 @@ class UltimateMenu
 	/**
 	 * Changes the status of a button from active to inactive
 	 *
+	 * @param array $updates
 	 */
-	public function updateButton(array $updates): void
+	public function updateButton(array $updates)
 	{
 		global $smcFunc;
 
@@ -282,7 +281,7 @@ class UltimateMenu
 	/**
 	 * Saves a new or updates an existing button
 	 */
-	public function saveButton(array $menu_entry): void
+	public function saveButton(array $menu_entry)
 	{
 		global $smcFunc;
 
@@ -386,7 +385,7 @@ class UltimateMenu
 	/**
 	 * Removes all buttons
 	 */
-	public function deleteallButtons(): void
+	public function deleteallButtons()
 	{
 		global $smcFunc;
 
@@ -415,7 +414,7 @@ class UltimateMenu
 		return $this->flatten($context['menu_buttons']);
 	}
 
-	public function flatten(array $array, int $i = 0): array
+	public function flatten(array $array, $i = 0)
 	{
 		$result = array();
 		foreach ($array as $key => $value)

@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * @package   Ultimate Menu mod
  * @version   1.1.1
@@ -48,7 +45,7 @@ class ManageUltimateMenu
 		$this->{$subActions[$_GET['sa']]}();
 	}
 
-	public function ManageUltimateMenu(): void
+	public function ManageUltimateMenu()
 	{
 		// Get rid of all of em!
 		if (!empty($_POST['removeAll']))
@@ -81,7 +78,7 @@ class ManageUltimateMenu
 		$this->ListButtons();
 	}
 
-	public function ListButtons(): void
+	public function ListButtons()
 	{
 		global $context, $txt, $scripturl, $sourcedir;
 
@@ -244,7 +241,7 @@ class ManageUltimateMenu
 		$context['default_list'] = 'menu_list';
 	}
 
-	public function getInput(): array
+	public function getInput()
 	{
 		$member_groups = $this->um->listGroups([-3]);
 		$button_names = $this->um->getButtonNames();
@@ -310,7 +307,7 @@ class ManageUltimateMenu
 		);
 	}
 
-	public function validateInput(array $menu_entry): array
+	public function validateInput(array $menu_entry)
 	{
 		$post_errors = [];
 		$required_fields = [
@@ -339,7 +336,7 @@ class ManageUltimateMenu
 		return $post_errors;
 	}
 
-	public function SaveButton(): void
+	public function SaveButton()
 	{
 		global $context, $txt;
 
@@ -393,7 +390,7 @@ class ManageUltimateMenu
 			fatal_lang_error('no_access', false);
 	}
 
-	public function EditButton(): void
+	public function EditButton()
 	{
 		global $context, $txt;
 
@@ -421,7 +418,7 @@ class ManageUltimateMenu
 		$context['template_layers'][] = 'form';
 	}
 
-	public function AddButton(): void
+	public function AddButton()
 	{
 		global $context, $txt;
 
