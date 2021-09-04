@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @package   Ultimate Menu mod
  * @version   1.1.4
@@ -8,7 +11,7 @@
  */
 class ManageUltimateMenu
 {
-	private $um;
+	private UltimateMenu $um;
 
 	public function __construct()
 	{
@@ -39,16 +42,13 @@ class ManageUltimateMenu
 			'editbutton' => 'EditButton',
 			'savebutton' => 'SaveButton',
 		];
-
-		if (!isset($_GET['sa']) || !isset($subActions[$_GET['sa']]))
-			$_GET['sa'] = 'manmenu';
-		$this->{$subActions[$_GET['sa']]}();
+		call_user_func([$this, $subActions[$_GET['sa'] ??  ''] ?? 'manmenu']);
 	}
 
-	public function ManageUltimateMenu()
+	public function ManageUltimateMenu(): void
 	{
 		// Get rid of all of em!
-		if (!empty($_POST['removeAll']))
+		if (isset($_POST['removeAll']))
 		{
 			checkSession();
 			$this->um->deleteallButtons();
@@ -75,10 +75,10 @@ class ManageUltimateMenu
 		elseif (isset($_POST['new']))
 			redirectexit('action=admin;area=umen;sa=addbutton');
 
-		$this->ListButtons();
+		$this->listButtons();
 	}
 
-	public function ListButtons()
+	public function listButtons(): void
 	{
 		global $context, $txt, $scripturl, $sourcedir;
 
@@ -114,10 +114,7 @@ class ManageUltimateMenu
 						'value' => $txt['um_menu_button_type'],
 					],
 					'data' => [
-						'function' => function ($rowData) use ($txt)
-						{
-							return $txt['um_menu_' . $rowData['type'] . '_link'];
-						},
+						'function' => fn($rowData): string => $txt['um_menu_' . $rowData['type'] . '_link'],
 					],
 					'sort' => [
 						'default' => 'type',
@@ -143,18 +140,6 @@ class ManageUltimateMenu
 					'sort' => [
 						'default' => 'position',
 						'reverse' => 'position DESC',
-					],
-				],
-				'link' => [
-					'header' => [
-						'value' => $txt['um_menu_button_link'],
-					],
-					'data' => [
-						'db_htmlsafe' => 'link',
-					],
-					'sort' => [
-						'default' => 'link',
-						'reverse' => 'link DESC',
 					],
 				],
 				'status' => [
@@ -241,7 +226,7 @@ class ManageUltimateMenu
 		$context['default_list'] = 'menu_list';
 	}
 
-	public function getInput()
+	public function getInput(): array
 	{
 		$member_groups = $this->um->listGroups([-3]);
 		$button_names = $this->um->getButtonNames();
@@ -250,65 +235,36 @@ class ManageUltimateMenu
 			'name' => FILTER_UNSAFE_RAW,
 			'position' => [
 				'filter' => FILTER_CALLBACK,
-				'options' => function ($v)
-				{
-					return in_array($v, ['before', 'child_of', 'after']) ? $v : false;
-				},
+				'options' => fn($v) => in_array($v, ['before', 'child_of', 'after']) ? $v : false,
 			],
 			'parent' => [
 				'filter' => FILTER_CALLBACK,
-				'options' => function ($v) use ($button_names)
-				{
-					return isset($button_names[$v]) ? $v : false;
-				},
+				'options' => fn($v) => isset($button_names[$v]) ? $v : false,
 			],
 			'type' => [
 				'filter' => FILTER_CALLBACK,
-				'options' => function ($v)
-				{
-					return in_array($v, ['forum', 'external']) ? $v : false;
-				},
+				'options' => fn($v) => in_array($v, ['forum', 'external']) ? $v : false,
 			],
 			'link' => FILTER_UNSAFE_RAW,
 			'permissions' => [
 				'filter' => FILTER_CALLBACK,
 				'flags' => FILTER_REQUIRE_ARRAY,
-				'options' => function ($v) use ($member_groups)
-				{
-					return isset($member_groups[$v]) ? $v : false;
-				},
+				'options' => fn($v) => isset($member_groups[$v]) ? $v : false,
 			],
 			'status' => [
 				'filter' => FILTER_CALLBACK,
-				'options' => function ($v)
-				{
-					return in_array($v, ['active', 'inactive']) ? $v : false;
-				},
+				'options' => fn($v) => in_array($v, ['active', 'inactive']) ? $v : false,
 			],
 			'target' => [
 				'filter' => FILTER_CALLBACK,
-				'options' => function ($v)
-				{
-					return in_array($v, ['_self', '_blank']) ? $v : false;
-				},
+				'options' => fn($v) => in_array($v, ['_self', '_blank']) ? $v : false,
 			],
 		];
 
-		// Make sure we grab all of the content
-		return array_replace(
-			[
-				'target' => '_self',
-				'type' => 'forum',
-				'position' => 'before',
-				'permissions' => [],
-				'status' => 'active',
-				'parent' => '',
-			],
-			filter_input_array(INPUT_POST, $args, false) ?: []
-		);
+		return filter_input_array(INPUT_POST, $args) ?: [];
 	}
 
-	public function validateInput(array $menu_entry)
+	public function validateInput(array $menu_entry): array
 	{
 		$post_errors = [];
 		$required_fields = [
@@ -337,7 +293,7 @@ class ManageUltimateMenu
 		return $post_errors;
 	}
 
-	public function SaveButton()
+	public function SaveButton(): void
 	{
 		global $context, $txt;
 
@@ -391,7 +347,7 @@ class ManageUltimateMenu
 			fatal_lang_error('no_access', false);
 	}
 
-	public function EditButton()
+	public function EditButton(): void
 	{
 		global $context, $txt;
 
@@ -419,7 +375,7 @@ class ManageUltimateMenu
 		$context['template_layers'][] = 'form';
 	}
 
-	public function AddButton()
+	public function AddButton(): void
 	{
 		global $context, $txt;
 

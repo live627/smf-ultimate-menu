@@ -13,48 +13,24 @@ final class Test extends TestCase
 				'test',
 				[
 					'before' => [
-						'inserted_test' => [
-							'href' => 'link',
-							'show' => true,
-						],
-						'test' => [
-							'href' => 'link',
-							'show' => true,
-						],
-						'test1' => [
-							'href' => 'link1',
-							'show' => true,
-						],
+						'inserted_test' => ['href' => 'link', 'show' => true,],
+						'test' => ['href' => 'link', 'show' => true,],
+						'test1' => ['href' => 'link1', 'show' => true,],
 					],
 					'after' => [
-						'test' => [
-							'href' => 'link',
-							'show' => true,
-						],
-						'inserted_test' => [
-							'href' => 'link',
-							'show' => true,
-						],
-						'test1' => [
-							'href' => 'link1',
-							'show' => true,
-						],
+						'test' => ['href' => 'link', 'show' => true,],
+						'inserted_test' => ['href' => 'link', 'show' => true,],
+						'test1' => ['href' => 'link1', 'show' => true,],
 					],
 					'child_of' => [
 						'test' => [
 							'href' => 'link',
 							'show' => true,
 							'sub_buttons' => [
-								'inserted_test' => [
-									'href' => 'link',
-									'show' => true,
-								],
+								'inserted_test' => ['href' => 'link', 'show' => true,],
 							],
 						],
-						'test1' => [
-							'href' => 'link1',
-							'show' => true,
-						],
+						'test1' => ['href' => 'link1', 'show' => true,],
 					],
 				],
 			],
@@ -62,46 +38,22 @@ final class Test extends TestCase
 				'test1',
 				[
 					'before' => [
-						'test' => [
-							'href' => 'link',
-							'show' => true,
-						],
-						'inserted_test1' => [
-							'href' => 'link',
-							'show' => true,
-						],
-						'test1' => [
-							'href' => 'link1',
-							'show' => true,
-						],
+						'test' => ['href' => 'link', 'show' => true,],
+						'inserted_test1' => ['href' => 'link', 'show' => true,],
+						'test1' => ['href' => 'link1', 'show' => true,],
 					],
 					'after' => [
-						'test' => [
-							'href' => 'link',
-							'show' => true,
-						],
-						'test1' => [
-							'href' => 'link1',
-							'show' => true,
-						],
-						'inserted_test1' => [
-							'href' => 'link',
-							'show' => true,
-						],
+						'test' => ['href' => 'link', 'show' => true,],
+						'test1' => ['href' => 'link1', 'show' => true,],
+						'inserted_test1' => ['href' => 'link', 'show' => true,],
 					],
 					'child_of' => [
-						'test' => [
-							'href' => 'link',
-							'show' => true,
-						],
+						'test' => ['href' => 'link', 'show' => true,],
 						'test1' => [
 							'href' => 'link1',
 							'show' => true,
 							'sub_buttons' => [
-								'inserted_test1' => [
-									'href' => 'link',
-									'show' => true,
-								],
+								'inserted_test1' => ['href' => 'link', 'show' => true,],
 							],
 						],
 					],
@@ -110,35 +62,13 @@ final class Test extends TestCase
 			[
 				'dungeon',
 				[
-					'before' => [
-						'test' => [
-							'href' => 'link',
-							'show' => true,
-						],
-						'test1' => [
-							'href' => 'link1',
-							'show' => true,
-						],
+					'before' => ['test' => ['href' => 'link', 'show' => true], 'test1' => ['href' => 'link1', 'show' => true,],
 					],
 					'after' => [
-						'test' => [
-							'href' => 'link',
-							'show' => true,
-						],
-						'test1' => [
-							'href' => 'link1',
-							'show' => true,
-						],
+						'test' => ['href' => 'link', 'show' => true], 'test1' => ['href' => 'link1', 'show' => true,],
 					],
 					'child_of' => [
-						'test' => [
-							'href' => 'link',
-							'show' => true,
-						],
-						'test1' => [
-							'href' => 'link1',
-							'show' => true,
-						],
+						'test' => ['href' => 'link', 'show' => true], 'test1' => ['href' => 'link1', 'show' => true,],
 					],
 				],
 			],
@@ -152,21 +82,9 @@ final class Test extends TestCase
 	{
 		foreach (['before', 'after', 'child_of'] as $where)
 		{
-			$haystack = [
-				'test' => [
-					'href' => 'link',
-					'show' => true,
-				],
-				'test1' => [
-					'href' => 'link1',
-					'show' => true,
-				],
-			];
+			$haystack = ['test' => ['href' => 'link', 'show' => true], 'test1' => ['href' => 'link1', 'show' => true,],];
 			recursive_button(
-				[
-					'href' => 'link',
-					'show' => true,
-				],
+				['href' => 'link', 'show' => true,],
 				$haystack,
 				$insertion_point,
 				$where,
@@ -187,18 +105,9 @@ final class Test extends TestCase
 							'href' => 'link',
 							'show' => true,
 							'sub_buttons' => [
-								'inserted_sub' => [
-									'href' => 'link',
-									'show' => true,
-								],
-								'sub' => [
-									'href' => 'link',
-									'show' => true,
-								],
-								'sub1' => [
-									'href' => 'link',
-									'show' => true,
-								],
+								'inserted_sub' => ['href' => 'link', 'show' => true,],
+								'sub' => ['href' => 'link', 'show' => true,] ,
+								'sub1' => ['href' => 'link', 'show' => true,],
 							],
 						],
 					],
@@ -207,18 +116,9 @@ final class Test extends TestCase
 							'href' => 'link',
 							'show' => true,
 							'sub_buttons' => [
-								'sub' => [
-									'href' => 'link',
-									'show' => true,
-								],
-								'inserted_sub' => [
-									'href' => 'link',
-									'show' => true,
-								],
-								'sub1' => [
-									'href' => 'link',
-									'show' => true,
-								],
+								'sub' => ['href' => 'link', 'show' => true,],
+								'inserted_sub' => ['href' => 'link', 'show' => true,],
+								'sub1' => ['href' => 'link', 'show' => true,],
 							],
 						],
 					],
@@ -231,16 +131,10 @@ final class Test extends TestCase
 									'href' => 'link',
 									'show' => true,
 									'sub_buttons' => [
-										'inserted_sub' => [
-											'href' => 'link',
-											'show' => true,
-										],
+										'inserted_sub' => ['href' => 'link', 'show' => true,],
 									],
 								],
-								'sub1' => [
-									'href' => 'link',
-									'show' => true,
-								],
+								'sub1' => ['href' => 'link', 'show' => true,],
 							],
 						],
 					],
@@ -254,18 +148,9 @@ final class Test extends TestCase
 							'href' => 'link',
 							'show' => true,
 							'sub_buttons' => [
-								'sub' => [
-									'href' => 'link',
-									'show' => true,
-								],
-								'inserted_sub1' => [
-									'href' => 'link',
-									'show' => true,
-								],
-								'sub1' => [
-									'href' => 'link',
-									'show' => true,
-								],
+								'sub' => ['href' => 'link', 'show' => true,],
+								'inserted_sub1' => ['href' => 'link', 'show' => true,],
+								'sub1' => ['href' => 'link', 'show' => true,],
 							],
 						],
 					],
@@ -274,18 +159,9 @@ final class Test extends TestCase
 							'href' => 'link',
 							'show' => true,
 							'sub_buttons' => [
-								'sub' => [
-									'href' => 'link',
-									'show' => true,
-								],
-								'sub1' => [
-									'href' => 'link',
-									'show' => true,
-								],
-								'inserted_sub1' => [
-									'href' => 'link',
-									'show' => true,
-								],
+								'sub' => ['href' => 'link', 'show' => true,],
+								'sub1' => ['href' => 'link', 'show' => true,],
+								'inserted_sub1' => ['href' => 'link', 'show' => true,],
 							],
 						],
 					],
@@ -294,18 +170,12 @@ final class Test extends TestCase
 							'href' => 'link',
 							'show' => true,
 							'sub_buttons' => [
-								'sub' => [
-									'href' => 'link',
-									'show' => true,
-								],
+								'sub' => ['href' => 'link', 'show' => true,],
 								'sub1' => [
 									'href' => 'link',
 									'show' => true,
 									'sub_buttons' => [
-										'inserted_sub1' => [
-											'href' => 'link',
-											'show' => true,
-										],
+										'inserted_sub1' => ['href' => 'link', 'show' => true,],
 									],
 								],
 							],
@@ -321,14 +191,7 @@ final class Test extends TestCase
 							'href' => 'link',
 							'show' => true,
 							'sub_buttons' => [
-								'sub' => [
-									'href' => 'link',
-									'show' => true,
-								],
-								'sub1' => [
-									'href' => 'link',
-									'show' => true,
-								],
+								'sub' => ['href' => 'link', 'show' => true], 'sub1' => ['href' => 'link', 'show' => true,],
 							],
 						],
 					],
@@ -337,14 +200,7 @@ final class Test extends TestCase
 							'href' => 'link',
 							'show' => true,
 							'sub_buttons' => [
-								'sub' => [
-									'href' => 'link',
-									'show' => true,
-								],
-								'sub1' => [
-									'href' => 'link',
-									'show' => true,
-								],
+								'sub' => ['href' => 'link', 'show' => true], 'sub1' => ['href' => 'link', 'show' => true,],
 							],
 						],
 					],
@@ -353,14 +209,7 @@ final class Test extends TestCase
 							'href' => 'link',
 							'show' => true,
 							'sub_buttons' => [
-								'sub' => [
-									'href' => 'link',
-									'show' => true,
-								],
-								'sub1' => [
-									'href' => 'link',
-									'show' => true,
-								],
+								'sub' => ['href' => 'link', 'show' => true], 'sub1' => ['href' => 'link', 'show' => true,],
 							],
 						],
 					],
@@ -416,6 +265,25 @@ final class Test extends TestCase
 		$dummy = [];
 		um_load_menu($dummy);
 		$this->assertEquals('my_func,um_load_menu', $modSettings['integrate_menu_buttons']);
+		$dummy = [];
+		um_load_menu($dummy);
+		$this->assertEquals('my_func,um_load_menu', $modSettings['integrate_menu_buttons']);
+	}
+
+	public function testMenu(): void
+	{
+		global $modSettings;
+
+		$modSettings['um_count'] = 2;
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"child_of","link":"t","active":true,"groups":"-1,0,2,"parent":"register"}';
+		$haystack = [];
+		um_load_menu($haystack);
+		$this->assertArrayHasKey('um_button_2', $haystack);
+		$this->assertArrayHasKey('title', $haystack['um_button_2']);
+		$this->assertArrayHasKey('href', $haystack['um_button_2']);
+		$this->assertEquals('Test', $haystack['um_button_2']['title']);
+		$this->assertEquals('', $haystack['um_button_2']['href']);
+		$this->assertCount(1, $haystack);
 	}
 
 	public function testListButtons(): void

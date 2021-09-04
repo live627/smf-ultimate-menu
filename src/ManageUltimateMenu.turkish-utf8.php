@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 // türkçe çeviri http://smf.konusal.com hizmetidir
 
 /**

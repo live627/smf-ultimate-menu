@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @package   Ultimate Menu mod
  * @version   1.1.4
@@ -44,28 +46,22 @@ class UltimateMenu
 			if (empty($modSettings['permission_enable_postgroups']))
 				$where[] = 'min_posts = {int:min_posts}';
 		}
-		$request = $smcFunc['db_query'](
-			'',
-			'
+		$request = $smcFunc['db_query']('', '
 			SELECT
-				group_name, id_group, min_posts
+				id_group, group_name, min_posts
 			FROM {db_prefix}membergroups
-			WHERE ' . implode(
-				'
-				AND ',
-				$where
-			),
+			WHERE ' . implode("\n\t\t\t\tAND", $where),
 			[
 				'not_inherited' => -2,
 				'min_posts' => -1,
 			]
 		);
 
-		while ($row = $smcFunc['db_fetch_assoc']($request))
-			$groups[$row['id_group']] = [
-				'name' => trim($row['group_name']),
-				'checked' => in_array($row['id_group'], $checked) || in_array(-3, $checked),
-				'is_post_group' => $row['min_posts'] != -1,
+		while ([$id, $name, $min_posts] = $smcFunc['db_fetch_row']($request))
+			$groups[$id] = [
+				'name' => trim($name),
+				'checked' => in_array($id, $checked) || in_array(-3, $checked),
+				'is_post_group' => $min_posts != -1,
 			];
 		$smcFunc['db_free_result']($request);
 
@@ -81,9 +77,7 @@ class UltimateMenu
 	{
 		global $smcFunc;
 
-		$request = $smcFunc['db_query'](
-			'',
-			'
+		$request = $smcFunc['db_query']('', '
 			SELECT
 				id_button, name, target, type, position, link, status, permissions, parent
 			FROM {db_prefix}um_menu'
@@ -109,9 +103,8 @@ class UltimateMenu
 	{
 		global $smcFunc;
 
-		$request = $smcFunc['db_query'](
-			'',
-			'
+		$buttons = [];
+		$request = $smcFunc['db_query']('', '
 			SELECT
 				id_button, name, target, type, position, link, status, parent
 			FROM {db_prefix}um_menu
@@ -123,7 +116,6 @@ class UltimateMenu
 				'limit' => $items_per_page,
 			]
 		);
-		$buttons = [];
 
 		while ($row = $smcFunc['db_fetch_assoc']($request))
 			$buttons[] = $row;
@@ -140,13 +132,11 @@ class UltimateMenu
 	{
 		global $smcFunc;
 
-		$request = $smcFunc['db_query'](
-			'',
-			'
+		$request = $smcFunc['db_query']('', '
 			SELECT COUNT(*)
 			FROM {db_prefix}um_menu'
 		);
-		list ($numButtons) = $smcFunc['db_fetch_row']($request);
+		[$numButtons] = $smcFunc['db_fetch_row']($request);
 		$smcFunc['db_free_result']($request);
 
 		return $numButtons;
@@ -157,34 +147,38 @@ class UltimateMenu
 	 *
 	 * Called whenever the menu structure is updated in the ACP
 	 */
-	public function rebuildMenu()
+	public function rebuildMenu(): void
 	{
 		global $smcFunc;
 
-		$request = $smcFunc['db_query'](
-			'',
-			'
-			SELECT *
+		$buttons = [];
+		$request = $smcFunc['db_query']('', '
+			SELECT
+				id_button, name, target, type, position, link, status, parent
 			FROM {db_prefix}um_menu'
 		);
-		$buttons = [];
 
 		while ($row = $smcFunc['db_fetch_assoc']($request))
-			$buttons['um_button_' . $row['id_button']] = json_encode($row);
+			$buttons['um_button_' . $row['id_button']] = json_encode([
+				'name' => $row['name'],
+				'target' => $row['target'],
+				'type' => $row['type'],
+				'position' => $row['position'],
+				'groups' => array_map('intval', explode(',', $row['permissions'])),
+				'link' => $row['link'],
+				'active' => $row['status'] == 'active',
+				'parent' => $row['parent'],
+			]);
 		$smcFunc['db_free_result']($request);
 
-		$request = $smcFunc['db_query'](
-			'',
-			'
+		$request = $smcFunc['db_query']('', '
 			SELECT MAX(id_button)
 			FROM {db_prefix}um_menu'
 		);
-		list ($max) = $smcFunc['db_fetch_row']($request);
+		[$max] = $smcFunc['db_fetch_row']($request);
 		$smcFunc['db_free_result']($request);
 
-		$smcFunc['db_query'](
-			'',
-			'
+		$smcFunc['db_query']('', '
 			DELETE FROM {db_prefix}settings
 			WHERE variable LIKE {string:settings_search}
 				AND variable NOT IN ({array_string:settings})',
@@ -193,11 +187,7 @@ class UltimateMenu
 				'settings' => array_keys($buttons),
 			]
 		);
-		updateSettings(
-			[
-				'um_count' => $max,
-			] + $buttons
-		);
+		updateSettings(['um_count' => $max] + $buttons);
 	}
 
 	/**
@@ -205,13 +195,11 @@ class UltimateMenu
 	 *
 	 * @param int[] $ids
 	 */
-	public function deleteButton(array $ids)
+	public function deleteButton(array $ids): void
 	{
 		global $smcFunc;
 
-		$smcFunc['db_query'](
-			'',
-			'
+		$smcFunc['db_query']('', '
 			DELETE FROM {db_prefix}um_menu
 			WHERE id_button IN ({array_int:button_list})',
 			[
@@ -223,9 +211,8 @@ class UltimateMenu
 	/**
 	 * Changes the status of a button from active to inactive
 	 *
-	 * @param array $updates
 	 */
-	public function updateButton(array $updates)
+	public function updateButton(array $updates): void
 	{
 		global $smcFunc;
 
@@ -256,13 +243,11 @@ class UltimateMenu
 	 *
 	 * @return int
 	 */
-	public function checkButton($id, $name)
+	public function checkButton($id, $name): int
 	{
 		global $smcFunc;
 
-		$request = $smcFunc['db_query'](
-			'',
-			'
+		$request = $smcFunc['db_query']('', '
 			SELECT id_button
 			FROM {db_prefix}um_menu
 			WHERE name = {string:name}
@@ -281,7 +266,7 @@ class UltimateMenu
 	/**
 	 * Saves a new or updates an existing button
 	 */
-	public function saveButton(array $menu_entry)
+	public function saveButton(array $menu_entry): void
 	{
 		global $smcFunc;
 
@@ -351,13 +336,11 @@ class UltimateMenu
 	 *
 	 * @return array
 	 */
-	public function fetchButton($id)
+	public function fetchButton($id): array
 	{
 		global $smcFunc;
 
-		$request = $smcFunc['db_query'](
-			'',
-			'
+		$request = $smcFunc['db_query']('', '
 			SELECT
 				id_button, name, target, type, position, link, status, permissions, parent
 			FROM {db_prefix}um_menu
@@ -385,13 +368,11 @@ class UltimateMenu
 	/**
 	 * Removes all buttons
 	 */
-	public function deleteallButtons()
+	public function deleteallButtons(): void
 	{
 		global $smcFunc;
 
-		$smcFunc['db_query'](
-			'',
-			'
+		$smcFunc['db_query']('', '
 			TRUNCATE {db_prefix}um_menu'
 		);
 	}
@@ -401,7 +382,7 @@ class UltimateMenu
 	 *
 	 * @return array
 	 */
-	public function getButtonNames()
+	public function getButtonNames(): array
 	{
 		global $context;
 
@@ -420,7 +401,7 @@ class UltimateMenu
 		return $this->flatten($context['replayed_menu_buttons']);
 	}
 
-	public function flatten(array $array, $i = 0)
+	public function flatten(array $array, int $i = 0): array
 	{
 		$result = array();
 		foreach ($array as $key => $value)

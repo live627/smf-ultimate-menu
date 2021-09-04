@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @package   Ultimate Menu mod
  * @version   1.1.4
@@ -8,7 +10,7 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-function um_load_menu(&$menu_buttons)
+function um_load_menu(&$menu_buttons): void
 {
 	global $smcFunc, $user_info, $scripturl, $modSettings;
 
@@ -19,11 +21,7 @@ function um_load_menu(&$menu_buttons)
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 	}
 
-	$num_buttons = isset($modSettings['um_count'])
-		? $modSettings['um_count']
-		: 0;
-
-	for ($i = 1; $i <= $num_buttons; $i++)
+	for ($i = 1; $i <= ($modSettings['um_count'] ?? 0); $i++)
 	{
 		$key = 'um_button_' . $i;
 
@@ -34,7 +32,7 @@ function um_load_menu(&$menu_buttons)
 			'title' => $row['name'],
 			'href' => ($row['type'] == 'forum' ? $scripturl . '?' : '') . $row['link'],
 			'target' => $row['target'],
-			'show' => (allowedTo('admin_forum') || array_intersect($user_info['groups'], explode(',', $row['permissions'])) != []) && $row['status'] == 'active',
+			'show' => (allowedTo('admin_forum') || array_intersect($user_info['groups'], $row['groups']) != []) && $row['active'],
 		];
 
 		recursive_button($temp_menu, $menu_buttons, $row['parent'], $row['position'], $key);
@@ -48,30 +46,26 @@ function um_replay_menu(&$menu_buttons)
 	$context['replayed_menu_buttons'] = $menu_buttons;
 }
 
-function recursive_button(array $needle, array &$haystack, $insertion_point, $where, $key)
+function recursive_button(array $needle, array &$haystack, $insertion_point, $where, $key): void
 {
 	foreach ($haystack as $area => &$info)
-	{
 		if ($area == $insertion_point)
-		{
-			if ($where == 'before' || $where == 'after')
+			switch ($where)
 			{
-				insert_button([$key => $needle], $haystack, $insertion_point, $where);
-				break;
-			}
+				case 'before':
+				case 'after':
+					insert_button([$key => $needle], $haystack, $insertion_point, $where);
+					break;
 
-			if ($where == 'child_of')
-			{
-				$info['sub_buttons'][$key] = $needle;
-				break;
+				case 'child_of':
+					$info['sub_buttons'][$key] = $needle;
+					break;
 			}
-		}
 		elseif (!empty($info['sub_buttons']))
 			recursive_button($needle, $info['sub_buttons'], $insertion_point, $where, $key);
-	}
 }
 
-function insert_button(array $needle, array &$haystack, $insertion_point, $where = 'after')
+function insert_button(array $needle, array &$haystack, $insertion_point, $where = 'after'): void
 {
 	$offset = 0;
 
@@ -85,7 +79,7 @@ function insert_button(array $needle, array &$haystack, $insertion_point, $where
 	$haystack = array_slice($haystack, 0, $offset, true) + $needle + array_slice($haystack, $offset, null, true);
 }
 
-function um_admin_areas(&$admin_areas)
+function um_admin_areas(&$admin_areas): void
 {
 	global $txt;
 

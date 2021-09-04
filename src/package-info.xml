@@ -7,6 +7,18 @@
 	<type>modification</type>
 
 	<install for="2.0 - 2.0.99">
+		<code type="inline"><![CDATA[<?php
+			define('REQUIRED_PHP_VERSION', '7.4.0');
+			if (version_compare(PHP_VERSION, REQUIRED_PHP_VERSION, '<'))
+				fatal_error(
+					sprintf(
+						'This mod requires a minimum of PHP %s in order to function. (You are currently running PHP %s)',
+						REQUIRED_PHP_VERSION,
+						PHP_VERSION
+					),
+					false
+				);
+		?>]]></code>
 		<readme type="file" parsebbc="true">install.txt</readme>
 		<database>install.php</database>
 		<require-file name="Subs-UltimateMenu.php" destination="$sourcedir" />
