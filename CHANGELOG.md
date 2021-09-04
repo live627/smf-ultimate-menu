@@ -1,5 +1,13 @@
 # Changelog
 
+### [1.1.2](https://www.github.com/live627/smf-ultimate-menu/compare/v1.1.1...v1.1.2) (2021-09-04)
+
+
+### Bug Fixes
+
+* Remove PHP 7 code that should wait for a future version ([2002cd0](https://www.github.com/live627/smf-ultimate-menu/commit/2002cd0eeb70992c197be7425dc5009aaa4a9c82))
+* Show hidden buttons in the positions list (register et al) ([a9671bd](https://www.github.com/live627/smf-ultimate-menu/commit/a9671bdd32749a68d6817ea89fda43e7f040ced5))
+
 ### [1.1.1](https://www.github.com/live627/smf-ultimate-menu/compare/v1.1.0...v1.1.1) (2021-09-01)
 
 
