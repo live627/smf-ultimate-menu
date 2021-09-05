@@ -55,11 +55,11 @@ function recursive_button(array $needle, array &$haystack, $insertion_point, $wh
 				case 'before':
 				case 'after':
 					insert_button([$key => $needle], $haystack, $insertion_point, $where);
-					break;
+					break 2;
 
 				case 'child_of':
 					$info['sub_buttons'][$key] = $needle;
-					break;
+					break 2;
 			}
 		elseif (!empty($info['sub_buttons']))
 			recursive_button($needle, $info['sub_buttons'], $insertion_point, $where, $key);
@@ -89,7 +89,7 @@ function um_admin_areas(&$admin_areas): void
 		'file' => 'ManageUltimateMenu.php',
 		'function' => function (): void
 		{
-			new ManageUltimateMenu;
+			(new ManageUltimateMenu($_GET['sa'] ?? ''));
 		},
 		'icon' => 'umen.png',
 		'subsections' => [

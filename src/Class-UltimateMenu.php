@@ -401,7 +401,7 @@ class UltimateMenu
 		return $this->flatten($context['replayed_menu_buttons']);
 	}
 
-	public function flatten(array $array, int $i = 0): array
+	private function flatten(array $array, int $i = 0): array
 	{
 		$result = array();
 		foreach ($array as $key => $value)

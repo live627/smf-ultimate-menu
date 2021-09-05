@@ -13,7 +13,7 @@ class ManageUltimateMenu
 {
 	private UltimateMenu $um;
 
-	public function __construct()
+	public function __construct(string $sa)
 	{
 		global $context, $sourcedir, $txt;
 
@@ -32,20 +32,18 @@ class ManageUltimateMenu
 				],
 			],
 		];
-		loadTemplate('ManageUltimateMenu');
-		require_once $sourcedir . '/Class-UltimateMenu.php';
 		$this->um = new UltimateMenu;
 
 		$subActions = [
-			'manmenu' => 'ManageUltimateMenu',
+			'manmenu' => 'ManageMenu',
 			'addbutton' => 'AddButton',
 			'editbutton' => 'EditButton',
 			'savebutton' => 'SaveButton',
 		];
-		call_user_func([$this, $subActions[$_GET['sa'] ??  ''] ?? 'manmenu']);
+		call_user_func([$this, $subActions[$a] ?? current($subActions)]);
 	}
 
-	public function ManageUltimateMenu(): void
+	public function ManageMenu(): void
 	{
 		// Get rid of all of em!
 		if (isset($_POST['removeAll']))
@@ -78,7 +76,7 @@ class ManageUltimateMenu
 		$this->listButtons();
 	}
 
-	public function listButtons(): void
+	private function listButtons(): void
 	{
 		global $context, $txt, $scripturl, $sourcedir;
 
@@ -226,7 +224,7 @@ class ManageUltimateMenu
 		$context['default_list'] = 'menu_list';
 	}
 
-	public function getInput(): array
+	private function getInput(): array
 	{
 		$member_groups = $this->um->listGroups([-3]);
 		$button_names = $this->um->getButtonNames();
@@ -264,7 +262,7 @@ class ManageUltimateMenu
 		return filter_input_array(INPUT_POST, $args) ?: [];
 	}
 
-	public function validateInput(array $menu_entry): array
+	private function validateInput(array $menu_entry): array
 	{
 		$post_errors = [];
 		$required_fields = [

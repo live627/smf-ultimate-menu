@@ -5,12 +5,16 @@ declare(strict_types=1);
 require_once './src/ManageUltimateMenu.php';
 require_once './src/Subs-UltimateMenu.php';
 require_once './src/Class-UltimateMenu.php';
+require_once './src/ManageUltimateMenu.english.php';
 require_once './vendor/autoload.php';
 
 // What are you doing here, SMF?
 define('SMF', 1);
 
-$user_info = ['is_admin' => true ,'groups' => []];
+global $context;
+$user_info = ['is_admin' => true, 'is_guest' => false, 'language' => '', 'groups' => [0], 'permissions' => []];
+$context = ['user' => ['can_mod' => true], 'right_to_left' => false, 'session_var' => 'var', 'session_id' => 'id', 'current_action' => '', 'forum_name' => '', 'admin_menu_name' => ''];
+$modSettings = ['lastActive' => 0, 'settings_updated' => 0, 'postmod_active' => false];
 
 $smcFunc['db_query'] = function($name, $query, $args)
 {
@@ -44,3 +48,4 @@ $smcFunc['db_insert'] = function(): void
 require_once './vendor/simplemachines/smf/Sources/Load.php';
 require_once './vendor/simplemachines/smf/Sources/Security.php';
 require_once './vendor/simplemachines/smf/Sources/Subs.php';
+require_once './vendor/simplemachines/smf/Themes/default/languages/index.english.php';

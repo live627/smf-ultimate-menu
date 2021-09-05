@@ -8,29 +8,32 @@ final class Test extends TestCase
 {
 	public function buttonProvider(): array
 	{
+		$btn = ['href' => 'link', 'show' => true];
+		$btn1 = ['href' => 'link1', 'show' => true];
+
 		return [
 			[
 				'test',
 				[
 					'before' => [
-						'inserted_test' => ['href' => 'link', 'show' => true,],
-						'test' => ['href' => 'link', 'show' => true,],
-						'test1' => ['href' => 'link1', 'show' => true,],
+						'inserted_test' => $btn,
+						'test' => $btn,
+						'test1' => $btn1,
 					],
 					'after' => [
-						'test' => ['href' => 'link', 'show' => true,],
-						'inserted_test' => ['href' => 'link', 'show' => true,],
-						'test1' => ['href' => 'link1', 'show' => true,],
+						'test' => $btn,
+						'inserted_test' => $btn,
+						'test1' => $btn1,
 					],
 					'child_of' => [
 						'test' => [
 							'href' => 'link',
 							'show' => true,
 							'sub_buttons' => [
-								'inserted_test' => ['href' => 'link', 'show' => true,],
+								'inserted_test' => $btn,
 							],
 						],
-						'test1' => ['href' => 'link1', 'show' => true,],
+						'test1' => $btn1,
 					],
 				],
 			],
@@ -38,22 +41,22 @@ final class Test extends TestCase
 				'test1',
 				[
 					'before' => [
-						'test' => ['href' => 'link', 'show' => true,],
-						'inserted_test1' => ['href' => 'link', 'show' => true,],
-						'test1' => ['href' => 'link1', 'show' => true,],
+						'test' => $btn,
+						'inserted_test1' => $btn,
+						'test1' => $btn1,
 					],
 					'after' => [
-						'test' => ['href' => 'link', 'show' => true,],
-						'test1' => ['href' => 'link1', 'show' => true,],
-						'inserted_test1' => ['href' => 'link', 'show' => true,],
+						'test' => $btn,
+						'test1' => $btn1,
+						'inserted_test1' => $btn,
 					],
 					'child_of' => [
-						'test' => ['href' => 'link', 'show' => true,],
+						'test' => $btn,
 						'test1' => [
 							'href' => 'link1',
 							'show' => true,
 							'sub_buttons' => [
-								'inserted_test1' => ['href' => 'link', 'show' => true,],
+								'inserted_test1' => $btn,
 							],
 						],
 					],
@@ -62,13 +65,17 @@ final class Test extends TestCase
 			[
 				'dungeon',
 				[
-					'before' => ['test' => ['href' => 'link', 'show' => true], 'test1' => ['href' => 'link1', 'show' => true,],
+					'before' => [
+						'test' => $btn,
+						'test1' => $btn1,
 					],
 					'after' => [
-						'test' => ['href' => 'link', 'show' => true], 'test1' => ['href' => 'link1', 'show' => true,],
+						'test' => $btn,
+						'test1' => $btn1,
 					],
 					'child_of' => [
-						'test' => ['href' => 'link', 'show' => true], 'test1' => ['href' => 'link1', 'show' => true,],
+						'test' => $btn,
+						'test1' => $btn1,
 					],
 				],
 			],
@@ -80,11 +87,14 @@ final class Test extends TestCase
 	 */
 	public function testInsertButton(string $insertion_point, array $expected): void
 	{
+		$btn = ['href' => 'link', 'show' => true];
+		$btn1 = ['href' => 'link1', 'show' => true];
+
 		foreach (['before', 'after', 'child_of'] as $where)
 		{
-			$haystack = ['test' => ['href' => 'link', 'show' => true], 'test1' => ['href' => 'link1', 'show' => true,],];
+			$haystack = ['test' => $btn, 'test1' => $btn1];
 			recursive_button(
-				['href' => 'link', 'show' => true,],
+				$btn,
 				$haystack,
 				$insertion_point,
 				$where,
@@ -96,6 +106,7 @@ final class Test extends TestCase
 
 	public function childButtonProvider(): array
 	{
+		$btn = ['href' => 'link', 'show' => true];
 		return [
 			[
 				'sub',
@@ -105,9 +116,9 @@ final class Test extends TestCase
 							'href' => 'link',
 							'show' => true,
 							'sub_buttons' => [
-								'inserted_sub' => ['href' => 'link', 'show' => true,],
-								'sub' => ['href' => 'link', 'show' => true,] ,
-								'sub1' => ['href' => 'link', 'show' => true,],
+								'inserted_sub' => $btn,
+								'sub' => $btn ,
+								'sub1' => $btn,
 							],
 						],
 					],
@@ -116,9 +127,9 @@ final class Test extends TestCase
 							'href' => 'link',
 							'show' => true,
 							'sub_buttons' => [
-								'sub' => ['href' => 'link', 'show' => true,],
-								'inserted_sub' => ['href' => 'link', 'show' => true,],
-								'sub1' => ['href' => 'link', 'show' => true,],
+								'sub' => $btn,
+								'inserted_sub' => $btn,
+								'sub1' => $btn,
 							],
 						],
 					],
@@ -131,10 +142,10 @@ final class Test extends TestCase
 									'href' => 'link',
 									'show' => true,
 									'sub_buttons' => [
-										'inserted_sub' => ['href' => 'link', 'show' => true,],
+										'inserted_sub' => $btn,
 									],
 								],
-								'sub1' => ['href' => 'link', 'show' => true,],
+								'sub1' => $btn,
 							],
 						],
 					],
@@ -148,9 +159,9 @@ final class Test extends TestCase
 							'href' => 'link',
 							'show' => true,
 							'sub_buttons' => [
-								'sub' => ['href' => 'link', 'show' => true,],
-								'inserted_sub1' => ['href' => 'link', 'show' => true,],
-								'sub1' => ['href' => 'link', 'show' => true,],
+								'sub' => $btn,
+								'inserted_sub1' => $btn,
+								'sub1' => $btn,
 							],
 						],
 					],
@@ -159,9 +170,9 @@ final class Test extends TestCase
 							'href' => 'link',
 							'show' => true,
 							'sub_buttons' => [
-								'sub' => ['href' => 'link', 'show' => true,],
-								'sub1' => ['href' => 'link', 'show' => true,],
-								'inserted_sub1' => ['href' => 'link', 'show' => true,],
+								'sub' => $btn,
+								'sub1' => $btn,
+								'inserted_sub1' => $btn,
 							],
 						],
 					],
@@ -170,12 +181,12 @@ final class Test extends TestCase
 							'href' => 'link',
 							'show' => true,
 							'sub_buttons' => [
-								'sub' => ['href' => 'link', 'show' => true,],
+								'sub' => $btn,
 								'sub1' => [
 									'href' => 'link',
 									'show' => true,
 									'sub_buttons' => [
-										'inserted_sub1' => ['href' => 'link', 'show' => true,],
+										'inserted_sub1' => $btn,
 									],
 								],
 							],
@@ -191,7 +202,7 @@ final class Test extends TestCase
 							'href' => 'link',
 							'show' => true,
 							'sub_buttons' => [
-								'sub' => ['href' => 'link', 'show' => true], 'sub1' => ['href' => 'link', 'show' => true,],
+								'sub' => $btn, 'sub1' => $btn,
 							],
 						],
 					],
@@ -200,7 +211,7 @@ final class Test extends TestCase
 							'href' => 'link',
 							'show' => true,
 							'sub_buttons' => [
-								'sub' => ['href' => 'link', 'show' => true], 'sub1' => ['href' => 'link', 'show' => true,],
+								'sub' => $btn, 'sub1' => $btn,
 							],
 						],
 					],
@@ -209,7 +220,7 @@ final class Test extends TestCase
 							'href' => 'link',
 							'show' => true,
 							'sub_buttons' => [
-								'sub' => ['href' => 'link', 'show' => true], 'sub1' => ['href' => 'link', 'show' => true,],
+								'sub' => $btn, 'sub1' => $btn,
 							],
 						],
 					],
@@ -275,28 +286,68 @@ final class Test extends TestCase
 		global $modSettings;
 
 		$modSettings['um_count'] = 2;
-		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"child_of","link":"t","active":true,"groups":"-1,0,2,"parent":"register"}';
-		$haystack = [];
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"register"}';
+		$haystack = ['register' => 'l'];
 		um_load_menu($haystack);
+		$this->assertCount(2, $haystack);
 		$this->assertArrayHasKey('um_button_2', $haystack);
+		$this->assertCount(4, $haystack['um_button_2']);
 		$this->assertArrayHasKey('title', $haystack['um_button_2']);
 		$this->assertArrayHasKey('href', $haystack['um_button_2']);
 		$this->assertEquals('Test', $haystack['um_button_2']['title']);
-		$this->assertEquals('', $haystack['um_button_2']['href']);
-		$this->assertCount(1, $haystack);
+		$this->assertEquals('?t', $haystack['um_button_2']['href']);
+		unset($modSettings['um_count'], $modSettings['um_button_2']);
 	}
 
 	public function testListButtons(): void
 	{
-		$haystack = (new UltimateMenu)->flatten([
-			'test' => [
-				'title' => 'link',
-				'sub_buttons' => ['sub' => ['title' => 'link1']],
-			],
-		]);
-		$this->assertArrayHasKey('test', $haystack);
-		$this->assertArrayHasKey('sub', $haystack);
-		$this->assertCount(2, $haystack);
-		$this->assertSame(['test' => [0, 'link'], 'sub' => [1, 'link1']], $haystack);
+		global $modSettings;
+
+		$modSettings['um_count'] = 2;
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"register"}';
+		$haystack = (new UltimateMenu)->getButtonNames();
+		$this->assertArrayHasKey('um_button_2', $haystack);
+		$this->assertCount(2, $haystack['um_button_2']);
+		$this->assertSame([0, 'Test'], $haystack['um_button_2']);
+		$this->assertArrayHasKey('help', $haystack);
+		$this->assertArrayHasKey('admin', $haystack);
+		$this->assertArrayHasKey('profile', $haystack);
+		$this->assertArrayHasKey('logout', $haystack);
+		$this->assertArrayHasKey('register', $haystack);
+		unset($modSettings['um_count'], $modSettings['um_button_2']);
+	}
+
+	public function testIntegration(): void
+	{
+		global $context, $modSettings;
+
+		$modSettings['um_count'] = 2;
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[0],"parent":"help"}';
+		setupMenuContext();
+		$this->assertArrayHasKey('um_button_2', $context['menu_buttons']);
+		$this->assertArrayHasKey('title', $context['menu_buttons']['um_button_2']);
+		$this->assertArrayHasKey('href', $context['menu_buttons']['um_button_2']);
+		$this->assertEquals('Test', $context['menu_buttons']['um_button_2']['title']);
+		$this->assertEquals('?t', $context['menu_buttons']['um_button_2']['href']);
+		unset($modSettings['um_count'], $modSettings['um_button_2']);
+	}
+
+	public function testDispatch(): void
+	{
+
+		// Any methods not specified in setMethods will execute perfectly normally,
+		// and any methods that ARE specified return null (or whatever you specify)
+		$mock = $this->getMockBuilder('ManageUltimateMenu')
+			->setMethods(array('ManageMenu'))
+			->disableOriginalConstructor()
+			->getMock();
+
+		// doA() should be called once
+		$mock->expects($this->once())
+			 ->method('ManageMenu');
+
+		// Call doEverything and see if it calls the functions like our
+		// above written expectations specify
+		$mock->__construct();
 	}
 }
