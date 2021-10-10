@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - master
+    paths:
+      - '**.php'
+      - composer.lock
 jobs:
   build:
     runs-on: ubuntu-latest
