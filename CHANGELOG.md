@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.1.3](https://www.github.com/live627/smf-ultimate-menu/compare/v1.1.2...v1.1.3) (2021-10-10)
+
+
+### Bug Fixes
+
+* Redirect ([6e5d0a7](https://www.github.com/live627/smf-ultimate-menu/commit/6e5d0a7f3aa66fca8e6636efc2c3f39c096bcded))
+
 ### [1.1.2](https://www.github.com/live627/smf-ultimate-menu/compare/v1.1.1...v1.1.2) (2021-09-04)
 
 

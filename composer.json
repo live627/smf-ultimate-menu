@@ -16,5 +16,6 @@
         "simplemachines/smf": "~2",
         "phpunit/phpunit": "^9.5",
         "scrutinizer/ocular": "^1.8"
-    }
+    },
+    "version": "1.1.3"
 }
