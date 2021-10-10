@@ -89,6 +89,10 @@ function um_admin_areas(&$admin_areas): void
 		'file' => 'ManageUltimateMenu.php',
 		'function' => function (): void
 		{
+			global $sourcedir;
+
+			loadTemplate('ManageUltimateMenu');
+			require_once $sourcedir . '/Class-UltimateMenu.php';
 			(new ManageUltimateMenu($_GET['sa'] ?? ''));
 		},
 		'icon' => 'umen.png',

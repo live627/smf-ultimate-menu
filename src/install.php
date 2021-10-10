@@ -81,33 +81,61 @@ $tables = [
 
 foreach ($tables as $table)
 {
-	$smcFunc['db_create_table']('{db_prefix}' . $table['name'], $table['columns'], $table['indexes'], [], 'update');
+	$smcFunc['db_create_table'](
+		'{db_prefix}' . $table['name'],
+		$table['columns'],
+		$table['indexes'],
+		[],
+		'update'
+	);
 
 	if (isset($table['default']))
-		$smcFunc['db_insert']('ignore', '{db_prefix}' . $table['name'], $table['default']['columns'], $table['default']['values'], $table['default']['keys']);
+		$smcFunc['db_insert'](
+			'ignore',
+			'{db_prefix}' . $table['name'],
+			$table['default']['columns'],
+			$table['default']['values'],
+			$table['default']['keys']
+		);
 }
 
-$request = $smcFunc['db_query']('', '
-	SELECT id_button, name, target, type, position, link, status, permissions, parent
-	FROM {db_prefix}um_menu');
 $buttons = [];
+$request = $smcFunc['db_query']('', '
+	SELECT
+		id_button, name, target, type, position, link, status, parent
+	FROM {db_prefix}um_menu'
+);
 
 while ($row = $smcFunc['db_fetch_assoc']($request))
-	$buttons['um_button_' . $row['id_button']] = json_encode($row);
+	$buttons['um_button_' . $row['id_button']] = json_encode([
+		'name' => $row['name'],
+		'target' => $row['target'],
+		'type' => $row['type'],
+		'position' => $row['position'],
+		'groups' => array_map('intval', explode(',', $row['permissions'])),
+		'link' => $row['link'],
+		'active' => $row['status'] == 'active',
+		'parent' => $row['parent'],
+	]);
 $smcFunc['db_free_result']($request);
-updateSettings(
-	[
-		'um_count' => count($buttons),
-	] + $buttons
+
+$request = $smcFunc['db_query']('', '
+	SELECT MAX(id_button)
+	FROM {db_prefix}um_menu'
 );
+[$max] = $smcFunc['db_fetch_row']($request);
+$smcFunc['db_free_result']($request);
 
 $smcFunc['db_query']('', '
 	DELETE FROM {db_prefix}settings
-	WHERE variable = {string:setting}',
+	WHERE variable LIKE {string:settings_search}
+		AND variable NOT IN ({array_string:settings})',
 	[
-		'setting' => 'um_menu',
+		'settings_search' => 'um_button%',
+		'settings' => array_keys($buttons),
 	]
 );
+updateSettings(['um_count' => $max] + $buttons);
 
 // Now presenting... *drumroll*
 add_integration_function('integrate_pre_include', '$sourcedir/Subs-UltimateMenu.php');

@@ -15,7 +15,7 @@ class ManageUltimateMenu
 
 	public function __construct(string $sa)
 	{
-		global $context, $sourcedir, $txt;
+		global $context, $txt;
 
 		isAllowedTo('admin_forum');
 
@@ -40,7 +40,7 @@ class ManageUltimateMenu
 			'editbutton' => 'EditButton',
 			'savebutton' => 'SaveButton',
 		];
-		call_user_func([$this, $subActions[$a] ?? current($subActions)]);
+		call_user_func([$this, $subActions[$sa] ?? current($subActions)]);
 	}
 
 	public function ManageMenu(): void
@@ -124,16 +124,14 @@ class ManageUltimateMenu
 						'value' => $txt['um_menu_button_position'],
 					],
 					'data' => [
-						'function' => function ($rowData) use ($txt, $button_names)
-						{
-							return sprintf(
+						'function' => fn(array $rowData): string =>
+							sprintf(
 								'%s %s',
 								$txt['um_menu_' . $rowData['position']],
 								isset($button_names[$rowData['parent']])
 									? $button_names[$rowData['parent']][1]
 									: ucwords($rowData['parent'])
-							);
-						},
+							),
 					],
 					'sort' => [
 						'default' => 'position',
@@ -146,14 +144,12 @@ class ManageUltimateMenu
 						'class' => 'centertext',
 					],
 					'data' => [
-						'function' => function ($rowData)
-						{
-							return sprintf(
+						'function' => fn(array $rowData): string =>
+							sprintf(
 								'<input type="checkbox" name="status[%1$s]" id="status_%1$s" value="%1$s"%2$s />',
 								$rowData['id_button'],
 								$rowData['status'] == 'inactive' ? '' : ' checked="checked"'
-							);
-						},
+							),
 						'class' => 'centertext',
 					],
 					'sort' => [
@@ -167,15 +163,13 @@ class ManageUltimateMenu
 						'class' => 'centertext',
 					],
 					'data' => [
-						'function' => function ($rowData) use ($scripturl, $txt)
-						{
-							return sprintf(
+						'function' => fn(array $rowData): string =>
+							sprintf(
 								'<a href="%s?action=admin;area=umen;sa=editbutton;in=%d">%s</a>',
 								$scripturl,
 								$rowData['id_button'],
 								$txt['modify']
-							);
-						},
+							),
 						'class' => 'centertext',
 					],
 				],
@@ -203,10 +197,10 @@ class ManageUltimateMenu
 					'position' => 'below_table_data',
 					'value' => sprintf(
 						'
-						<input type="submit" name="removeButtons" value="%s" onclick="return confirm(\'%s\');" class="button_submit" />
-						<input type="submit" name="removeAll" value="%s" onclick="return confirm(\'%s\');" class="button_submit" />
-						<input type="submit" name="new" value="%s" class="button_submit" />
-						<input type="submit" name="save" value="%s" class="button_submit" />',
+						<input type="submit" name="removeButtons" value="%s" onclick="return confirm(\'%s\');" class="button" />
+						<input type="submit" name="removeAll" value="%s" onclick="return confirm(\'%s\');" class="button" />
+						<input type="submit" name="new" value="%s" class="button" />
+						<input type="submit" name="save" value="%s" class="button" />',
 						$txt['um_menu_remove_selected'],
 						$txt['um_menu_remove_confirm'],
 						$txt['um_menu_remove_all'],
@@ -259,7 +253,7 @@ class ManageUltimateMenu
 			],
 		];
 
-		return filter_input_array(INPUT_POST, $args) ?: [];
+		return filter_input_array(INPUT_POST, $args, FALSE) ?: [];
 	}
 
 	private function validateInput(array $menu_entry): array
@@ -297,7 +291,17 @@ class ManageUltimateMenu
 
 		if (isset($_POST['submit']))
 		{
-			$menu_entry = $this->getInput();
+			$menu_entry = array_replace(
+				[
+					'target' => '_self',
+					'type' => 'forum',
+					'position' => 'before',
+					'permissions' => [],
+					'status' => 'active',
+					'parent' => '',
+				],
+				$this->getInput()
+			);
 			$post_errors = $this->validateInput($menu_entry);
 
 			// I see you made it to the final stage, my young padawan.

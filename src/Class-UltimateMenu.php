@@ -50,7 +50,7 @@ class UltimateMenu
 			SELECT
 				id_group, group_name, min_posts
 			FROM {db_prefix}membergroups
-			WHERE ' . implode("\n\t\t\t\tAND", $where),
+			WHERE ' . implode("\n\t\t\t\tAND ", $where),
 			[
 				'not_inherited' => -2,
 				'min_posts' => -1,
@@ -154,7 +154,7 @@ class UltimateMenu
 		$buttons = [];
 		$request = $smcFunc['db_query']('', '
 			SELECT
-				id_button, name, target, type, position, link, status, parent
+				id_button, name, target, type, position, link, status, permissions, parent
 			FROM {db_prefix}um_menu'
 		);
 

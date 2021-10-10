@@ -15,14 +15,13 @@ function template_form_above(): void
 	global $context, $scripturl;
 
 	echo '
-		<form action="', $scripturl, '?action=admin;area=umen;sa=savebutton" method="post" accept-charset="', $context['character_set'], '" name="postmodify" id="postmodify" class="flow_hidden">
+		<form action="', $scripturl, '?action=admin;area=umen;sa=savebutton" method="post" accept-charset="', $context['character_set'], '" name="postmodify" id="postmodify">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					', $context['page_title'], '
 				</h3>
 			</div>
-			<span class="upperframe"><span></span></span>
-				<div class="roundframe">';
+			<div class="roundframe noup">';
 }
 
 function template_errors_above(): void
@@ -54,13 +53,15 @@ function template_main(): void
 {
 	global $context, $txt, $scripturl;
 
+	$sel = fn(bool $x, string $str): string => $x ? ' ' . $str : '';
+
 	echo '
 					<dl class="settings">
 						<dt>
 							<strong>', $txt['um_menu_button_name'], ':</strong>
 						</dt>
 						<dd>
-							<input type="text" name="name" id="bnbox" value="', $context['button_data']['name'], '" tabindex="1" class="input_text" style="width: 100%;" />
+							<input type="text" name="name" value="', $context['button_data']['name'], '" style="width: 100%;" />
 						</dd>
 						<dt>
 							<strong>', $txt['um_menu_button_position'], ':</strong>
@@ -73,7 +74,7 @@ function template_main(): void
 			'
 								<option value="%s"%s>%s...</option>',
 			$v,
-			$context['button_data']['position'] == $v ? ' selected="selected"' : '',
+			$sel($context['button_data']['position'] == $v, 'selected'),
 			$txt['um_menu_' . $v]
 		);
 
@@ -86,7 +87,7 @@ function template_main(): void
 			'
 								<option value="%s"%s>%s</option>',
 			$idx,
-			$context['button_data']['parent'] == $idx ? ' selected="selected"' : '',
+			$sel($context['button_data']['parent'] == $v, 'selected'),
 			str_repeat('&emsp;', $title[0] * 2) . $title[1]
 		);
 
@@ -97,21 +98,21 @@ function template_main(): void
 							<strong>', $txt['um_menu_button_type'], ':</strong>
 						</dt>
 						<dd>
-							<input type="radio" class="input_check" name="type" value="forum"', $context['button_data']['type'] == 'forum' ? ' checked="checked"' : '', '/>', $txt['um_menu_forum'], '<br />
-							<input type="radio" class="input_check" name="type" value="external"', $context['button_data']['type'] == 'external' ? ' checked="checked"' : '', '/>', $txt['um_menu_external'], '
+							<input type="radio" name="type" value="forum"', $sel($context['button_data']['type'] == 'forum', 'checked'), '/>', $txt['um_menu_forum'], '<br />
+							<input type="radio" name="type" value="external"', $sel($context['button_data']['type'] == 'external', 'checked'), '/>', $txt['um_menu_external'], '
 						</dd>
 						<dt>
 							<strong>', $txt['um_menu_link_type'], ':</strong>
 						</dt>
 						<dd>
-							<input type="radio" class="input_check" name="target" value="_self"', $context['button_data']['target'] == '_self' ? ' checked="checked"' : '', '/>', $txt['um_menu_same_window'], '<br />
-							<input type="radio" class="input_check" name="target" value="_blank"', $context['button_data']['target'] == '_blank' ? ' checked="checked"' : '', '/>', $txt['um_menu_new_tab'], '
+							<input type="radio" name="target" value="_self"', $sel($context['button_data']['target'] == '_self', 'checked'), '/>', $txt['um_menu_same_window'], '<br />
+							<input type="radio" name="target" value="_blank"', $sel($context['button_data']['target'] == '_blank', 'checked'), '/>', $txt['um_menu_new_tab'], '
 						</dd>
 						<dt>
 							<strong>', $txt['um_menu_button_link'], ':</strong><br />
 						</dt>
 						<dd>
-							<input type="text" name="link" value="', $context['button_data']['link'], '" tabindex="1" class="input_text" style="width: 100%;" />
+							<input type="text" name="link" value="', $context['button_data']['link'], '" style="width: 100%;" />
 							<span class="smalltext">', $txt['um_menu_button_link_desc'], '</span>
 						</dd>
 						<dt>
@@ -125,7 +126,7 @@ function template_main(): void
 	{
 		echo '
 								<label>
-									<input type="checkbox" class="input_check" name="permissions[]" value="', $id, '"', $permission['checked'] ? ' checked="checked"' : '', ' />
+									<input type="checkbox" name="permissions[]" value="', $id, '"', $sel($permission['checked'], 'checked'), ' />
 									<span';
 
 		if ($permission['is_post_group'])
@@ -137,16 +138,18 @@ function template_main(): void
 	}
 
 	echo '
-								<input type="checkbox" class="input_check" id="check_group_all"', $context['all_groups_checked'] ? ' checked="checked"' : '', ' />
-								<label for="check_group_all"><em>', $txt['check_all'], '</em></label><br />
+								<label>
+									<input type="checkbox"', $sel($context['all_groups_checked'], 'checked'), ' />
+									<em>', $txt['check_all'], '</em>
+								</label>
 							</fieldset>
 						</dd>
 						<dt>
 							<strong>', $txt['um_menu_button_status'], ':</strong>
 						</dt>
 						<dd>
-							<input type="radio" class="input_check" name="status" value="active"', $context['button_data']['status'] == 'active' ? ' checked="checked"' : '', ' />', $txt['um_menu_button_active'], ' <br />
-							<input type="radio" class="input_check" name="status" value="inactive"', $context['button_data']['status'] == 'inactive' ? ' checked="checked"' : '', ' />', $txt['um_menu_button_inactive'], '
+							<input type="radio" name="status" value="active"', $sel($context['button_data']['status'] == 'active', 'checked'), ' />', $txt['um_menu_button_active'], ' <br />
+							<input type="radio" name="status" value="inactive"', $sel($context['button_data']['status'] == 'inactive', 'checked'), ' />', $txt['um_menu_button_inactive'], '
 						</dd>
 					</dl>';
 }
@@ -159,44 +162,45 @@ function template_form_below(): void
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 					<input name="in" value="', $context['button_data']['id'], '" type="hidden" />
 					<div class="righttext padding">
-						<input name="submit" value="', $txt['admin_manage_menu_submit'], '" class="button_submit" type="submit" />
+						<input name="submit" value="', $txt['admin_manage_menu_submit'], '" class="button" type="submit" />
 					</div>
 				</div>
 			</form>
-			<span class="lowerframe"><span></span></span>
 			<script>
-				document.getElementById("check_group_all").addEventListener("click", function(event)
-				{
-					invertAll(this, this.form, "permissions[]");
-				});
 				var
 					el = document.createElement("a"),
 					div = document.getElementById("group_perms"),
-					l = div.firstElementChild
+					l = div.firstElementChild,
 					a = document.createElement("a");
-				el.innerHTML = "[ " + l.innerHTML + " ]";
+				el.textContent = l.textContent;
+				el.className = "toggle_down";
 				el.href = "#";
 				el.style.display = "";
 				el.addEventListener("click", function(event)
 				{
-					div.style.display = "";
+					div.classList.remove("hidden");
 					this.style.display = "none";
 					event.stopPropagation();
 					event.preventDefault();
 				});
-				div.style.display = "none";
+				div.classList.add("hidden");
 				div.parentNode.appendChild(el);
-				a.innerHTML = l.innerHTML;
+				a.className = "toggle_up";
+				a.textContent = l.textContent;
 				a.href = "#";
 				a.style.display = "";
 				a.addEventListener("click", function(event)
 				{
-					div.style.display = "none";
+					div.classList.add("hidden");
 					el.style.display = "";
 					event.stopPropagation();
 					event.preventDefault();
 				});
-				l.innerHTML = "";
+				l.textContent = "";
 				l.appendChild(a);
+				div.lastElementChild.firstElementChild.addEventListener("click", function()
+				{
+					invertAll(this, this.form, "permissions[]");
+				});
 			</script>';
 }
