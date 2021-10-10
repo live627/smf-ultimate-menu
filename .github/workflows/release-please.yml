@@ -3,7 +3,7 @@ on:
     branches:
       - master
     paths:
-      - '**.php'
+      - 'src/*'
 name: release-please
 jobs:
   release-please:
