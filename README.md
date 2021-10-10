@@ -5,6 +5,8 @@
 [![MIT license](http://img.shields.io/badge/license-MIT-009999.svg)](http://opensource.org/licenses/MIT)
 [![Latest Version](https://img.shields.io/github/release/live627/smf-ultimate-menu.svg)](https://github.com/live627/smf-ultimate-menu/releases) [![Support](http://img.shields.io/badge/PayPal-$-009966.svg)](https://www.paypal.me/JohnRayes)
 
+[View changelog](https://github.com/live627/smf-ultimate-menu/blob/master/CHANGELOG.md)
+
 Add custom buttons to the main menu within SMF
 ## Introduction:
 This is a tool for configuring the main menu within SMF, allowing custom buttons to be added at will, complete with children and grandchildren menus (so, a main menu item, a dropdown and a follow-on dropdown)
