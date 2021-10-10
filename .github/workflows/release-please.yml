@@ -13,8 +13,7 @@ jobs:
       - uses: GoogleCloudPlatform/release-please-action@v2
         id: release
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          release-type: simple
+          release-type: php
           package-name: ${{ env.MOD_NAME }}
       - uses: actions/github-script@v3
         id: vars
@@ -34,7 +33,7 @@ jobs:
         if: ${{ steps.release.outputs.pr && !steps.release.outputs.release_created }}
       - if: ${{ steps.release.outputs.pr && !steps.release.outputs.release_created }}
         run: |
-          version=$(cat ./version.txt)
+          version=$(cat ./composer.json | jq '.version')
           for f in src/*.php; do
             sed -i "/@version/c \ * @version   $version" "$f"
           done
@@ -46,7 +45,7 @@ jobs:
           git push
       - uses: actions/checkout@v2
         if: ${{ steps.release.outputs.release_created }}
-      - run: tar -czvf myfile.tgz -C src/ .
+      - run: tar -czvf myfile.tgz LICENSE README.md -C src $(ls src)
         if: ${{ steps.release.outputs.release_created }}
       - name: Upload release asset
         uses: actions/github-script@v2
