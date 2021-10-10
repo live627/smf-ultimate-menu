@@ -2,6 +2,8 @@ on:
   push:
     branches:
       - master
+    paths:
+      - '**.php'
 name: release-please
 jobs:
   release-please:
