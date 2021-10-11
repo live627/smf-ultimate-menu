@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.1.4](https://www.github.com/live627/smf-ultimate-menu/compare/v1.1.3...v1.1.4) (2021-10-11)
+
+
+### Bug Fixes
+
+* Avoid fatal errors if no groups were selected ([104e2d9](https://www.github.com/live627/smf-ultimate-menu/commit/104e2d95d613a10f2fe733bf0c810f7d93977115))
+
 ### [1.1.3](https://www.github.com/live627/smf-ultimate-menu/compare/v1.1.2...v1.1.3) (2021-10-10)
 
 
