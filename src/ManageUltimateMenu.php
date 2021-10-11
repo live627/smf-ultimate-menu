@@ -300,10 +300,11 @@ class ManageUltimateMenu
 				'target' => '_self',
 				'type' => 'forum',
 				'position' => 'before',
+				'permissions' => [],
 				'status' => 'active',
-				'parent' => 'home',
+				'parent' => '',
 			],
-			filter_input_array(INPUT_POST, $args) ?: []
+			filter_input_array(INPUT_POST, $args, false) ?: []
 		);
 	}
 
