@@ -35,7 +35,7 @@ jobs:
         if: ${{ steps.release.outputs.pr && !steps.release.outputs.release_created }}
       - if: ${{ steps.release.outputs.pr && !steps.release.outputs.release_created }}
         run: |
-          version=$(cat ./composer.json | jq '.version')
+          version=$(cat ./composer.json | jq -r '.version')
           for f in src/*.php; do
             sed -i "/@version/c \ * @version   $version" "$f"
           done
