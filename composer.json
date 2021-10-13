@@ -6,7 +6,7 @@
                 "name": "simplemachines/smf",
                 "version": "2.0.18",
                 "dist": {
-                    "url": "https://download.simplemachines.org/index.php/smf_2-0-18_install.zip",
+                    "url": "http://download.simplemachines.org/index.php/smf_2-0-18_install.zip",
                     "type": "zip"
                 }
             }
@@ -17,5 +17,5 @@
         "phpunit/phpunit": "^9.5",
         "scrutinizer/ocular": "^1.8"
     },
-    "version": "1.1.4"
+    "version": "2.0.0"
 }

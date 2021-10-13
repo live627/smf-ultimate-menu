@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
@@ -334,20 +334,14 @@ final class Test extends TestCase
 
 	public function testDispatch(): void
 	{
-
-		// Any methods not specified in setMethods will execute perfectly normally,
-		// and any methods that ARE specified return null (or whatever you specify)
 		$mock = $this->getMockBuilder('ManageUltimateMenu')
-			->setMethods(array('ManageMenu'))
+			->onlyMethods(array('ManageMenu'))
 			->disableOriginalConstructor()
 			->getMock();
 
-		// doA() should be called once
 		$mock->expects($this->once())
 			 ->method('ManageMenu');
 
-		// Call doEverything and see if it calls the functions like our
-		// above written expectations specify
-		$mock->__construct();
+		$mock->__construct('');
 	}
 }

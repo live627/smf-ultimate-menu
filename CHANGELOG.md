@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://www.github.com/live627/smf-ultimate-menu/compare/v1.1.4...v2.0.0) (2021-10-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* Require SMF 2.1 and PHP 7.4
+
+### Code Refactoring
+
+* Require SMF 2.1 and PHP 7.4 ([a7a6974](https://www.github.com/live627/smf-ultimate-menu/commit/a7a69746494603b3a76842ae15e401812e67a93f))
+
 ### [1.1.4](https://www.github.com/live627/smf-ultimate-menu/compare/v1.1.3...v1.1.4) (2021-10-11)
 
 

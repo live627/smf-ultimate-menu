@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @package   Ultimate Menu mod
- * @version   1.1.4
+ * @version   2.0.0
  * @author    John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2014, John Rayes
  * @license   http://opensource.org/licenses/MIT MIT
@@ -87,7 +87,7 @@ function template_main(): void
 			'
 								<option value="%s"%s>%s</option>',
 			$idx,
-			$sel($context['button_data']['parent'] == $v, 'selected'),
+			$sel($context['button_data']['parent'] == $idx, 'selected'),
 			str_repeat('&emsp;', $title[0] * 2) . $title[1]
 		);
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @package Ultimate Menu mod
- * @version   1.1.4
+ * @version   2.0.0
  * @author John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2014, John Rayes
  * @license http://opensource.org/licenses/MIT MIT
@@ -102,7 +102,7 @@ foreach ($tables as $table)
 $buttons = [];
 $request = $smcFunc['db_query']('', '
 	SELECT
-		id_button, name, target, type, position, link, status, parent
+		id_button, name, target, type, position, link, status, permissions, parent
 	FROM {db_prefix}um_menu'
 );
 
