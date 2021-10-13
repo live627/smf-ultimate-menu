@@ -102,7 +102,7 @@ foreach ($tables as $table)
 $buttons = [];
 $request = $smcFunc['db_query']('', '
 	SELECT
-		id_button, name, target, type, position, link, status, parent
+		id_button, name, target, type, position, link, status, permissions, parent
 	FROM {db_prefix}um_menu'
 );
 
