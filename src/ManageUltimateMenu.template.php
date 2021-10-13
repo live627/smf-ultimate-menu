@@ -87,7 +87,7 @@ function template_main(): void
 			'
 								<option value="%s"%s>%s</option>',
 			$idx,
-			$sel($context['button_data']['parent'] == $v, 'selected'),
+			$sel($context['button_data']['parent'] == $idx, 'selected'),
 			str_repeat('&emsp;', $title[0] * 2) . $title[1]
 		);
 
