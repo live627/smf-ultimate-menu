@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
@@ -335,7 +335,7 @@ final class Test extends TestCase
 	public function testDispatch(): void
 	{
 		$mock = $this->getMockBuilder('ManageUltimateMenu')
-			->setMethods(array('ManageMenu'))
+			->onlyMethods(array('ManageMenu'))
 			->disableOriginalConstructor()
 			->getMock();
 
