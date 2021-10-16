@@ -119,23 +119,26 @@ while ($row = $smcFunc['db_fetch_assoc']($request))
 	]);
 $smcFunc['db_free_result']($request);
 
-$request = $smcFunc['db_query']('', '
-	SELECT MAX(id_button)
-	FROM {db_prefix}um_menu'
-);
-[$max] = $smcFunc['db_fetch_row']($request);
-$smcFunc['db_free_result']($request);
+if (!empty($buttons))
+{
+	$request = $smcFunc['db_query']('', '
+		SELECT MAX(id_button)
+		FROM {db_prefix}um_menu'
+	);
+	[$max] = $smcFunc['db_fetch_row']($request);
+	$smcFunc['db_free_result']($request);
 
-$smcFunc['db_query']('', '
-	DELETE FROM {db_prefix}settings
-	WHERE variable LIKE {string:settings_search}
-		AND variable NOT IN ({array_string:settings})',
-	[
-		'settings_search' => 'um_button%',
-		'settings' => array_keys($buttons),
-	]
-);
-updateSettings(['um_count' => $max] + $buttons);
+	$smcFunc['db_query']('', '
+		DELETE FROM {db_prefix}settings
+		WHERE variable LIKE {string:settings_search}
+			AND variable NOT IN ({array_string:settings})',
+		[
+			'settings_search' => 'um_button%',
+			'settings' => array_keys($buttons),
+		]
+	);
+	updateSettings(['um_count' => $max] + $buttons);
+}
 
 // Now presenting... *drumroll*
 add_integration_function('integrate_pre_include', '$sourcedir/Subs-UltimateMenu.php');
