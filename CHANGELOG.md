@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.0.1](https://www.github.com/live627/smf-ultimate-menu/compare/v2.0.0...v2.0.1) (2021-10-16)
+
+
+### Bug Fixes
+
+* Error upon installing if no buttons exist ([06dfef4](https://www.github.com/live627/smf-ultimate-menu/commit/06dfef4530cc2f268073e74e26bea37573b4e989))
+
 ## [2.0.0](https://www.github.com/live627/smf-ultimate-menu/compare/v1.1.4...v2.0.0) (2021-10-11)
 
 
