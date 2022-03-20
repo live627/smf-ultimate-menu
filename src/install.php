@@ -86,7 +86,7 @@ foreach ($tables as $table)
 		$table['columns'],
 		$table['indexes'],
 		[],
-		'update'
+		'ignore'
 	);
 
 	if (isset($table['default']))
