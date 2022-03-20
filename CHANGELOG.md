@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.0.2](https://www.github.com/live627/smf-ultimate-menu/compare/v2.0.1...v2.0.2) (2022-03-20)
+
+
+### Bug Fixes
+
+* Work around a bug in SMF preventing installing this sometimes ([15bc58d](https://www.github.com/live627/smf-ultimate-menu/commit/15bc58da80d118b8057f177dfdf57b854084e2c3))
+
 ### [2.0.1](https://www.github.com/live627/smf-ultimate-menu/compare/v2.0.0...v2.0.1) (2021-10-16)
 
 
