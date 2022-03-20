@@ -7,7 +7,7 @@
 
 Package name | SMF version | Minimmum PHP version
 --- | --- | ---
-[Ultimate Menu 2.2.1](https://github.com/live627/smf-ultimate-menu/releases/download/v2.2.1/ultimate-menu_2-2-1.tgz) | SMF 2.1.x | PHP 7.4
+[Ultimate Menu 2.0.2](https://github.com/live627/smf-ultimate-menu/releases/download/v2.0.2/ultimate-menu_2-0-2.tgz) | SMF 2.1.x | PHP 7.4
 [Ultimate Menu 1.1.4](https://github.com/live627/smf-ultimate-menu/releases/download/v1.1.4/ultimate-menu_1-1-4.tgz) | SMF 2.0.x | PHP 5.3
 
 [View changelog](https://github.com/live627/smf-ultimate-menu/blob/master/CHANGELOG.md)
