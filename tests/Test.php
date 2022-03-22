@@ -279,6 +279,8 @@ final class Test extends TestCase
 		$dummy = [];
 		um_load_menu($dummy);
 		$this->assertEquals('my_func,um_load_menu', $modSettings['integrate_menu_buttons']);
+		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
+		remove_integration_function('integrate_menu_buttons', 'my_func');
 	}
 
 	public function testMenu(): void
@@ -286,8 +288,8 @@ final class Test extends TestCase
 		global $modSettings;
 
 		$modSettings['um_count'] = 2;
-		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"register"}';
-		$haystack = ['register' => 'l'];
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup"}';
+		$haystack = ['signup' => 'l'];
 		um_load_menu($haystack);
 		$this->assertCount(2, $haystack);
 		$this->assertArrayHasKey('um_button_2', $haystack);
@@ -304,16 +306,14 @@ final class Test extends TestCase
 		global $modSettings;
 
 		$modSettings['um_count'] = 2;
-		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"register"}';
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup"}';
+		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 		$haystack = (new UltimateMenu)->getButtonNames();
-		$this->assertArrayHasKey('um_button_2', $haystack);
+		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
 		$this->assertCount(2, $haystack['um_button_2']);
 		$this->assertSame([0, 'Test'], $haystack['um_button_2']);
-		$this->assertArrayHasKey('help', $haystack);
 		$this->assertArrayHasKey('admin', $haystack);
-		$this->assertArrayHasKey('profile', $haystack);
-		$this->assertArrayHasKey('logout', $haystack);
-		$this->assertArrayHasKey('register', $haystack);
+		$this->assertArrayHasKey('signup', $haystack);
 		unset($modSettings['um_count'], $modSettings['um_button_2']);
 	}
 
@@ -322,8 +322,10 @@ final class Test extends TestCase
 		global $context, $modSettings;
 
 		$modSettings['um_count'] = 2;
-		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[0],"parent":"help"}';
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[0],"parent":"search"}';
+		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 		setupMenuContext();
+		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
 		$this->assertArrayHasKey('um_button_2', $context['menu_buttons']);
 		$this->assertArrayHasKey('title', $context['menu_buttons']['um_button_2']);
 		$this->assertArrayHasKey('href', $context['menu_buttons']['um_button_2']);

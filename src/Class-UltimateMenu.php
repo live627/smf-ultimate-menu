@@ -396,7 +396,7 @@ class UltimateMenu
 		setupMenuContext();
 
 		// We are in the endgame now.
-		remove_integration_function('integrate_menu_buttons', 'um_replay_menu');
+		remove_integration_function('integrate_menu_buttons', 'um_replay_menu', false);
 
 		return $this->flatten($context['replayed_menu_buttons']);
 	}
