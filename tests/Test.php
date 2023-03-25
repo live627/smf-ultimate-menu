@@ -82,10 +82,8 @@ final class Test extends TestCase
 		];
 	}
 
-	/**
-	 * @dataProvider buttonProvider
-	 */
-	public function testInsertButton(string $insertion_point, array $expected): void
+	#[\PHPUnit\Framework\Attributes\DataProvider('buttonProvider')]
+    public function testInsertButton(string $insertion_point, array $expected): void
 	{
 		$btn = ['href' => 'link', 'show' => true];
 		$btn1 = ['href' => 'link1', 'show' => true];
@@ -229,10 +227,8 @@ final class Test extends TestCase
 		];
 	}
 
-	/**
-	 * @dataProvider childButtonProvider
-	 */
-	public function testInsertChildButton(string $insertion_point, array $expected): void
+	#[\PHPUnit\Framework\Attributes\DataProvider('childButtonProvider')]
+    public function testInsertChildButton(string $insertion_point, array $expected): void
 	{
 		foreach (['before', 'after', 'child_of'] as $where)
 		{
