@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @package   Ultimate Menu mod
- * @version   2.0.2
+ * @version   2.0.3
  * @author    John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2014, John Rayes
  * @license   http://opensource.org/licenses/MIT MIT
@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 function um_load_menu(&$menu_buttons): void
 {
-	global $smcFunc, $user_info, $scripturl, $modSettings;
+	global $smcFunc, $user_info, $scripturl, $modSettings, $settings;
 
 	// Make damn sure we ALWAYS load last. Priority: 100!
 	if (substr($modSettings['integrate_menu_buttons'], -12) !== 'um_load_menu')
@@ -32,6 +32,7 @@ function um_load_menu(&$menu_buttons): void
 			'title' => $row['name'],
 			'href' => ($row['type'] == 'forum' ? $scripturl . '?' : '') . $row['link'],
 			'target' => $row['target'],
+			'icon' => !empty($row['icon']) ? 'um_icons/' . $row['icon'] : '',
 			'show' => (allowedTo('admin_forum') || array_intersect($user_info['groups'], $row['groups']) != []) && $row['active'],
 		];
 
@@ -81,7 +82,7 @@ function insert_button(array $needle, array &$haystack, $insertion_point, $where
 
 function um_admin_areas(&$admin_areas): void
 {
-	global $txt;
+	global $context, $txt;
 
 	loadLanguage('ManageUltimateMenu');
 	$admin_areas['config']['areas']['umen'] = [
@@ -98,7 +99,23 @@ function um_admin_areas(&$admin_areas): void
 		'icon' => 'umen.png',
 		'subsections' => [
 			'manmenu' => [$txt['um_admin_manage_menu'], ''],
+			'fileslist' => [$txt['um_admin_manage_icons'], ''],
 			'addbutton' => [$txt['um_admin_add_button'], ''],
 		],
 	];
+
+	// additional messages for "Remove all data associated with this modification."
+	list($count, $requestPairs)  = [0, ['action' => 'admin', 'area' => 'packages', 'sa' => 'uninstall', 'package' => 'ultimate-menu']];
+	array_walk_recursive($requestPairs, function($value, $request) use (&$count) {
+		$count = isset($_REQUEST[$request]) && stripos($_REQUEST[$request], $value) !== FALSE ? $count+1 : $count;
+	}, $count);
+
+	if ($count > 3) {
+		$context['html_headers'] .= '
+		<script>
+			$(document).ready(function(){
+				$("#db_changes_div > ul").append(\'<li>' . $txt['um_menu_icons_uninstall'] . '</li>\');
+			});
+		</script>';
+	}
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @package Ultimate Menu mod
- * @version   2.0.2
+ * @version   2.0.3
  * @author John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2014, John Rayes
  * @license http://opensource.org/licenses/MIT MIT
@@ -13,6 +13,7 @@ declare(strict_types=1);
 $txt['um_admin_menu'] = 'Ultimate Menu';
 $txt['um_admin_add_button'] = 'Ajouter un bouton';
 $txt['um_admin_manage_menu'] = 'Gérer le menu';
+$txt['um_admin_menu_opt_file'] = 'Choisir l\'icône';
 
 $txt['admin_menu'] = 'Menu';
 $txt['admin_menu_title'] = 'Réglages menu';
@@ -29,6 +30,7 @@ $txt['um_menu_inactive'] = 'Inactif';
 $txt['um_menu_no_buttons'] = 'Il n\'y a pas encore de boutons...';
 $txt['um_menu_button_id'] = 'ID du bouton';
 $txt['um_menu_button_name'] = 'Nom du bouton';
+$txt['um_menu_button_upload'] = 'Téléchargement d\'images';
 $txt['um_menu_button_type'] = 'Type de bouton';
 $txt['um_menu_button_position'] = 'Position du bouton';
 $txt['um_menu_button_link'] = 'Lien du bouton';
@@ -59,6 +61,19 @@ $txt['um_menu_link_type'] = 'Type de lien';
 $txt['um_menu_same_window'] = 'Même fenêtre';
 $txt['um_menu_new_tab'] = 'Nouvel onglet';
 
+$txt['um_menu_button_icon'] = 'Icône de bouton';
+$txt['um_menu_no_icons'] = 'Aucune icône Ultimate Menu';
+$txt['um_menu_icon_name'] = 'Nom du fichier';
+$txt['um_menu_icon_assigned'] = 'Bouton attribué';
+$txt['um_menu_delete_selected'] = 'Supprimer les fichiers d\'icônes sélectionnés';
+$txt['um_menu_delete_unassigned'] = 'Supprimer les fichiers d\'icônes non attribués';
+$txt['um_menu_delete_all'] = 'Supprimer tous les fichiers d\'icônes';
+$txt['um_menu_delete_selected_confirm'] = 'Êtes-vous sûr de vouloir supprimer les fichiers d\'icônes sélectionnés ?';
+$txt['um_menu_delete_unassigned_confirm'] = 'Êtes-vous sûr de vouloir supprimer tous les fichiers d\'icônes non attribués ?';
+$txt['um_menu_delete_all_confirm'] = 'Êtes-vous sûr de vouloir supprimer tous les fichiers d\'icônes ?';
+$txt['um_menu_icon_unassigned'] = '&#10062;';
+$txt['um_menu_icons_uninstall'] = 'Supprimer toutes les icônes Ultimate Menu du dossier "um_icons"';
+
 // Submission errors
 $txt['um_menu_session_verify_fail'] = 'Session verification failed. Please then try again.';
 $txt['um_menu_not_found'] = 'Le bouton que vous essayez de modifier n\'existe pas !';
@@ -71,5 +86,7 @@ $txt['um_menu_empty_link'] = 'Le lien a été laissé vide.';
 $txt['um_menu_empty_parent'] = 'Le parent a été laissé vide.';
 $txt['um_menu_depend_desc'] = 'Vous devez déplacer ou supprimer tous les boutons enfant et/ou petit-enfant de ce bouton avant de le modifier.';
 $txt['um_menu_before_child_title'] = 'Créer un bouton enfant';
-$txt['um_menu_before_child_desc'] = 'Utilisez Child Of pour faire des boutons l\'enfant d\'un autre!';
-$txt['um_menu_mysql'] = 'Le nom de bouton que vous avez choisi est déjà utilisé !';
+$txt['um_menu_before_child_desc'] = 'utilisez Child Of pour faire des boutons l\'enfant d\'un autre !';
+$txt['um_menu_mysql'] = 'Le nom du bouton que vous avez choisi est déjà utilisé!';
+$txt['um_menu_filename_illegal'] = 'Le nom de fichier saisi contient des caractères non autorisés.';
+$txt['um_menu_filename_exists'] = 'Le nom de fichier saisi n\'existe pas dans le chemin d\'accès aux icônes du menu Ultimate.';

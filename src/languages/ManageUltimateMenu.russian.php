@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @package Ultimate Menu mod
- * @version   2.0.2
+ * @version   2.0.3
  * @author John Rayes <live627@gmail.com>
  * @translation digger <digger@mysmf.net>
  * @copyright Copyright (c) 2014, John Rayes
@@ -14,6 +14,7 @@ declare(strict_types=1);
 $txt['um_admin_menu'] = 'Управление меню';
 $txt['um_admin_add_button'] = 'Добавить пункт';
 $txt['um_admin_manage_menu'] = 'Управление меню';
+$txt['um_admin_menu_opt_file'] = 'Выберите значок';
 
 $txt['admin_menu'] = 'Меню';
 $txt['admin_menu_title'] = 'Редактирование пункта меню';
@@ -28,6 +29,7 @@ $txt['active'] = 'Включен';
 $txt['inactive'] = 'Выключен';
 $txt['um_menu_no_buttons'] = 'Еще нет добавленных пунктов...';
 $txt['um_menu_button_id'] = 'ID';
+$txt['um_menu_button_upload'] = 'Загрузка изображения';
 $txt['um_menu_button_name'] = 'Название';
 $txt['um_menu_button_type'] = 'Тип';
 $txt['um_menu_button_position'] = 'Позиция';
@@ -55,6 +57,19 @@ $txt['um_menu_link_type'] = 'Открывать ссылку';
 $txt['um_menu_same_window'] = 'В том же окне';
 $txt['um_menu_new_tab'] = 'В новой вкладке';
 
+$txt['um_menu_button_icon'] = 'Значок кнопки';
+$txt['um_menu_no_icons'] = 'Иконок Ultimate Menu нет';
+$txt['um_menu_icon_name'] = 'Имя файла';
+$txt['um_menu_icon_assigned'] = 'Назначенная кнопка';
+$txt['um_menu_delete_selected'] = 'Удалить выбранные файлы значков';
+$txt['um_menu_delete_unassigned'] = 'Удалить неназначенные файлы значков';
+$txt['um_menu_delete_all'] = 'Удалить все файлы значков';
+$txt['um_menu_delete_selected_confirm'] = 'Вы уверены, что хотите удалить выбранные файлы значков?';
+$txt['um_menu_delete_unassigned_confirm'] = 'Вы уверены, что хотите удалить все неназначенные файлы значков?';
+$txt['um_menu_delete_all_confirm'] = 'Вы уверены, что хотите удалить все файлы значков?';
+$txt['um_menu_icon_unassigned'] = '&#10062;';
+$txt['um_menu_icons_uninstall'] = 'Удалить все значки Ultimate Menu из пути "um_icons"';
+
 // Submission errors
 $txt['um_menu_session_verify_fail'] = 'Session verification failed. Please then try again.';
 $txt['um_menu_not_found'] = 'Такой пункт меню не существует!';
@@ -68,3 +83,5 @@ $txt['um_menu_depend_desc'] = 'Вы должны удалить или переместить вложенные пункт
 $txt['um_menu_before_child_title'] = 'Сделать пункт меню вложенным';
 $txt['um_menu_before_child_desc'] = 'Используйте "Подраздел", чтобы вложить один пункт меню в другой!';
 $txt['um_menu_mysql'] = 'Такое название пункта меню уже используется!';
+$txt['um_menu_filename_illegal'] = 'Введенное имя файла содержит недопустимые символы.';
+$txt['um_menu_filename_exists'] = 'Указанное имя файла отсутствует в пути к значкам Ultimate Menu.';
