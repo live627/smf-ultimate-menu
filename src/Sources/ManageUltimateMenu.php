@@ -1,10 +1,9 @@
 <?php
 
 declare(strict_types=1);
-
 /**
  * @package   Ultimate Menu mod
- * @version   2.0.2
+ * @version   2.0.3
  * @author    John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2014, John Rayes
  * @license   http://opensource.org/licenses/MIT MIT
@@ -15,10 +14,13 @@ class ManageUltimateMenu
 
 	public function __construct(string $sa)
 	{
-		global $context, $txt;
+		global $settings, $modSettings, $context, $txt;
 
 		isAllowedTo('admin_forum');
 
+		$context['html_headers'] .= '
+		<link rel="stylesheet" href="' . $settings['default_theme_url'] . '/css/ultimate-menu.css">
+		<script src="' . $settings['default_theme_url'] . '/scripts/ultimate-menu.js" defer></script>';
 		$context['page_title'] = $txt['admin_menu_title'];
 		$context[$context['admin_menu_name']]['tab_data'] = [
 			'title' => $txt['admin_menu'],
@@ -27,18 +29,23 @@ class ManageUltimateMenu
 				'manmenu' => [
 					'description' => $txt['admin_manage_menu_desc'],
 				],
+				'fileslist' => [
+					'description' => $txt['admin_manage_icons_desc'],
+				],
 				'addbutton' => [
 					'description' => $txt['admin_menu_add_button_desc'],
 				],
 			],
 		];
-		$this->um = new UltimateMenu;
+		$this->um = new UltimateMenu();
 
 		$subActions = [
 			'manmenu' => 'ManageMenu',
+			'fileslist' => 'FilesList',
 			'addbutton' => 'AddButton',
 			'editbutton' => 'EditButton',
 			'savebutton' => 'SaveButton',
+			'uploadicon' => 'UmUploadIcon',
 		];
 		call_user_func([$this, $subActions[$sa] ?? current($subActions)]);
 	}
@@ -74,6 +81,33 @@ class ManageUltimateMenu
 			redirectexit('action=admin;area=umen;sa=addbutton');
 
 		$this->listButtons();
+	}
+
+	public function FilesList(): void
+	{
+		if (isset($_POST['removeAll']))
+		{
+			checkSession();
+			$this->um->deleteIcons('all', []);
+			$this->um->rebuildMenu();
+			redirectexit('action=admin;area=umen;sa=fileslist');
+		}
+		if (isset($_POST['removeUnassigned']))
+		{
+			checkSession();
+			$this->um->deleteIcons('unassigned', []);
+			$this->um->rebuildMenu();
+			redirectexit('action=admin;area=umen;sa=fileslist');
+		}
+		elseif (isset($_POST['removeSelected'], $_POST['remove']) && is_array($_POST['remove']))
+		{
+			checkSession();
+			$this->um->deleteIcons('selected', array_filter($_POST['remove']));
+			$this->um->rebuildMenu();
+			redirectexit('action=admin;area=umen;sa=fileslist');
+		}
+
+		$this->listFiles();
 	}
 
 	private function listButtons(): void
@@ -218,6 +252,95 @@ class ManageUltimateMenu
 		$context['default_list'] = 'menu_list';
 	}
 
+	private function listFiles(): void
+	{
+		global $context, $txt, $scripturl, $sourcedir, $settings;
+
+		$icon_files = $this->um->icon_files_sort($this->um->getIconPathContents());
+		$listOptions = [
+			'id' => 'files_list',
+			'items_per_page' => 20,
+			'base_href' => $scripturl . '?action=admin;area=umen;sa=fileslist',
+			'default_sort_col' => 'name',
+			'default_sort_dir' => 'asc',
+			'get_items' => [
+				'function' => [$this->um, 'listIconPathContents'],
+			],
+			'get_count' => [
+				'function' => [$this->um, 'list_getNumIcons'],
+			],
+			'no_items_label' => $txt['um_menu_no_icons'],
+			'columns' => [
+				'name' => [
+					'header' => [
+						'value' => $txt['um_menu_icon_name'],
+					],
+					'data' => [
+						'function' => function($rowData) {
+							return $rowData['name'];
+						},
+					],
+					'sort' => [
+						'default' => 'name',
+						'reverse' => 'name DESC',
+					],
+				],
+				'assigned' => [
+					'header' => [
+						'value' => $txt['um_menu_icon_assigned'],
+					],
+					'data' => [
+						'function' => fn($rowData): string => $rowData['assigned'],
+					],
+					'sort' => [
+						'default' => 'assigned',
+						'reverse' => 'assigned DESC',
+					],
+				],
+				'check' => [
+					'header' => [
+						'value' => '<input type="checkbox" onclick="invertAll(this, this.form);" class="input_check" />',
+						'class' => 'centertext',
+					],
+					'data' => [
+						'sprintf' => [
+							'format' => '<input type="checkbox" name="remove[]" value="%s" class="input_check" />',
+							'params' => [
+								'name' => false,
+							],
+						],
+						'class' => 'centertext',
+					],
+				],
+			],
+			'form' => [
+				'href' => $scripturl . '?action=admin;area=umen;sa=fileslist',
+			],
+			'additional_rows' => [
+				[
+					'position' => 'below_table_data',
+					'value' => sprintf(
+						'
+						<input type="submit" name="removeSelected" value="%s" onclick="return confirm(\'%s\');" class="button" />
+						<input type="submit" name="removeUnassigned" value="%s" onclick="return confirm(\'%s\');" class="button" />
+						<input type="submit" name="removeAll" value="%s" onclick="return confirm(\'%s\');" class="button" />',
+						$txt['um_menu_delete_selected'],
+						$txt['um_menu_delete_selected_confirm'],
+						$txt['um_menu_delete_unassigned'],
+						$txt['um_menu_delete_unassigned_confirm'],
+						$txt['um_menu_delete_all'],
+						$txt['um_menu_delete_all_confirm'],
+					),
+					'class' => 'righttext',
+				],
+			],
+		];
+		require_once $sourcedir . '/Subs-List.php';
+		createList($listOptions);
+		$context['sub_template'] = 'show_list';
+		$context['default_list'] = 'files_list';
+	}
+
 	private function getInput(): array
 	{
 		$member_groups = $this->um->listGroups([-3]);
@@ -225,6 +348,7 @@ class ManageUltimateMenu
 		$args = [
 			'in' => FILTER_VALIDATE_INT,
 			'name' => FILTER_UNSAFE_RAW,
+			'icon' => FILTER_UNSAFE_RAW,
 			'position' => [
 				'filter' => FILTER_CALLBACK,
 				'options' => fn($v) => in_array($v, ['before', 'child_of', 'after']) ? $v : false,
@@ -258,6 +382,8 @@ class ManageUltimateMenu
 
 	private function validateInput(array $menu_entry): array
 	{
+		global $settings;
+
 		$post_errors = [];
 		$required_fields = [
 			'name',
@@ -278,6 +404,14 @@ class ManageUltimateMenu
 		if (is_numeric($menu_entry['name']))
 			$post_errors['name'] = 'um_menu_numeric';
 
+		// Ensure icon filename is legit
+		if (isset($menu_entry['icon']) && empty($this->um->sanitizeFilename($menu_entry['icon']))) {
+			$post_errors['icon'] = 'um_menu_filename_illegal';
+		}
+		elseif (isset($menu_entry['icon']) && !file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $menu_entry['icon'])) {
+			$post_errors['icon'] = 'um_menu_filename_exists';
+		}
+
 		// Let's make sure you're not trying to make a name that's already taken.
 		if (!empty($this->um->checkButton($menu_entry['in'], $menu_entry['name'])))
 			$post_errors['name'] = 'um_menu_mysql';
@@ -287,7 +421,7 @@ class ManageUltimateMenu
 
 	public function SaveButton(): void
 	{
-		global $context, $txt;
+		global $context, $txt, $settings, $modSettings;
 
 		if (isset($_POST['submit']))
 		{
@@ -299,14 +433,19 @@ class ManageUltimateMenu
 					'permissions' => [],
 					'status' => 'active',
 					'parent' => '',
+					'icon' => '',
+					'image' => '',
 				],
 				$this->getInput()
 			);
 			$post_errors = $this->validateInput($menu_entry);
 
 			// I see you made it to the final stage, my young padawan.
-			if (empty($post_errors))
-			{
+			if (empty($post_errors)) {
+				if (isset($_FILES['attachment'])) {
+					unset($_FILES['attachment']);
+				}
+				clearstatcache();
 				$this->um->saveButton($menu_entry);
 				$this->um->rebuildMenu();
 
@@ -318,6 +457,8 @@ class ManageUltimateMenu
 			}
 			else
 			{
+				$filePath = !empty($menu_entry['icon']) ? $this->um->sanitizeFilename($menu_entry['icon']) : '';
+				$filePath = !empty($filePath) && file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $filePath) ? $settings['default_theme_url'] . '/images/um_icons/' . $filePath : 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
 				$context['page_title'] = $txt['um_menu_edit_title'];
 				$context['button_names'] = $this->um->getButtonNames();
 				$context['post_error'] = $post_errors;
@@ -331,6 +472,8 @@ class ManageUltimateMenu
 					'position' => $menu_entry['position'],
 					'link' => $menu_entry['link'],
 					'parent' => $menu_entry['parent'],
+					'icon' => (!empty($filePath) ? $filePath : ''),
+					'image' => '<img id="um_icon_img" style="width: 16px;height: 16px;object-fit: contain;" alt="" src="' . $filePath . '">',
 					'permissions' => $this->um->listGroups(
 						array_filter($menu_entry['permissions'], 'strlen')
 					),
@@ -343,20 +486,29 @@ class ManageUltimateMenu
 				));
 				$context['template_layers'][] = 'form';
 				$context['template_layers'][] = 'errors';
+				$context['um_button_icons'] = $this->um->getIconPathContents();
 			}
 		}
-		else
+		else {
 			fatal_lang_error('no_access', false);
+		}
 	}
 
 	public function EditButton(): void
 	{
-		global $context, $txt;
+		global $settings, $modSettings, $context, $txt;
 
 		$row = isset($_GET['in']) ? $this->um->fetchButton($_GET['in']) : [];
 		if (empty($row))
 			fatal_lang_error('no_access', false);
-
+		$filePath = !empty($row['icon']) ? $this->um->sanitizeFilename($row['icon']) : '';
+		$filePath = !empty($filePath) && file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $filePath) ? $settings['default_theme_url'] . '/images/um_icons/' . $filePath : 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+		$bytes = openssl_random_pseudo_bytes(10);
+		$codeValue = strval(bin2hex($bytes));
+		updateSettings([
+			'um_secureCode' => $codeValue
+		]);
+		$modSettings['um_secureCode'] = $codeValue;
 		$context['button_data'] = [
 			'id' => $row['id'],
 			'name' => $row['name'],
@@ -367,6 +519,10 @@ class ManageUltimateMenu
 			'link' => $row['link'],
 			'status' => $row['status'],
 			'parent' => $row['parent'],
+			'icon' => !empty($row['icon']) ? $row['icon'] : '',
+			'image' => '<img id="um_icon_img" style="width: 16px;height: 16px;object-fit: contain;" alt="" src="' . $filePath . '">',
+			'um_secureCode' => $codeValue,
+
 		];
 		$context['all_groups_checked'] = empty(array_diff_key(
 			$context['button_data']['permissions'],
@@ -375,11 +531,23 @@ class ManageUltimateMenu
 		$context['page_title'] = $txt['um_menu_edit_title'];
 		$context['button_names'] = $this->um->getButtonNames();
 		$context['template_layers'][] = 'form';
+		$context['um_button_icons'] = $this->um->getIconPathContents();
+		$context['html_headers'] .= '
+		<script>
+			let um_secureCode = "' . $codeValue . '";
+		</script>';
 	}
 
 	public function AddButton(): void
 	{
-		global $context, $txt;
+		global $settings, $modSettings, $context, $txt;
+
+		$bytes = openssl_random_pseudo_bytes(10);
+		$codeValue = strval(bin2hex($bytes));
+		updateSettings([
+			'um_secureCode' => $codeValue
+		]);
+		$modSettings['um_secureCode'] = $codeValue;
 
 		$context['button_data'] = [
 			'name' => '',
@@ -390,11 +558,85 @@ class ManageUltimateMenu
 			'status' => 'active',
 			'permissions' => $this->um->listGroups([-3]),
 			'parent' => 'home',
+			'icon' => '',
+			'image' => '<img id="um_icon_img" style="width: 16px;height: 16px;object-fit: contain;" alt="" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=">',
 			'id' => 0,
+			'um_secureCode' => $codeValue,
 		];
 		$context['all_groups_checked'] = true;
 		$context['page_title'] = $txt['um_menu_add_title'];
 		$context['button_names'] = $this->um->getButtonNames();
 		$context['template_layers'][] = 'form';
+		$context['um_button_icons'] = $this->um->getIconPathContents();
+		$context['html_headers'] .= '
+		<script>
+			let um_secureCode = "' . $codeValue . '";
+		</script>';
+	}
+
+	public function UmUploadIcon(): void
+	{
+		global $txt, $settings, $modSettings, $sourcedir;
+		checkSession('post');
+		list($types, $json_msg) = [['jpeg', 'jpg', 'png'], ['error' => $txt['um_menu_filename_illegal'], 'file' => '']];
+		$postVar = !empty($_FILES['attachment']) ? $_FILES['attachment'] : '';
+		$checkCode = isset($_POST['um_checkcode']) ? $_POST['um_checkcode'] : '';
+		$umCode = !empty($modSettings['um_secureCode']) ? $modSettings['um_secureCode'] : '';
+
+		if (empty($checkCode) || empty($umCode) || $checkCode != $umCode) {
+			exit(json_encode($json_msg));
+		}
+
+		clearstatcache();
+		if (!empty($postVar) && !empty($postVar['name']))
+		{
+			$newname = $postVar['name'] = $this->um->sanitizeFilename(basename($postVar['name']));
+			$target = $this->um->unixDirSeparator($settings['default_theme_dir'] . '/images/um_icons');
+			$tmp_name = $postVar['tmp_name'];
+			$ext = strtolower(pathinfo($newname, PATHINFO_EXTENSION));
+			$filename = pathinfo($newname, PATHINFO_FILENAME);
+			$file = $this->um->hexadecimal_filename($filename) . '.' . $ext;
+			if (!in_array($ext, $types)) {
+				$json_msg['error'] = $txt['um_menu_filename_illegal'];
+			}
+			else {
+				if (file_exists($target . '/' . $newname)) {
+					@unlink($target . '/' . $newname);
+					clearstatcache();
+				}
+				$com = fopen($target . '/' . $newname, "ab");
+				$in = fopen($tmp_name, "rb");
+				if ($in)
+				{
+					while ($buff = fread($in, 1048576))
+					{
+						fwrite($com, $buff);
+						sleep(1);
+					}
+					fclose($in);
+				}
+				fclose($com);
+				clearstatcache();
+				if (!empty($newname) && file_exists($target . '/' . $newname)) {
+					$renamed = $this->um->imageResize($target . '/' . $newname, $target . '/' . $file, $ext, 16, 16, false);
+					if (!empty($renamed) && $renamed != $newname) {
+						$newname = $renamed;
+						$json_msg = ['error' => '', 'file' => $newname];
+					}
+					elseif (!empty($renamed)) {
+						$json_msg = ['error' => $txt['um_menu_filename_compress'], 'file' => $newname];
+					}
+					else {
+						$json_msg['error'] = $txt['um_menu_filename_unknown'];
+					}
+				}
+				else {
+					$json_msg['error'] = $txt['um_menu_filename_exists'];
+				}
+			}
+			unset($_FILES['attachment']);
+		}
+
+		exit(json_encode($json_msg));
 	}
 }

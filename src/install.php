@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @package Ultimate Menu mod
- * @version   2.0.2
+ * @version   2.0.3
  * @author John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2014, John Rayes
  * @license http://opensource.org/licenses/MIT MIT
@@ -51,8 +51,7 @@ $tables = [
 			],
 			[
 				'name' => 'link',
-				'type' => 'varchar',
-				'size' => 255,
+				'type' => 'text',
 			],
 			[
 				'name' => 'status',
@@ -62,12 +61,18 @@ $tables = [
 			[
 				'name' => 'permissions',
 				'type' => 'varchar',
-				'size' => 255,
+				'size' => 191,
 			],
 			[
 				'name' => 'parent',
 				'type' => 'varchar',
 				'size' => 65,
+			],
+			[
+				'name' => 'icon',
+				'type' => 'varchar',
+				'size' => 191,
+				'default' => '',
 			],
 		],
 		'indexes' => [
@@ -99,10 +104,53 @@ foreach ($tables as $table)
 		);
 }
 
+if (!checkFieldExistsUMInstaller('um_menu', 'icon'))
+{
+	$smcFunc['db_add_column']('{db_prefix}um_menu', [
+			'name' => 'icon',
+			'type' => 'varchar',
+			'size' => 191,
+			'default' => '',
+		],
+		[],
+		false
+	);
+}
+
+// update link column to text to facilitate elongated hyperlinks
+if (checkFieldExistsUMInstaller('um_menu', 'link'))
+{
+	$checkUmTable = $smcFunc['db_list_columns']('{db_prefix}um_menu', true);
+	if (!empty($checkUmTable) && !empty($checkUmTable['link']) && $checkUmTable['link']['type'] != 'text') {
+		$adjust = array(
+			'name' => 'link',
+			'type' => 'text',
+			'default' => null,
+		);
+
+		$smcFunc['db_change_column']('{db_prefix}um_menu', 'link', $adjust);
+	}
+}
+
+// update varchar size of permissions column to 191 for utf8mb4 compatibility
+if (checkFieldExistsUMInstaller('um_menu', 'permissions'))
+{
+	$checkUmTable = $smcFunc['db_list_columns']('{db_prefix}um_menu', true);
+	if (!empty($checkUmTable) && !empty($checkUmTable['permissions']) && intval($checkUmTable['permissions']['size']) != 191) {
+		$adjust = array(
+			'name' => 'permissions',
+			'type' => 'varchar',
+			'size' => 191,
+		);
+
+		$smcFunc['db_change_column']('{db_prefix}um_menu', 'permissions', $adjust);
+	}
+}
+
 $buttons = [];
 $request = $smcFunc['db_query']('', '
 	SELECT
-		id_button, name, target, type, position, link, status, permissions, parent
+		id_button, name, target, type, position, link, status, permissions, parent, icon
 	FROM {db_prefix}um_menu'
 );
 
@@ -116,6 +164,7 @@ while ($row = $smcFunc['db_fetch_assoc']($request))
 		'link' => $row['link'],
 		'active' => $row['status'] == 'active',
 		'parent' => $row['parent'],
+		'icon' => !empty($row['icon']) ? $row['icon'] : '',
 	]);
 $smcFunc['db_free_result']($request);
 
@@ -144,3 +193,27 @@ if (!empty($buttons))
 add_integration_function('integrate_pre_include', '$sourcedir/Subs-UltimateMenu.php');
 add_integration_function('integrate_menu_buttons', 'um_load_menu');
 add_integration_function('integrate_admin_areas', 'um_admin_areas');
+
+function check_table_existsUMInstaller($table)
+{
+	global $db_prefix, $smcFunc;
+
+	if ($smcFunc['db_list_tables'](false, $db_prefix . $table)) {
+		return true;
+	}
+
+	return false;
+}
+
+function checkFieldExistsUMInstaller($tableName, $columnName)
+{
+	global $smcFunc;
+	if (check_table_existsUMInstaller($tableName)) {
+		$check = $smcFunc['db_list_columns'] ('{db_prefix}' . $tableName, false, array());
+		if (in_array($columnName, $check)) {
+			return true;
+		}
+	}
+
+	return false;
+}

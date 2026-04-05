@@ -1,0 +1,16 @@
+/* Ultimate-menu CSS */
+#um_loader {
+	position: relative;
+	width: calc(80px / cos(45deg));
+	height: 0.25rem;
+	--c: #000 0 15px,#0000 0 20px;
+	background:
+		repeating-linear-gradient(135deg,var(--c)) left top,
+		repeating-linear-gradient( 45deg,var(--c)) left bottom;
+	background-size:  200% 50%;
+	background-repeat: no-repeat;
+	animation: umloader 2s infinite linear;
+}
+@keyframes umloader {
+	100% {background-position:top right,bottom right}
+}

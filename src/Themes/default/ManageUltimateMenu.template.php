@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @package   Ultimate Menu mod
- * @version   2.0.2
+ * @version   2.0.3
  * @author    John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2014, John Rayes
  * @license   http://opensource.org/licenses/MIT MIT
@@ -15,7 +15,7 @@ function template_form_above(): void
 	global $context, $scripturl;
 
 	echo '
-		<form action="', $scripturl, '?action=admin;area=umen;sa=savebutton" method="post" accept-charset="', $context['character_set'], '" name="postmodify" id="postmodify">
+		<form action="', $scripturl, '?action=admin;area=umen;sa=savebutton" enctype="multipart/form-data" method="post" accept-charset="', $context['character_set'], '" name="postmodify" id="postmodify">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					', $context['page_title'], '
@@ -51,7 +51,7 @@ function template_errors_below(): void
 
 function template_main(): void
 {
-	global $context, $txt, $scripturl;
+	global $context, $txt, $scripturl, $settings;
 
 	$sel = fn(bool $x, string $str): string => $x ? ' ' . $str : '';
 
@@ -62,7 +62,7 @@ function template_main(): void
 						</dt>
 						<dd>
 							<input type="text" name="name" value="', $context['button_data']['name'], '" style="width: 100%;" />
-						</dd>
+						</dd>										
 						<dt>
 							<strong>', $txt['um_menu_button_position'], ':</strong>
 						</dt>
@@ -151,12 +151,43 @@ function template_main(): void
 							<input type="radio" name="status" value="active"', $sel($context['button_data']['status'] == 'active', 'checked'), ' />', $txt['um_menu_button_active'], ' <br />
 							<input type="radio" name="status" value="inactive"', $sel($context['button_data']['status'] == 'inactive', 'checked'), ' />', $txt['um_menu_button_inactive'], '
 						</dd>
+						<dt>
+							<strong>', $txt['um_menu_button_upload'], ':</strong>
+						</dt>		
+						<dd style="display: inline-flex;justify-content: space-between;align-items: center;">
+							<span style="flex-basis: 60%;">
+								<input id="um_file" type="file" name="attachment" accept="image/png, image/jpeg, .png, .jpg, .jpeg" value="', $context['button_data']['icon'], '" style="width: 100%;" />
+							</span>
+							<span style="flex-basis: 30%;height: 100%;">
+								<span id="um_loader" style="width: 80%;display: none;"></span>
+							</span>
+						</dd>
+						<dt>
+							<strong>', $txt['um_menu_button_icon'], ':</strong>
+						</dt>
+						<dd style="display: inline-flex;height: 42px;" class="windowbg2">
+							<span style="flex-basis: 85%;">
+								<select id="um_icon" name="icon">
+									<optgroup label="' . $txt['um_admin_menu_opt_file'] . '">';
+	foreach ($context['um_button_icons'] as $filename)
+    	echo '
+									<option value="', $filename, '"', ($context['button_data']['icon'] == $filename ? ' selected="selected"' : ''), '>
+										', $filename, '
+									</option>';
+
+	echo '
+								</select>
+							</span>
+							<span style="flex-basis: 15%;justify-content: flex-end;padding-left: 0.25rem;">
+								' . $context['button_data']['image'] . '
+							</span>
+						</dd>
 					</dl>';
 }
 
 function template_form_below(): void
 {
-	global $context, $txt;
+	global $settings, $context, $scripturl, $txt;
 
 	echo '
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
@@ -165,42 +196,5 @@ function template_form_below(): void
 						<input name="submit" value="', $txt['admin_manage_menu_submit'], '" class="button" type="submit" />
 					</div>
 				</div>
-			</form>
-			<script>
-				var
-					el = document.createElement("a"),
-					div = document.getElementById("group_perms"),
-					l = div.firstElementChild,
-					a = document.createElement("a");
-				el.textContent = l.textContent;
-				el.className = "toggle_down";
-				el.href = "#";
-				el.style.display = "";
-				el.addEventListener("click", function(event)
-				{
-					div.classList.remove("hidden");
-					this.style.display = "none";
-					event.stopPropagation();
-					event.preventDefault();
-				});
-				div.classList.add("hidden");
-				div.parentNode.appendChild(el);
-				a.className = "toggle_up";
-				a.textContent = l.textContent;
-				a.href = "#";
-				a.style.display = "";
-				a.addEventListener("click", function(event)
-				{
-					div.classList.add("hidden");
-					el.style.display = "";
-					event.stopPropagation();
-					event.preventDefault();
-				});
-				l.textContent = "";
-				l.appendChild(a);
-				div.lastElementChild.firstElementChild.addEventListener("click", function()
-				{
-					invertAll(this, this.form, "permissions[]");
-				});
-			</script>';
+			</form>';
 }
