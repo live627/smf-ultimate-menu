@@ -10,7 +10,7 @@
         "phpunit/phpunit": "^9.6"
     },
     "require": {
-        "php": ">=7.4"
+        "php": ">=8.0"
     },
     "scripts": {
         "test": "phpunit --testdox"

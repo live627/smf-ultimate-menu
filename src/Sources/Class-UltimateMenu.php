@@ -604,7 +604,6 @@ class UltimateMenu
 
 		clearstatcache();
 		if (@extension_loaded('imagick')) {
-			$dir = $this->unixDirSeparator(dirname($src));
 			try {
 				$icon = new \Imagick($src);
 			} catch(ImagickException $e) {
