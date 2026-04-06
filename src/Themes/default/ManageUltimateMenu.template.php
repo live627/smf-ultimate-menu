@@ -62,7 +62,7 @@ function template_main(): void
 						</dt>
 						<dd>
 							<input type="text" name="name" value="', $context['button_data']['name'], '" style="width: 100%;" />
-						</dd>										
+						</dd>
 						<dt>
 							<strong>', $txt['um_menu_button_position'], ':</strong>
 						</dt>
@@ -153,7 +153,7 @@ function template_main(): void
 						</dd>
 						<dt>
 							<strong>', $txt['um_menu_button_upload'], ':</strong>
-						</dt>		
+						</dt>
 						<dd style="display: inline-flex;justify-content: space-between;align-items: center;">
 							<span style="flex-basis: 60%;">
 								<input id="um_file" type="file" name="attachment" accept="image/png, image/jpeg, .png, .jpg, .jpeg" value="', $context['button_data']['icon'], '" style="width: 100%;" />
@@ -170,10 +170,12 @@ function template_main(): void
 								<select id="um_icon" name="icon">
 									<optgroup label="' . $txt['um_admin_menu_opt_file'] . '">';
 	foreach ($context['um_button_icons'] as $filename)
-    	echo '
+	{
+		echo '
 									<option value="', $filename, '"', ($context['button_data']['icon'] == $filename ? ' selected="selected"' : ''), '>
 										', $filename, '
 									</option>';
+	}
 
 	echo '
 								</select>
