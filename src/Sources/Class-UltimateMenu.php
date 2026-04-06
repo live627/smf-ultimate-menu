@@ -435,7 +435,8 @@ class UltimateMenu
 		$start = isset($_REQUEST['start']) ? intval($_REQUEST['start']) : 0;
 		$files = $this->getIconPathContents();
 		$buttons = $this->total_getMenu();
-		foreach ($files as $index => $file) {
+		foreach ($files as $index => $file)
+		{
 			$assignedIndex = array_search($file, array_column($buttons, 'icon'));
 			$filesList[] = [
 				'id_file' => $index,
@@ -451,7 +452,7 @@ class UltimateMenu
 	/**
 	 * Deletes opted icon files
 	 */
-	public function deleteIcons($task='selected', $files=[]): void
+	public function deleteIcons($task='selected', $files = []): void
 	{
 		global $settings;
 
@@ -459,25 +460,27 @@ class UltimateMenu
 		$icons = glob($settings['default_theme_dir'] . "/images/um_icons/*.{jpg,jpeg,png}", GLOB_BRACE);
 		$buttons = $this->total_getMenu();
 
-		switch($task) {
+		switch ($task)
+		{
 			case 'all':
-				foreach ($icons as $icon) {
+				foreach ($icons as $icon)
 					@unlink($icon);
-				}
+
 				break;
 			case 'unassigned':
-				foreach ($icons as $icon) {
+				foreach ($icons as $icon)
+				{
 					$assignedIndex = array_search(basename($icon), array_column($buttons, 'icon'));
-					if (is_bool($assignedIndex)) {
+					if (is_bool($assignedIndex))
 						@unlink($icon);
-					}
+
 				}
 				break;
 			default:
-				foreach ($files as $file) {
-					if (in_array($settings['default_theme_dir'] . '/images/um_icons/' . $file, $icons)) {
+				foreach ($files as $file)
+				{
+					if (in_array($settings['default_theme_dir'] . '/images/um_icons/' . $file, $icons))
 						@unlink($settings['default_theme_dir'] . '/images/um_icons/' . $file);
-					}
 				}
 		}
 
@@ -501,9 +504,11 @@ class UltimateMenu
 			RecursiveIteratorIterator::LEAVES_ONLY
 		);
 
-		foreach ($files as $file) {
+		foreach ($files as $file)
+		{
 			$ext = $file->getExtension();
-			if (!$file->isDir() && in_array($ext, ['jpg', 'jpeg', 'png'])) {
+			if (!$file->isDir() && in_array($ext, ['jpg', 'jpeg', 'png']))
+			{
 				$filePath = $file->getRealPath();
 				$images[] = basename($filePath);
 			}
@@ -537,19 +542,18 @@ class UltimateMenu
 		$path = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
 		$parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
 		$absolutes = [];
-		foreach ($parts as $part) {
+		foreach ($parts as $part)
+		{
 			if ($part == '.')
 				continue;
 
-			if ($part == '..') {
+			if ($part == '..')
 				array_pop($absolutes);
-			}
-			else {
+			else
 				$absolutes[] = $part;
-			}
 		}
 		$new = implode(DIRECTORY_SEPARATOR, $absolutes);
-		$new = substr($new, 0, 1) ==  substr($boarddir, 0, 1) ? $new : substr($boarddir, 0, 1) . $new;
+		$new = substr($new, 0, 1) == substr($boarddir, 0, 1) ? $new : substr($boarddir, 0, 1) . $new;
 
 		return $new;
 	}
@@ -559,7 +563,7 @@ class UltimateMenu
 	 *
 	 * @return string
 	 */
-	public function imageResize($src, $dst, $ext, $width=16, $height=16, $crop=false): string
+	public function imageResize($src, $dst, $ext, $width = 16, $height = 16, $crop = false): string
 	{
 		global $settings, $boarddir, $boardurl;
 
@@ -567,24 +571,24 @@ class UltimateMenu
 		$src = $this->unixDirSeparator($settings['default_theme_dir']) . '/images/um_icons/' . basename($src);
 		list($error, $imagick, $baseFile, $imgTypes) = [false, false, basename($src), ['jpg', 'png']];
 
-		if ($ext == 'jpeg') {
+		if ($ext == 'jpeg')
+		{
 			$renamed = rtrim($src, '.jpeg') . '.jpg';
-			if (file_exists($renamed)) {
+			if (file_exists($renamed))
+			{
 				unlink($renamed);
 				clearstatcache();
 			}
 			@rename($src, $renamed);
 			clearstatcache();
-			if (file_exists($renamed)) {
-				$src = $renamed;
-				$ext = 'jpg';
-			}
+			if (file_exists($renamed))
+				list($src, $ext) = [$renamed, 'jpg'];
 		}
 
 		if (empty($src) || !file_exists($src))
 			return $baseFile;
 
-		if(!list($w, $h) = getimagesize($src))
+		if (!list($w, $h) = getimagesize($src))
 			return $baseFile;
 
 		if (!in_array($ext, $imgTypes))
@@ -592,43 +596,50 @@ class UltimateMenu
 
 		$imgInfo = getimagesize($src);
 		$imgMime = $imgInfo['mime'];
-		foreach ($imgTypes as $imgType) {
-			if (stripos($imgMime, $imgType) !== FALSE)
+		foreach ($imgTypes as $imgType)
+		{
+			if (stripos($imgMime, $imgType) !== false)
 				$ext = $imgType;
 		}
 		$ext = $ext == 'jpeg' ? 'jpg' : $ext;
 
-		if (!in_array($ext, $imgTypes)) {
+		if (!in_array($ext, $imgTypes))
 			return $baseFile;
-		}
 
 		clearstatcache();
-		if (@extension_loaded('imagick')) {
-			try {
+		if (@extension_loaded('imagick'))
+		{
+			try
+			{
 				$icon = new \Imagick($src);
-			} catch(ImagickException $e) {
+			}
+			catch (ImagickException $e)
+			{
 				$error = true;
 			}
-			if (empty($error)) {
+			if (empty($error))
+			{
 				$w = $icon->getImageWidth();
 				$h = $icon->getImageHeight();
-				if($w < $width && $h < $height)
+				if ($w < $width && $h < $height)
 					return $baseFile;
 
-				if ($w > $h) {
+				if ($w > $h)
+				{
 					$resize_width = $w * $height / $h;
 					$resize_height = $height;
 				}
-				else {
+				else
+				{
 					$resize_width = $width;
 					$resize_height = $h * $width / $w;
 				}
 
 				$icon->setCompressionQuality(100);
-				if (!$crop) {
+				if (!$crop)
 					$icon->resizeImage($width, $height, Imagick::FILTER_CATROM, 0);
-				}
-				else {
+				else
+				{
 					$icon->resizeImage($resize_width, $resize_height, Imagick::FILTER_LANCZOS, 0.9);
 					$icon->cropImage($width, $height, ($resize_width - $width) / 2, ($resize_height - $height) / 2);
 				}
@@ -639,49 +650,50 @@ class UltimateMenu
 				$imagick = true;
 
 				clearstatcache();
-				if (!file_exists($dst)) {
+				if (!file_exists($dst))
 					$imagick = false;
-				}
-				else {
+				else
+				{
 					@unlink($src);
 					$baseFile = basename($dst);
 				}
 			}
 		}
 
-		if (empty($imagick)) {
-			switch($ext)
+		if (empty($imagick))
+		{
+			switch ($ext)
 			{
 				case 'png':
-					if (!$img = @imagecreatefrompng($src)) {
+					if (!$img = @imagecreatefrompng($src))
 						$img = imagecreatefromstring(file_get_contents($src));
-					}
+
 					break;
 				default:
-					if (!$img = @imagecreatefromjpeg($src)) {
+					if (!$img = @imagecreatefromjpeg($src))
 						$img = imagecreatefromstring(file_get_contents($src));
-					}
 			}
 
-			if (empty($img)) {
+			if (empty($img))
 				return $baseFile;
-			}
 
 			imageinterlace($img, true);
-			if($crop)
+			if ($crop)
 			{
-				if($w < $width || $h < $height)
+				if ($w < $width || $h < $height)
 					return $baseFile;
-				$ratio = max($width/$w, $height/$h);
+
+				$ratio = max($width / $w, $height / $h);
 				$h = $height / $ratio;
 				$x = ($w - $width / $ratio) / 2;
 				$w = $width / $ratio;
 			}
 			else
 			{
-				if($w < $width && $h < $height)
+				if ($w < $width && $h < $height)
 					return $baseFile;
-				$ratio = min($width/$w, $height/$h);
+
+				$ratio = min($width / $w, $height / $h);
 				$width = $w * $ratio;
 				$height = $h * $ratio;
 				$x = 0;
@@ -694,7 +706,7 @@ class UltimateMenu
 			imagesavealpha($new, true);
 			imagecopyresampled($new, $img, 0, 0, $x, 0, $width, $height, $w, $h);
 
-			switch($ext)
+			switch ($ext)
 			{
 				case 'png':
 					imagepng($new, $dst, 0);
@@ -703,17 +715,17 @@ class UltimateMenu
 					imagejpeg($new, $dst, 0);
 			}
 			clearstatcache();
-			if (file_exists($dst)) {
+			if (file_exists($dst))
+			{
 				$baseFile = basename($dst);
-				if (file_exists($src)) {
+				if (file_exists($src))
+				{
 					unlink($src);
 					clearstatcache();
 				}
 			}
-			else {
+			else
 				$baseFile = basename($src);
-			}
-
 		}
 
 		return $baseFile;
@@ -760,7 +772,8 @@ class UltimateMenu
 	 */
 	public function icon_files_sort($array): array
 	{
-		usort($array, function($a, $b) {
+		usort($array, function($a, $b)
+		{
 			return $a <=> $b;
 		});
 
@@ -772,24 +785,25 @@ class UltimateMenu
 	 *
 	 * @return int
 	 */
-	private function um_file_increment($number=0, $numbers=[]): int
+	private function um_file_increment($number = 0, $numbers = []): int
 	{
 		global $settings;
 
 		$files = $this->getIconPathContents();
-		usort($files, function($a, $b) {
+		usort($files, function($a, $b)
+		{
 			list($numberA, $numberB, $matches) = [0, 0, []];
-			if (preg_match('/^um--(\\d+)/', $a, $matches)) {
-				$numberA = (float)$matches[1];
-			}
-			if (preg_match('/^um--(\\d+)/', $b, $matches)) {
-				$numberB = (float)$matches[1];
-			}
+			if (preg_match('/^um--(\\d+)/', $a, $matches))
+				$numberA = (float) $matches[1];
+
+			if (preg_match('/^um--(\\d+)/', $b, $matches))
+				$numberB = (float) $matches[1];
 
 			return $numberA <=> $numberB;
 		});
 
-		$numbers = array_map(function($value) {
+		$numbers = array_map(function($value)
+		{
 			$value = strstr($value, '_', true);
 			return preg_replace('/\D/', '', $value);
 		}, $files);
@@ -797,14 +811,15 @@ class UltimateMenu
 		$numbers = array_filter($numbers);
 		sort($numbers);
 
-		foreach ($numbers as $key => $value) {
+		foreach ($numbers as $key => $value)
+		{
 			if (isset($numbers[$key + 1]) && intval($numbers[$key + 1]) !== intval($value) + 1) {
 				$number = intval($value);
 				break;
 			}
 		}
 
-		return !empty($numbers) && empty($number) ? max($numbers)+1 : (!empty($number) ? intval($number)+1 : 1);
+		return !empty($numbers) && empty($number) ? max($numbers) + 1 : (!empty($number) ? intval($number) + 1 : 1);
 	}
 
 	/**
