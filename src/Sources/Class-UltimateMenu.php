@@ -452,7 +452,7 @@ class UltimateMenu
 	/**
 	 * Deletes opted icon files
 	 */
-	public function deleteIcons($task='selected', $files = []): void
+	public function deleteIcons($task = 'selected', $files = []): void
 	{
 		global $settings;
 
@@ -813,7 +813,8 @@ class UltimateMenu
 
 		foreach ($numbers as $key => $value)
 		{
-			if (isset($numbers[$key + 1]) && intval($numbers[$key + 1]) !== intval($value) + 1) {
+			if (isset($numbers[$key + 1]) && intval($numbers[$key + 1]) !== intval($value) + 1)
+			{
 				$number = intval($value);
 				break;
 			}
