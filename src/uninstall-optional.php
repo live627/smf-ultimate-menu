@@ -47,16 +47,15 @@ function um_deleteIconsPath($directory)
 	clearstatcache();
 	$um_icons_dir = rtrim(str_replace('\\', '/', $settings['default_theme_dir'] . '/images/um_icons'), '/\\');
 	$directory = rtrim(str_replace('\\', '/', $directory), '/\\');
-	if (!str_starts_with($directory, $um_icons_dir)) {
+	if (!str_starts_with($directory, $um_icons_dir))
 		return false;
-	}
 
 	if (is_dir($directory))
 	{
 		$directoryHandle = opendir($directory);
 		while ($contents = readdir($directoryHandle))
 		{
-			if($contents != '.' && $contents != '..')
+			if(!in_array($contents, ['.', '..']))
 			{
 				$path = $directory . "/" . $contents;
 				if (is_dir($path))
@@ -69,12 +68,10 @@ function um_deleteIconsPath($directory)
 		clearstatcache();
 		rmdir($directory);
 	}
-	elseif (file_exists($directory)) {
+	elseif (file_exists($directory))
 		@unlink($directory);
-	}
-	else {
+	else
 		return false;
-	}
 
 	clearstatcache();
 	return true;

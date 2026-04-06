@@ -50,7 +50,8 @@ function um_replay_menu(&$menu_buttons)
 function recursive_button(array $needle, array &$haystack, $insertion_point, $where, $key): void
 {
 	foreach ($haystack as $area => &$info)
-		if ($area == $insertion_point) {
+		if ($area == $insertion_point)
+		{
 			switch ($where)
 			{
 				case 'before':
