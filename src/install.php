@@ -121,7 +121,8 @@ if (!checkFieldExistsUMInstaller('um_menu', 'icon'))
 if (checkFieldExistsUMInstaller('um_menu', 'link'))
 {
 	$checkUmTable = $smcFunc['db_list_columns']('{db_prefix}um_menu', true);
-	if (!empty($checkUmTable) && !empty($checkUmTable['link']) && $checkUmTable['link']['type'] != 'text') {
+	if (!empty($checkUmTable) && !empty($checkUmTable['link']) && $checkUmTable['link']['type'] != 'text')
+	{
 		$adjust = array(
 			'name' => 'link',
 			'type' => 'text',
@@ -136,7 +137,8 @@ if (checkFieldExistsUMInstaller('um_menu', 'link'))
 if (checkFieldExistsUMInstaller('um_menu', 'permissions'))
 {
 	$checkUmTable = $smcFunc['db_list_columns']('{db_prefix}um_menu', true);
-	if (!empty($checkUmTable) && !empty($checkUmTable['permissions']) && intval($checkUmTable['permissions']['size']) != 191) {
+	if (!empty($checkUmTable) && !empty($checkUmTable['permissions']) && intval($checkUmTable['permissions']['size']) != 191)
+	{
 		$adjust = array(
 			'name' => 'permissions',
 			'type' => 'varchar',
@@ -198,9 +200,8 @@ function check_table_existsUMInstaller($table)
 {
 	global $db_prefix, $smcFunc;
 
-	if ($smcFunc['db_list_tables'](false, $db_prefix . $table)) {
+	if ($smcFunc['db_list_tables'](false, $db_prefix . $table))
 		return true;
-	}
 
 	return false;
 }
@@ -208,11 +209,11 @@ function check_table_existsUMInstaller($table)
 function checkFieldExistsUMInstaller($tableName, $columnName)
 {
 	global $smcFunc;
-	if (check_table_existsUMInstaller($tableName)) {
-		$check = $smcFunc['db_list_columns'] ('{db_prefix}' . $tableName, false, array());
-		if (in_array($columnName, $check)) {
+	if (check_table_existsUMInstaller($tableName))
+	{
+		$check = $smcFunc['db_list_columns'] ('{db_prefix}' . $tableName, false, []);
+		if (in_array($columnName, $check))
 			return true;
-		}
 	}
 
 	return false;

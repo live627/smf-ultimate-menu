@@ -50,7 +50,7 @@ function um_replay_menu(&$menu_buttons)
 function recursive_button(array $needle, array &$haystack, $insertion_point, $where, $key): void
 {
 	foreach ($haystack as $area => &$info)
-		if ($area == $insertion_point)
+		if ($area == $insertion_point) {
 			switch ($where)
 			{
 				case 'before':
@@ -62,6 +62,7 @@ function recursive_button(array $needle, array &$haystack, $insertion_point, $wh
 					$info['sub_buttons'][$key] = $needle;
 					break 2;
 			}
+		}
 		elseif (!empty($info['sub_buttons']))
 			recursive_button($needle, $info['sub_buttons'], $insertion_point, $where, $key);
 }
@@ -88,7 +89,7 @@ function um_admin_areas(&$admin_areas): void
 	$admin_areas['config']['areas']['umen'] = [
 		'label' => $txt['um_admin_menu'],
 		'file' => 'ManageUltimateMenu.php',
-		'function' => function (): void
+		'function' => function(): void
 		{
 			global $sourcedir;
 
@@ -105,12 +106,14 @@ function um_admin_areas(&$admin_areas): void
 	];
 
 	// additional messages for "Remove all data associated with this modification."
-	list($count, $requestPairs)  = [0, ['action' => 'admin', 'area' => 'packages', 'sa' => 'uninstall', 'package' => 'ultimate-menu']];
-	array_walk_recursive($requestPairs, function($value, $request) use (&$count) {
-		$count = isset($_REQUEST[$request]) && stripos($_REQUEST[$request], $value) !== FALSE ? $count+1 : $count;
+	list($count, $requestPairs) = [0, ['action' => 'admin', 'area' => 'packages', 'sa' => 'uninstall', 'package' => 'ultimate-menu']];
+	array_walk_recursive($requestPairs, function($value, $request) use (&$count)
+	{
+		$count = isset($_REQUEST[$request]) && stripos($_REQUEST[$request], $value) !== false ? $count + 1 : $count;
 	}, $count);
 
-	if ($count > 3) {
+	if ($count > 3)
+	{
 		$context['html_headers'] .= '
 		<script>
 			$(document).ready(function(){
