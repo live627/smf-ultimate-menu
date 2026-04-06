@@ -29,7 +29,8 @@
 		<require-file name="languages/ManageUltimateMenu.spanish_latin.php" destination="$languagedir" />
 		<require-file name="languages/ManageUltimateMenu.russian.php" destination="$languagedir" />
 		<require-file name="Themes/default/ManageUltimateMenu.template.php" destination="$themes_dir/default" />
- 		<require-file name="Themes/default/images/admin/umen.png" destination="$themes_dir/default/images/admin" />
+		<require-file name="Themes/default/images/admin/umen.png" destination="$themes_dir/default/images/admin" />
+ 		<require-file name="Themes/default/images/admin/big/umen.png" destination="$themes_dir/default/images/admin/big" />
 		<require-file name="Themes/default/scripts/ultimate-menu.js" destination="$themes_dir/default/scripts" />
 		<require-file name="Themes/default/css/ultimate-menu.css" destination="$themes_dir/default/css" />
 		<require-dir name="Themes/default/images/um_icons" destination="$themes_dir/default/images" />
@@ -45,6 +46,7 @@
 		<remove-file name="$sourcedir/ManageUltimateMenu.php" />
 		<remove-file name="$themes_dir/default/ManageUltimateMenu.template.php" />
 		<remove-file name="$themes_dir/default/images/admin/umen.png" />
+		<remove-file name="$themes_dir/default/images/admin/big/umen.png" />
 		<remove-file name="$themes_dir/default/scripts/ultimate-menu.js" />
 		<remove-file name="$themes_dir/default/css/ultimate-menu.css" />
 		<remove-file name="$languagedir/ManageUltimateMenu.english.php" />
