@@ -55,7 +55,7 @@ function um_deleteIconsPath($directory)
 		$directoryHandle = opendir($directory);
 		while ($contents = readdir($directoryHandle))
 		{
-			if(!in_array($contents, ['.', '..']))
+			if (!in_array($contents, ['.', '..']))
 			{
 				$path = $directory . "/" . $contents;
 				if (is_dir($path))
