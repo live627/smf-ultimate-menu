@@ -766,6 +766,19 @@ class UltimateMenu
 	}
 
 	/**
+	 * Returns an existing jpg/png image file path else a 1x1 pixel transparent GIF
+	 *
+	 * @return string
+	 */
+	public function iconFilePath($filename): string
+	{
+		global $settings;
+
+		$filename = !empty($filename) ? $this->sanitizeFilename(basename($filename)) : '';
+		return !empty($filename) && in_array(pathinfo($filename, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png']) && file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $filename) ? $settings['default_theme_url'] . '/images/um_icons/' . $filename : 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+	}
+
+	/**
 	 * Sorts files alphabetically
 	 *
 	 * @return array
