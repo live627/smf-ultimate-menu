@@ -1765,7 +1765,7 @@
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.4.0"
+                "php": ">=8.3.0"
             },
             "type": "library",
             "extra": {
@@ -3022,12 +3022,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/live627/SMF2.1.git",
-                "reference": "ba44808cb17393b8be20bcc8b37775f495518716"
+                "reference": "35154f99a5a2895c6b7e5819a73c4db1d48ed441"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/live627/SMF2.1/zipball/ba44808cb17393b8be20bcc8b37775f495518716",
-                "reference": "ba44808cb17393b8be20bcc8b37775f495518716",
+                "url": "https://api.github.com/repos/live627/SMF2.1/zipball/35154f99a5a2895c6b7e5819a73c4db1d48ed441",
+                "reference": "35154f99a5a2895c6b7e5819a73c4db1d48ed441",
                 "shasum": ""
             },
             "require-dev": {
@@ -3901,7 +3901,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.4"
+        "php": ">=8.3"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
