@@ -42,16 +42,14 @@ um_deleteIconsPath($settings['default_theme_dir'] . '/images/um_icons');
 
 function um_deleteIconsPath($directory)
 {
-	global $boarddir;
+	global $settings;
 
-	$boarddirx = rtrim(str_replace('\\', '/', $boarddir), '/\\');
-	$forbidden1 = $boarddirx . '/images';
-	$forbidden2 = rtrim(str_replace('\\', '/', $directory), '/\\');
-	if (empty($directory) || $boarddirx == $forbidden1 || $boarddirx == $forbidden2) {
+	clearstatcache();
+	$um_icons_dir = rtrim(str_replace('\\', '/', $settings['default_theme_dir'] . '/images/um_icons'), '/\\');
+	$directory = rtrim(str_replace('\\', '/', $directory), '/\\');
+	if (!str_starts_with($directory, $um_icons_dir)) {
 		return false;
 	}
-	$directory = rtrim($directory, '/\\');
-	$maindir = dirname($directory) == $boarddir ? true : false;
 
 	if (is_dir($directory))
 	{
@@ -68,18 +66,16 @@ function um_deleteIconsPath($directory)
 			}
 		}
 		closedir($directoryHandle);
-
-		if ($maindir && !empty($skip) && !empty($found)) {
-			$found = true;
-		}
-		else {
-			self::removeDir($directory);
-		}
+		clearstatcache();
+		rmdir($directory);
 	}
-	elseif (file_exists($directory))
+	elseif (file_exists($directory)) {
 		@unlink($directory);
-	else
+	}
+	else {
 		return false;
+	}
 
+	clearstatcache();
 	return true;
 }
