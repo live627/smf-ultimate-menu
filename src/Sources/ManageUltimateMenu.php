@@ -256,7 +256,6 @@ class ManageUltimateMenu
 	{
 		global $context, $txt, $scripturl, $sourcedir, $settings;
 
-		$icon_files = $this->um->icon_files_sort($this->um->getIconPathContents());
 		$listOptions = [
 			'id' => 'files_list',
 			'items_per_page' => 20,
