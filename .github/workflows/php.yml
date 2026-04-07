@@ -5,17 +5,30 @@ on:
       - master
     paths:
       - '**.php'
-      - composer.lock
+  pull_request:
+    branches:
+      - master
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     env:
       XDEBUG_MODE: coverage
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v4
+      with:
+        # Fetch 10 commits or Scrutinizer will throw ("Failed to retrieve commit parents.
+        # If you use a shallow git checkout, please checkout at least a depth of one.");
+        # see: RepositoryIntrospector at scrutinizer-ci/ocular GitHub repository
+        # 10 commits is an arbitrary value that is more than 1 commit
+        fetch-depth: 10
+    - name: Lint PHP files
+      run: |
+        shopt -s globstar
+        php -l src/**/*.php tests/**/*.php
     - name: Cache Composer packages
       id: composer-cache
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
         path: vendor
         key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
@@ -25,6 +38,7 @@ jobs:
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress
     - name: Run test suite
-      run: php vendor/bin/phpunit --colors
+      run: php vendor/bin/phpunit
+    - run: composer require --dev scrutinizer/ocular:^1.9
     - name: Uploading code coverage
       run: php vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover.xml
