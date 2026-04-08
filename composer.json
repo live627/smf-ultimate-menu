@@ -11,7 +11,8 @@
     },
     "require": {
 		"php": ">=8.0",
-		"ext-gd": "*"
+		"ext-gd": "*",
+		"ext-openssl": "*"
     },
     "scripts": {
         "test": "phpunit --testdox"
