@@ -297,7 +297,7 @@ final class Test extends TestCase
 		$this->assertArrayHasKey('title', $haystack['um_button_2']);
 		$this->assertArrayHasKey('href', $haystack['um_button_2']);
 		$this->assertEquals('Test', $haystack['um_button_2']['title']);
-		$this->assertEquals('?t', $haystack['um_button_2']['href']);
+		$this->assertEquals(dirname(__DIR__) . '?t', $haystack['um_button_2']['href']);
 		unset($modSettings['um_count'], $modSettings['um_button_2']);
 	}
 
@@ -330,7 +330,7 @@ final class Test extends TestCase
 		$this->assertArrayHasKey('title', $context['menu_buttons']['um_button_2']);
 		$this->assertArrayHasKey('href', $context['menu_buttons']['um_button_2']);
 		$this->assertEquals('Test', $context['menu_buttons']['um_button_2']['title']);
-		$this->assertEquals('?t', $context['menu_buttons']['um_button_2']['href']);
+		$this->assertEquals(dirname(__DIR__) . '?t', $context['menu_buttons']['um_button_2']['href']);
 		unset($modSettings['um_count'], $modSettings['um_button_2']);
 	}
 
