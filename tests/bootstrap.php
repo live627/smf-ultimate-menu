@@ -56,7 +56,7 @@ $smcFunc['db_insert'] = function (): void
 $smcFunc['htmltrim'] = fn(string $string): string => trim($string);
 $smcFunc['htmlspecialchars'] = fn(string $string): string => htmlspecialchars($string, ENT_QUOTES);
 
-require_once './vendor/simplemachines/smf2.1/Sources/Load.php';
-require_once './vendor/simplemachines/smf2.1/Sources/Security.php';
-require_once './vendor/simplemachines/smf2.1/Sources/Subs.php';
-require_once './vendor/simplemachines/smf2.1/Themes/default/languages/index.english.php';
+require_once './vendor/simplemachines/smf/Sources/Load.php';
+require_once './vendor/simplemachines/smf/Sources/Security.php';
+require_once './vendor/simplemachines/smf/Sources/Subs.php';
+require_once './vendor/simplemachines/smf/Themes/default/languages/index.english.php';
