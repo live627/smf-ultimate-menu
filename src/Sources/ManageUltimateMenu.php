@@ -404,7 +404,7 @@ class ManageUltimateMenu
 		// Ensure icon filename is legit
 		if (isset($menu_entry['icon']) && empty($this->um->sanitizeFilename($menu_entry['icon'])))
 			$post_errors['icon'] = 'um_menu_filename_illegal';
-		elseif (isset($menu_entry['icon']) && !file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $menu_entry['icon']))
+		elseif (isset($menu_entry['icon']) && $menu_entry['icon'] != '______' && !file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $menu_entry['icon']))
 			$post_errors['icon'] = 'um_menu_filename_exists';
 
 		// Let's make sure you're not trying to make a name that's already taken.
@@ -442,6 +442,7 @@ class ManageUltimateMenu
 					unset($_FILES['attachment']);
 
 				clearstatcache();
+				$menu_entry['icon'] = $menu_entry['icon'] == '______' ? '' : $menu_entry['icon'];
 				$this->um->saveButton($menu_entry);
 				$this->um->rebuildMenu();
 
@@ -480,7 +481,7 @@ class ManageUltimateMenu
 				));
 				$context['template_layers'][] = 'form';
 				$context['template_layers'][] = 'errors';
-				$context['um_button_icons'] = $this->um->getIconPathContents();
+				$context['um_button_icons'] = ['______', ...$this->um->getIconPathContents()];
 			}
 		}
 		else
@@ -495,7 +496,7 @@ class ManageUltimateMenu
 		if (empty($row))
 			fatal_lang_error('no_access', false);
 
-		$bytes = openssl_random_pseudo_bytes(10);
+		$bytes = random_bytes(10);
 		$codeValue = strval(bin2hex($bytes));
 		updateSettings([
 			'um_secureCode' => $codeValue
@@ -523,7 +524,7 @@ class ManageUltimateMenu
 		$context['page_title'] = $txt['um_menu_edit_title'];
 		$context['button_names'] = $this->um->getButtonNames();
 		$context['template_layers'][] = 'form';
-		$context['um_button_icons'] = $this->um->getIconPathContents();
+		$context['um_button_icons'] = ['______', ...$this->um->getIconPathContents()];
 		$context['html_headers'] .= '
 		<script>
 			let um_secureCode = "' . $codeValue . '";
@@ -534,7 +535,7 @@ class ManageUltimateMenu
 	{
 		global $settings, $modSettings, $context, $txt;
 
-		$bytes = openssl_random_pseudo_bytes(10);
+		$bytes = random_bytes(10);
 		$codeValue = strval(bin2hex($bytes));
 		updateSettings([
 			'um_secureCode' => $codeValue
@@ -559,7 +560,7 @@ class ManageUltimateMenu
 		$context['page_title'] = $txt['um_menu_add_title'];
 		$context['button_names'] = $this->um->getButtonNames();
 		$context['template_layers'][] = 'form';
-		$context['um_button_icons'] = $this->um->getIconPathContents();
+		$context['um_button_icons'] = ['______', ...$this->um->getIconPathContents()];
 		$context['html_headers'] .= '
 		<script>
 			let um_secureCode = "' . $codeValue . '";
@@ -584,7 +585,7 @@ class ManageUltimateMenu
 			$newname = $postVar['name'] = $this->um->sanitizeFilename(basename($postVar['name']));
 			$target = $this->um->unixDirSeparator($settings['default_theme_dir'] . '/images/um_icons');
 			$tmp_name = $postVar['tmp_name'];
-			$ext = strtolower(pathinfo($newname, PATHINFO_EXTENSION));
+			$ext = mb_strtolower(pathinfo($newname, PATHINFO_EXTENSION), 'UTF-8');
 			$filename = pathinfo($newname, PATHINFO_FILENAME);
 			$file = $this->um->hexadecimal_filename($filename) . '.' . $ext;
 			if (!in_array($ext, $types))

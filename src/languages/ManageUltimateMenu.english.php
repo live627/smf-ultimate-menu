@@ -75,6 +75,7 @@ $txt['um_menu_delete_unassigned_confirm'] = 'Are you sure you want to delete all
 $txt['um_menu_delete_all_confirm'] = 'Are you sure you want to delete all of the icon files?';
 $txt['um_menu_icon_unassigned'] = '&#10062;';
 $txt['um_menu_icons_uninstall'] = 'Remove all Ultimate Menu icons from the "um_icons" path';
+$txt['um__menu_icons_none'] = 'None';
 
 // Submission errors
 $txt['um_menu_session_verify_fail'] = 'Session verification failed. Please then try again.';
