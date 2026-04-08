@@ -55,6 +55,7 @@ $(document).ready(function() {
 			type: "POST",
 			success: function(response) {
 				console.log("Upload successful: " + response);
+				$("#um_file").val("");
 				if (response.file) {
 					$("#um_icon_img").attr("src", smf_default_theme_url + "/images/um_icons/" + response.file);
 					$("#um_icon").append($("<option>", {
@@ -70,19 +71,9 @@ $(document).ready(function() {
 				$("#um_loader").css("display", "none");
 			},
 			error: function(xhr, status, error) {
+				$("#um_file").val("");
 				console.log("Upload failed: " + error);
 				$("#um_loader").css("display", "none");
-			},
-			xhr: function() {
-				var myXhr = $.ajaxSettings.xhr();
-				if (myXhr.upload) {
-					myXhr.upload.addEventListener("progress", function(e) {
-						if (e.lengthComputable) {
-							var percentComplete = parseInt((e.loaded / e.total) * 100);
-						}
-					}, false);
-				}
-				return myXhr;
 			}
 		});
 	});

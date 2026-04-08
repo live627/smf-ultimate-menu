@@ -7,7 +7,7 @@
 
 Package name | SMF version | Minimmum PHP version
 --- | --- | ---
-[Ultimate Menu 2.0.3](https://github.com/live627/smf-ultimate-menu/releases/download/v2.0.2/ultimate-menu_2-0-2.tgz) | SMF 2.1.X | PHP 8.3
+[Ultimate Menu 2.0.3](https://github.com/live627/smf-ultimate-menu/releases/download/v2.0.2/ultimate-menu_2-0-2.tgz) | SMF 2.1.X | PHP 8.0
 
 [View changelog](https://github.com/live627/smf-ultimate-menu/blob/master/CHANGELOG.md)
 
@@ -21,3 +21,4 @@ This modification gives the ability to add custom buttons to the main menu withi
    - Does not remove the unread PM counter from the "PM" menu item.
 ## Compatibility notes
 *	Only compatible with the SMF 2.1 branch (https://download.simplemachines.org) [SMF 2.0 branch support has been dropped]
+*	PHP should be compiled with the [GD library or Imagick library] to take advantage of automatic image resizing

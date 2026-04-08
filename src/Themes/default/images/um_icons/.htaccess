@@ -1,7 +1,0 @@
-Order Deny,Allow
-Deny from all
-Allow from localhost
-<FilesMatch "\.(jpg|jpeg|png)$">
-    Allow from all
-</FilesMatch>
-RemoveHandler .php .php3 .phtml .cgi .fcgi .pl .fpl .shtml

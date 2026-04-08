@@ -1,5 +1,17 @@
 # Changelog
 
+### [2.0.3](https://www.github.com/live627/smf-ultimate-menu/compare/v2.0.1...v2.0.2) (2026-04-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* Require PHP 8.0+
+
+### Features
+* Added option to upload/use png or jpg icon for each navigation button
+* Uploaded icons are auto-resized to 16px * 16px
+* Added admin template to manipulate uploaded icons
+
 ### [2.0.2](https://www.github.com/live627/smf-ultimate-menu/compare/v2.0.1...v2.0.2) (2022-03-20)
 
 

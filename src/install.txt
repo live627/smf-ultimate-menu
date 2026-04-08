@@ -17,4 +17,5 @@ This modification gives the ability to add custom buttons to the main menu withi
 [hr]
 [list]
 [li]Only compatible with the [url=https://download.simplemachines.org]SMF 2.1 branch[/url] (SMF 2.0 branch support has been dropped)[/li]
+[li]PHP should be compiled with the [GD library or Imagick library] to take advantage of automatic image resizing[/li]
 [/list]

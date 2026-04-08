@@ -172,8 +172,8 @@ function template_main(): void
 	foreach ($context['um_button_icons'] as $filename)
 	{
 		echo '
-									<option value="', $filename, '"', ($context['button_data']['icon'] == $filename ? ' selected="selected"' : ''), '>
-										', $filename, '
+									<option value="', (!empty($filename) ? $filename : '______'), '"', ($context['button_data']['icon'] == $filename ? ' selected="selected"' : ''), '>
+										', (!empty($filename) && $filename != '______' ? $filename : $txt['um__menu_icons_none']), '
 									</option>';
 	}
 

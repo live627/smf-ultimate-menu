@@ -164,7 +164,7 @@ class UltimateMenu
 	 */
 	public function rebuildMenu(): void
 	{
-		global $smcFunc;
+		global $smcFunc, $settings;
 
 		$buttons = [];
 		$request = $smcFunc['db_query']('', '
@@ -183,7 +183,7 @@ class UltimateMenu
 				'link' => $row['link'],
 				'active' => $row['status'] == 'active',
 				'parent' => $row['parent'],
-				'icon' => !empty($row['icon']) ? $row['icon'] : '',
+				'icon' => !empty($row['icon']) && file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $row['icon']) ? $row['icon'] : '',
 			]);
 		$smcFunc['db_free_result']($request);
 
@@ -496,7 +496,7 @@ class UltimateMenu
 	{
 		global $settings;
 
-		list($images, $pathName) = [[], $settings['default_theme_dir'] . '/images/um_icons'];
+		list($images, $pathName) = [[''], $settings['default_theme_dir'] . '/images/um_icons'];
 		clearstatcache();
 
 		$files = new RecursiveIteratorIterator(
@@ -506,18 +506,14 @@ class UltimateMenu
 
 		foreach ($files as $file)
 		{
-			$ext = $file->getExtension();
-			if (!$file->isDir() && in_array($ext, ['jpg', 'jpeg', 'png']))
-			{
-				$filePath = $file->getRealPath();
-				$images[] = basename($filePath);
-			}
+			if (!$file->isDir() && in_array($file->getExtension(), ['jpg', 'jpeg', 'png']))
+				$images[] = basename($file->getRealPath());
 		}
 
 		$pathContents = $this->icon_files_sort($images);
 
 
-		return !empty($pathContents) && is_array($pathContents) ? $pathContents : [];
+		return !empty($pathContents) && is_array($pathContents) ? array_filter($pathContents) : [];
 	}
 
 	/**
@@ -527,35 +523,7 @@ class UltimateMenu
 	 */
 	public function unixDirSeparator($path) : string
 	{
-		return preg_replace('#/+#', '/', str_replace('\\', '/', $path));
-	}
-
-	/**
-	 * Returns a proper absolute path not dependant on the file or path existing
-	 *
-	 * @return string
-	 */
-	public function getAbsolutePath($path): string
-	{
-		global $boarddir;
-
-		$path = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
-		$parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
-		$absolutes = [];
-		foreach ($parts as $part)
-		{
-			if ($part == '.')
-				continue;
-
-			if ($part == '..')
-				array_pop($absolutes);
-			else
-				$absolutes[] = $part;
-		}
-		$new = implode(DIRECTORY_SEPARATOR, $absolutes);
-		$new = substr($new, 0, 1) == substr($boarddir, 0, 1) ? $new : substr($boarddir, 0, 1) . $new;
-
-		return $new;
+		return preg_replace('#/+#u', '/', str_replace('\\', '/', $path));
 	}
 
 	/**
@@ -694,8 +662,8 @@ class UltimateMenu
 					return $baseFile;
 
 				$ratio = min($width / $w, $height / $h);
-				$width = $w * $ratio;
-				$height = $h * $ratio;
+				$width = intval($w * $ratio);
+				$height = intval($h * $ratio);
 				$x = 0;
 			}
 
@@ -742,26 +710,28 @@ class UltimateMenu
 
 		$letters = range('a', 'z');
 		$random_key = array_rand($letters);
-		$bytes = openssl_random_pseudo_bytes(5);
-		$codeValue = strtolower(strval(bin2hex($bytes))) . $letters[$random_key];
+		$bytes = random_bytes(5);
+		$codeValue = mb_strtolower(strval(bin2hex($bytes)), 'UTF-8') . $letters[$random_key];
 		return 'um--' . $this->um_file_increment() . '_' . $codeValue;
 	}
 
 	/**
-	 * Returns a strict compatible filename
+	 * Returns a strict ASCII compatible filename
 	 *
 	 * @return string
 	 */
-	public function sanitizeFilename($filename): string
+	public function sanitizeFilename($filename = ''): string
 	{
+		if (extension_loaded('intl'))
+		{
+			$transliterator = \Transliterator::create('Any-Latin; Latin-ASCII');
+			$filename = $transliterator->transliterate($filename);
+		}
+		else
+			$filename = str_replace('?', '_', iconv("UTF-8", "ASCII//TRANSLIT", $filename));
 
-		$filename = basename($filename);
-		$filename = preg_replace('/[^a-zA-Z0-9\-\._]/', '-', $filename);
-
-		$filename = preg_replace('/--+/', '--', $filename);
-		$filename = mb_strtolower($filename, mb_detect_encoding($filename));
-		$filename = trim($filename, '.-');
-
+		$filename = preg_replace('/--+/u', '--', preg_replace('/[^a-zA-Z0-9\-\._]/u', '-', basename($filename)));
+		$filename = trim(mb_strtolower($filename, 'UTF-8'), '.-');
 		return trim($filename);
 	}
 
@@ -798,7 +768,7 @@ class UltimateMenu
 	 *
 	 * @return int
 	 */
-	private function um_file_increment($number = 0, $numbers = []): int
+	private function um_file_increment($number = 1, $numbers = []): int
 	{
 		global $settings;
 
@@ -806,34 +776,26 @@ class UltimateMenu
 		usort($files, function($a, $b)
 		{
 			list($numberA, $numberB, $matches) = [0, 0, []];
-			if (preg_match('/^um--(\\d+)/', $a, $matches))
+			if (preg_match('/^um--(\\d+)/u', $a, $matches))
 				$numberA = (float) $matches[1];
 
-			if (preg_match('/^um--(\\d+)/', $b, $matches))
+			if (preg_match('/^um--(\\d+)/u', $b, $matches))
 				$numberB = (float) $matches[1];
 
 			return $numberA <=> $numberB;
 		});
 
-		$numbers = array_map(function($value)
-		{
-			$value = strstr($value, '_', true);
-			return preg_replace('/\D/', '', $value);
-		}, $files);
-
-		$numbers = array_filter($numbers);
+		$numbers = array_unique(array_filter(array_map(fn($value): int => (int) preg_replace('/\D/u', '', strstr((string) $value, '_', true)), $files)));
 		sort($numbers);
-
-		foreach ($numbers as $key => $value)
+		foreach ($numbers as $value)
 		{
-			if (isset($numbers[$key + 1]) && intval($numbers[$key + 1]) !== intval($value) + 1)
-			{
-				$number = intval($value);
+			if (!in_array($number, $numbers))
 				break;
-			}
+
+			$number++;
 		}
 
-		return !empty($numbers) && empty($number) ? max($numbers) + 1 : (!empty($number) ? intval($number) + 1 : 1);
+		return $number;
 	}
 
 	/**
