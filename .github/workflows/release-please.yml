@@ -12,50 +12,46 @@ jobs:
       FORCE_COLOR: 1
       MOD_NAME: ultimate-menu
     steps:
-      - uses: GoogleCloudPlatform/release-please-action@v2
+      - uses: googleapis/release-please-action@v4
         id: release
         with:
-          release-type: php
-          package-name: ${{ env.MOD_NAME }}
-      - uses: actions/github-script@v3
-        id: vars
+          config-file: .github/release-please-config.json
+          manifest-file: .github/.release-please-manifest.json
+      - uses: actions/checkout@v5
         with:
-          script: |
-            const response = await github.pulls.get({
-              pull_number: ${{ steps.release.outputs.pr }},
-              owner: context.repo.owner,
-              repo: context.repo.repo
-            });
-            core.info("\u001B[32m✔\u001B[39mBranch: \u001B[1;32m" + response.data.head.ref);
-            core.setOutput("branch", response.data.head.ref);
-        if: ${{ steps.release.outputs.pr && !steps.release.outputs.release_created }}
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ steps.vars.outputs.branch }}
+          ref: ${{ fromJson(steps.release.outputs.pr).headBranchName }}
         if: ${{ steps.release.outputs.pr && !steps.release.outputs.release_created }}
       - if: ${{ steps.release.outputs.pr && !steps.release.outputs.release_created }}
         run: |
-          version=$(cat ./composer.json | jq -r '.version')
-          for f in src/*.php; do
-            sed -i "/@version/c \ * @version   $version" "$f"
+          VERSION=$(cat ./composer.json | jq -r '.version')
+          RE='[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)'
+          MAJOR=`echo $VERSION | sed -e "s#$RE#\1#"`
+          MINOR=`echo $VERSION | sed -e "s#$RE#\2#"`
+          PATCH=`echo $VERSION | sed -e "s#$RE#\3#"`
+          shopt -s globstar
+          for f in src/**/*.php; do
+            sed -i "/@version/c \ * @version   $VERSION" "$f"
           done
-          sed -i "/<version>/c \	<version>$version</version>" src/package-info.xml
-          sed -i -E "1s/[0-9]+\.[0-9]+\.[0-9]+/$version/" src/install.txt
-          sed -i "10s/[0-9]+\.[0-9]+\.[0-9]+/$version/" README.md
+          sed -i "/<version>/c \	<version>$VERSION</version>" src/package-info.xml
+          sed -i -E "30s/[0-9]+\.[0-9]+\.[0-9]+/$VERSION/" src/CustomForm/ManageCustomForm.php
+          sed -i -E "1s/[0-9]+\.[0-9]+\.[0-9]+/$VERSION/" src/install.txt
+          sed -i -E "10s/[0-9]+\.[0-9]+\.[0-9]+/$VERSION/g" README.md
+          sed -i -E "10s/[0-9]+-[0-9]+-[0-9]+/${MAJOR}-${MINOR}-${PATCH}/" README.md
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git commit -am "build: Update versions in mod files"
           git push
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
         if: ${{ steps.release.outputs.release_created }}
       - run: tar -czvf myfile.tgz LICENSE README.md -C src $(ls src)
         if: ${{ steps.release.outputs.release_created }}
       - name: Upload release asset
-        uses: actions/github-script@v2
+        uses: actions/github-script@v8
         with:
           script: |
             const fs = require('fs');
-            await github.repos.uploadReleaseAsset({
+            const str = "${{ steps.release.outputs.upload_url }}";
+            await github.rest.repos.uploadReleaseAsset({
               owner: context.repo.owner,
               url: "${{ steps.release.outputs.upload_url }}",
               repo: context.repo.repo,
@@ -66,12 +62,10 @@ jobs:
               name: "${{ env.MOD_NAME }}_${{ steps.release.outputs.major }}-${{ steps.release.outputs.minor }}-${{ steps.release.outputs.patch }}.tgz",
               data: fs.readFileSync("./myfile.tgz")
             });
-            const release = await github.repos.getReleaseByTag({
+            await github.rest.repos.updateRelease({
               ...context.repo,
-              tag: "${{ steps.release.outputs.tag_name }}",
-            });
-            await github.repos.updateRelease({
-              ...context.repo,
-              release_id: release.data.id,
+              release_id: str.substring(str.lastIndexOf('/', str.lastIndexOf('/assets') - 1) + 1, str.lastIndexOf('/assets')),
+              draft: false,
+              name: "${{ steps.release.outputs.tag_name }}",
             });
         if: ${{ steps.release.outputs.release_created }}
