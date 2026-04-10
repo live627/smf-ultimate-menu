@@ -3,12 +3,10 @@ tools:
         timeout: 300
 build:
     environment:
-        php:
-            version: 8.1
-            before_commands:
-                - "sudo apt-get update"
-                - "sudo apt-get install -y openssl libssl-dev"
-                - "sudo apt-get install -y php8.1-gd"
+    php:
+      version: 8.1 # Specify your PHP version
+      pecl_extensions:
+        - gd
     nodes:
         analysis:
             tests:
