@@ -2,14 +2,15 @@ tools:
     external_code_coverage:
         timeout: 300
 build:
-    image: default-bionic
+    environment:
+        php:
+            version: 8.1
+            before_commands:
+                - "sudo apt-get update"
+                - "sudo apt-get install -y openssl libssl-dev"
+                - "sudo apt-get install -y php8.1-gd"
     nodes:
         analysis:
-            commands:
-                - before_commands:
-                    - sudo apt-get update
-                    - sudo apt-get install -y openssl libssl-dev
-                    - sudo apt-get install -y php8.1-gd
             tests:
                 override:
                     - php-scrutinizer-run
