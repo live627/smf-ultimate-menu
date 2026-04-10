@@ -1,3 +1,4 @@
+# Scrutinizer config
 tools:
     external_code_coverage:
         timeout: 300
