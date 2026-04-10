@@ -2,12 +2,12 @@ tools:
     external_code_coverage:
         timeout: 300
 build:
-    environment:
-    variables:
-      OPENSSL_CFLAGS: "-I/usr/local/opt/openssl/include"
-      OPENSSL_LIBS: "-L/usr/local/opt/openssl/lib -lssl -lcrypto"
     nodes:
         analysis:
+            environment:
+                variables:
+                  OPENSSL_CFLAGS: "-I/usr/local/opt/openssl/include"
+                  OPENSSL_LIBS: "-L/usr/local/opt/openssl/lib -lssl -lcrypto"
             tests:
                 override:
                     - php-scrutinizer-run
