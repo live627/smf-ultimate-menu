@@ -2,7 +2,6 @@ tools:
     external_code_coverage:
         timeout: 300
 build:
-    image: default-bionic
     environment:
     variables:
       OPENSSL_CFLAGS: "-I/usr/local/opt/openssl/include"
