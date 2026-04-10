@@ -3,7 +3,7 @@ tools:
         timeout: 300
 build:
     image: default-bionic
-    nodes:            
+    nodes:
         analysis:
             commands:
                 - before_commands:
