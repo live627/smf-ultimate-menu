@@ -6,8 +6,7 @@ build:
     php:
       version: 8.1 # Specify your PHP version
       pecl_extensions:
-        - gd
-    image: default-bionic
+        - gd    
     nodes:
         analysis:
             tests:
