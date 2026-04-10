@@ -2,12 +2,12 @@ tools:
     external_code_coverage:
         timeout: 300
 build:
-    nodes:
-        analysis:
-            environment:
-                variables:
-                  OPENSSL_CFLAGS: "-I/usr/local/opt/openssl/include"
-                  OPENSSL_LIBS: "-L/usr/local/opt/openssl/lib -lssl -lcrypto"
-            tests:
-                override:
-                    - php-scrutinizer-run
+    dependencies:
+        before:
+            - sudo apt-get update
+            - sudo apt-get install -y openssl libssl-dev
+        nodes:
+            analysis:
+                tests:
+                    override:
+                        - php-scrutinizer-run

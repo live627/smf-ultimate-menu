@@ -464,7 +464,7 @@ class UltimateMenu
 		{
 			case 'all':
 				foreach ($icons as $icon)
-					@unlink($icon);
+					unlink($icon);
 
 				break;
 			case 'unassigned':
@@ -472,7 +472,7 @@ class UltimateMenu
 				{
 					$assignedIndex = array_search(basename($icon), array_column($buttons, 'icon'));
 					if (is_bool($assignedIndex))
-						@unlink($icon);
+						unlink($icon);
 
 				}
 				break;
@@ -480,7 +480,7 @@ class UltimateMenu
 				foreach ($files as $file)
 				{
 					if (in_array($settings['default_theme_dir'] . '/images/um_icons/' . $file, $icons))
-						@unlink($settings['default_theme_dir'] . '/images/um_icons/' . $file);
+						unlink($settings['default_theme_dir'] . '/images/um_icons/' . $file);
 				}
 		}
 
@@ -535,7 +535,7 @@ class UltimateMenu
 	{
 		global $settings, $boarddir, $boardurl;
 
-		@ini_set("gd.jpeg_ignore_warning", 1);
+		ini_set("gd.jpeg_ignore_warning", 1);
 		$src = $this->unixDirSeparator($settings['default_theme_dir']) . '/images/um_icons/' . basename($src);
 		list($error, $imagick, $baseFile, $imgTypes) = [false, false, basename($src), ['jpg', 'png']];
 
@@ -547,7 +547,7 @@ class UltimateMenu
 				unlink($renamed);
 				clearstatcache();
 			}
-			@rename($src, $renamed);
+			rename($src, $renamed);
 			clearstatcache();
 			if (file_exists($renamed))
 				list($src, $ext) = [$renamed, 'jpg'];
@@ -575,7 +575,7 @@ class UltimateMenu
 			return $baseFile;
 
 		clearstatcache();
-		if (@extension_loaded('imagick'))
+		if (extension_loaded('imagick'))
 		{
 			try
 			{
@@ -622,7 +622,7 @@ class UltimateMenu
 					$imagick = false;
 				else
 				{
-					@unlink($src);
+					unlink($src);
 					$baseFile = basename($dst);
 				}
 			}
@@ -633,12 +633,12 @@ class UltimateMenu
 			switch ($ext)
 			{
 				case 'png':
-					if (!$img = @imagecreatefrompng($src))
+					if (!$img = imagecreatefrompng($src))
 						$img = imagecreatefromstring(file_get_contents($src));
 
 					break;
 				default:
-					if (!$img = @imagecreatefromjpeg($src))
+					if (!$img = imagecreatefromjpeg($src))
 						$img = imagecreatefromstring(file_get_contents($src));
 			}
 

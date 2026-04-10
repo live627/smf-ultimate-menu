@@ -594,7 +594,7 @@ class ManageUltimateMenu
 			{
 				if (file_exists($target . '/' . $newname))
 				{
-					@unlink($target . '/' . $newname);
+					unlink($target . '/' . $newname);
 					clearstatcache();
 				}
 				$com = fopen($target . '/' . $newname, "ab");
