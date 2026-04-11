@@ -12,6 +12,7 @@ require_once './vendor/autoload.php';
 define('SMF', 1);
 
 global $context;
+
 $user_info = ['is_admin' => true, 'is_guest' => false, 'language' => '', 'groups' => [0], 'permissions' => []];
 $context = [
 	'user' => ['can_mod' => true, 'is_guest' => false, 'id' => 1],
@@ -24,10 +25,10 @@ $context = [
 ];
 $modSettings = ['lastActive' => 0, 'settings_updated' => 0, 'postmod_active' => false];
 
-global $scripturl; 
+global $scripturl;
 $scripturl = dirname(__DIR__);
 
-$smcFunc['db_query'] = function ($name, $query, $args)
+$smcFunc['db_query'] = function($name, $query, $args)
 {
 	global $current_item, $modSettings;
 
@@ -35,7 +36,7 @@ $smcFunc['db_query'] = function ($name, $query, $args)
 
 	if (isset($args['variable']) && $args['variable'] == 'integrate_menu_buttons') {
 		return [[$modSettings[$args['variable']] ?? null]];
-	}
+	}	
 
 	return [['']];
 };
