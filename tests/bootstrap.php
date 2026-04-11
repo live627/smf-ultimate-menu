@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 require_once './src/ManageUltimateMenu.php';
 require_once './src/Subs-UltimateMenu.php';
