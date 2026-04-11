@@ -52,29 +52,22 @@ class ManageUltimateMenu
 
 	public function ManageMenu(): void
 	{
-		// Get rid of all of em!
 		if (isset($_POST['removeAll'])) {
 			checkSession();
 			$this->um->deleteallButtons();
 			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen');
-		}
-		// User pressed the 'remove selection button'.
-		elseif (isset($_POST['removeButtons'], $_POST['remove']) && is_array($_POST['remove'])) {
+		} elseif (isset($_POST['removeButtons'], $_POST['remove']) && is_array($_POST['remove'])) {
 			checkSession();
 			$this->um->deleteButton(array_filter($_POST['remove'], 'ctype_digit'));
 			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen');
-		}
-		// Changing the status?
-		elseif (isset($_POST['save'])) {
+		} elseif (isset($_POST['save'])) {
 			checkSession();
 			$this->um->updateButton($_POST);
 			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen');
-		}
-		// New item?
-		elseif (isset($_POST['new'])) {
+		} elseif (isset($_POST['new'])) {
 			redirectexit('action=admin;area=umen;sa=addbutton');
 		}
 
@@ -94,8 +87,7 @@ class ManageUltimateMenu
 			$this->um->deleteIcons('unassigned', []);
 			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen;sa=fileslist');
-		}
-		elseif (isset($_POST['removeSelected'], $_POST['remove']) && is_array($_POST['remove'])) {
+		} elseif (isset($_POST['removeSelected'], $_POST['remove']) && is_array($_POST['remove'])) {
 			checkSession();
 			$this->um->deleteIcons('selected', array_filter($_POST['remove']));
 			$this->um->rebuildMenu();
@@ -402,8 +394,7 @@ class ManageUltimateMenu
 		// Ensure the icon filename is legit
 		if (isset($menu_entry['icon']) && empty($this->um->sanitizeFilename($menu_entry['icon']))) {
 			$post_errors['icon'] = 'um_menu_filename_illegal';
-		}
-		elseif (isset($menu_entry['icon']) && $menu_entry['icon'] != '______' && !file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $menu_entry['icon'])) {
+		} elseif (isset($menu_entry['icon']) && $menu_entry['icon'] != '______' && !file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $menu_entry['icon'])) {
 			$post_errors['icon'] = 'um_menu_filename_exists';
 		}
 
@@ -451,9 +442,7 @@ class ManageUltimateMenu
 				clean_cache('menu_buttons');
 
 				redirectexit('action=admin;area=umen');
-			}
-			else
-			{
+			} else {
 				$context['page_title'] = $txt['um_menu_edit_title'];
 				$context['button_names'] = $this->um->getButtonNames();
 				$context['post_error'] = $post_errors;
@@ -483,8 +472,7 @@ class ManageUltimateMenu
 				$context['template_layers'][] = 'errors';
 				$context['um_button_icons'] = ['______', ...$this->um->getIconPathContents()];
 			}
-		}
-		else {
+		} else {
 			fatal_lang_error('no_access', false);
 		}
 	}
@@ -592,8 +580,7 @@ class ManageUltimateMenu
 			$file = $this->um->hexadecimal_filename($filename) . '.' . $ext;
 			if (!in_array($ext, $types)) {
 				$json_msg['error'] = $txt['um_menu_filename_illegal'];
-			}
-			else {
+			} else {
 				$com = fopen($target . '/' . $newname, "wb");
 				$in = fopen($tmp_name, "rb");
 				if ($in) {
@@ -607,15 +594,12 @@ class ManageUltimateMenu
 					if (!empty($renamed) && $renamed != $newname) {
 						$newname = $renamed;
 						$json_msg = ['error' => '', 'file' => $newname];
-					}
-					elseif (!empty($renamed)) {
+					} elseif (!empty($renamed)) {
 						$json_msg = ['error' => $txt['um_menu_filename_compress'], 'file' => $newname];
-					}
-					else {
+					} else {
 						$json_msg['error'] = $txt['um_menu_filename_unknown'];
 					}
-				}
-				else {
+				} else {
 					$json_msg['error'] = $txt['um_menu_filename_exists'];
 				}
 			}
