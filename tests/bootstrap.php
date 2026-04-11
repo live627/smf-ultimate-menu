@@ -25,7 +25,7 @@ $context = [
 ];
 $modSettings = ['lastActive' => 0, 'settings_updated' => 0, 'postmod_active' => false];
 
-global $scripturl;
+global $scripturl; 
 $scripturl = dirname(__DIR__);
 
 $smcFunc['db_query'] = function($name, $query, $args)

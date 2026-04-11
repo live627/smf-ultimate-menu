@@ -15,7 +15,7 @@ jobs:
     env:
       XDEBUG_MODE: coverage
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
         # Fetch 10 commits or Scrutinizer will throw ("Failed to retrieve commit parents.
         # If you use a shallow git checkout, please checkout at least a depth of one.");
@@ -28,7 +28,7 @@ jobs:
         php -l src/**/*.php tests/**/*.php
     - name: Cache Composer packages
       id: composer-cache
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: vendor
         key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
