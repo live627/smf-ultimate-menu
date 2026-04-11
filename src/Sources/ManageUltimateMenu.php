@@ -577,7 +577,7 @@ class ManageUltimateMenu
 				$file = $this->um->hexadecimal_filename($filename) . '.' . $ext;
 				if (!in_array($ext, $types)) {
 					$json_msg['error'] = $txt['um_menu_filename_illegal'];
-				} elseif($com = fopen($target . '/' . $newname, "wb")) {
+				} elseif ($com = fopen($target . '/' . $newname, "wb")) {
 					$in = fopen($tmp_name, "rb");
 					if ($in) {
 						stream_copy_to_stream($in, $com);
@@ -602,15 +602,9 @@ class ManageUltimateMenu
 				unset($_FILES['attachment']);
 			}
 		}
-	}
 
-	if (ob_get_status()) {
-		ob_end_clean();
+		header('Content-Type: application/json; charset=utf-8');
+		echo json_encode($json_msg);
+		exit;
 	}
-
-	ob_start();
-	header('Content-Type: application/json');
-	http_response_code(200);
-	echo json_encode($json_msg);
-	ob_end_clean();
 }
