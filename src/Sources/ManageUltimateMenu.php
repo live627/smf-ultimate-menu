@@ -566,47 +566,51 @@ class ManageUltimateMenu
 		$postVar = !empty($_FILES['attachment']) ? $_FILES['attachment'] : '';
 		$checkCode = isset($_POST['um_checkcode']) ? $_POST['um_checkcode'] : '';
 		$umCode = !empty($modSettings['um_secureCode']) ? $modSettings['um_secureCode'] : '';
-
-		if (empty($checkCode) || empty($umCode) || $checkCode != $umCode) {
-			exit(json_encode($json_msg));
-		}
-
-		clearstatcache();
-		if (!empty($postVar) && !empty($postVar['name'])) {
-			$newname = $postVar['name'] = $this->um->sanitizeFilename(basename($postVar['name']));
-			$target = $this->um->unixDirSeparator($settings['default_theme_dir'] . '/images/um_icons');
-			$tmp_name = $postVar['tmp_name'];
-			$ext = mb_strtolower(pathinfo($newname, PATHINFO_EXTENSION), 'UTF-8');
-			$filename = pathinfo($newname, PATHINFO_FILENAME);
-			$file = $this->um->hexadecimal_filename($filename) . '.' . $ext;
-			if (!in_array($ext, $types)) {
-				$json_msg['error'] = $txt['um_menu_filename_illegal'];
-			} else {
-				$com = fopen($target . '/' . $newname, "wb");
-				$in = fopen($tmp_name, "rb");
-				if ($in) {
-					stream_copy_to_stream($in, $com);
-					fclose($in);
-				}
-				fclose($com);
-				clearstatcache();
-				if (!empty($newname) && file_exists($target . '/' . $newname)) {
-					$renamed = $this->um->imageResize($target . '/' . $newname, $target . '/' . $file, $ext, 16, 16, false);
-					if (!empty($renamed) && $renamed != $newname) {
-						$newname = $renamed;
-						$json_msg = ['error' => '', 'file' => $newname];
-					} elseif (!empty($renamed)) {
-						$json_msg = ['error' => $txt['um_menu_filename_compress'], 'file' => $newname];
-					} else {
-						$json_msg['error'] = $txt['um_menu_filename_unknown'];
+		if (!empty($checkCode) && !empty($umCode) && $checkCode == $umCode) {
+			clearstatcache();
+			if (!empty($postVar) && !empty($postVar['name'])) {
+				$newname = $postVar['name'] = $this->um->sanitizeFilename(basename($postVar['name']));
+				$target = $this->um->unixDirSeparator($settings['default_theme_dir'] . '/images/um_icons');
+				$tmp_name = $postVar['tmp_name'];
+				$ext = mb_strtolower(pathinfo($newname, PATHINFO_EXTENSION), 'UTF-8');
+				$filename = pathinfo($newname, PATHINFO_FILENAME);
+				$file = $this->um->hexadecimal_filename($filename) . '.' . $ext;
+				if (!in_array($ext, $types)) {
+					$json_msg['error'] = $txt['um_menu_filename_illegal'];
+				} elseif($com = fopen($target . '/' . $newname, "wb")) {
+					$in = fopen($tmp_name, "rb");
+					if ($in) {
+						stream_copy_to_stream($in, $com);
+						fclose($in);
 					}
-				} else {
-					$json_msg['error'] = $txt['um_menu_filename_exists'];
+					fclose($com);
+					clearstatcache();
+					if (!empty($newname) && file_exists($target . '/' . $newname)) {
+						$renamed = $this->um->imageResize($target . '/' . $newname, $target . '/' . $file, $ext, 16, 16, false);
+						if (!empty($renamed) && $renamed != $newname) {
+							$newname = $renamed;
+							$json_msg = ['error' => '', 'file' => $newname];
+						} elseif (!empty($renamed)) {
+							$json_msg = ['error' => $txt['um_menu_filename_compress'], 'file' => $newname];
+						} else {
+							$json_msg['error'] = $txt['um_menu_filename_unknown'];
+						}
+					} else {
+						$json_msg['error'] = $txt['um_menu_filename_exists'];
+					}
 				}
+				unset($_FILES['attachment']);
 			}
-			unset($_FILES['attachment']);
 		}
-
-		exit(json_encode($json_msg));
 	}
+
+	if (ob_get_status()) {
+		ob_end_clean();
+	}
+
+	ob_start();
+	header('Content-Type: application/json');
+	http_response_code(200);
+	echo json_encode($json_msg);
+	ob_end_clean();
 }
