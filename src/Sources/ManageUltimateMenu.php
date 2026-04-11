@@ -604,7 +604,9 @@ class ManageUltimateMenu
 		}
 
 		header('Content-Type: application/json; charset=utf-8');
-		echo json_encode($json_msg);
-		exit;
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Expires: Mon, 01 Jan 1990 00:00:00 GMT');
+		echo json_encode($json_msg, JSON_THROW_ON_ERROR);
+		exit(0);
 	}
 }
