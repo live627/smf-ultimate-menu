@@ -376,8 +376,9 @@ class ManageUltimateMenu
 		];
 
 		// If your session timed out, show an error, but do allow to re-submit.
-		if (checkSession('post', '', false) != '')
+		if (checkSession('post', '', false) != '') {
 			$post_errors[] = 'um_menu_session_verify_fail';
+		}
 
 		// These fields are required!
 		foreach ($required_fields as $required_field) {

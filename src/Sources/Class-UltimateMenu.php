@@ -317,8 +317,7 @@ class UltimateMenu
 					'icon' => $menu_entry['icon'],
 				]
 			);
-		}
-		else {
+		} else {
 			$smcFunc['db_insert'](
 				'insert',
 				'{db_prefix}um_menu',
@@ -644,8 +643,7 @@ class UltimateMenu
 				$h = $height / $ratio;
 				$x = ($w - $width / $ratio) / 2;
 				$w = $width / $ratio;
-			}
-			else {
+			} else {
 				if ($w < $width && $h < $height) {
 					return $baseFile;
 				}
