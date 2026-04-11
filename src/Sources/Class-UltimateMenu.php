@@ -735,14 +735,18 @@ class UltimateMenu
 	}
 
 	/**
-	 * Sorts files alphabetically
+	 * Sorts files by numerical prefix
 	 *
 	 * @return array
 	 */
 	public function icon_files_sort($array): array
 	{
 		usort($array, function($a, $b) {
-			return $a <=> $b;
+			preg_match('/\d+/', $a, $matchesA);
+			preg_match('/\d+/', $b, $matchesB);
+			$numA = isset($matchesA[0]) ? (int)$matchesA[0] : 0;
+			$numB = isset($matchesB[0]) ? (int)$matchesB[0] : 0;
+			return $numA <=> $numB;
 		});
 
 		return $array;
