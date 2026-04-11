@@ -65,7 +65,7 @@ function um_deleteIconsPath($directory)
 		clearstatcache();
 		rmdir($directory);
 	} elseif (file_exists($directory)) {
-		@unlink($directory);
+		unlink($directory);
 	} else {
 		return false;
 	}
