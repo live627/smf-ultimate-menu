@@ -6,7 +6,7 @@ declare(strict_types=1);
  * @package   Ultimate Menu mod
  * @version   2.0.3
  * @author    John Rayes <live627@gmail.com>
- * @copyright Copyright (c) 2014, John Rayes
+ * @copyright Copyright (c) 2026, John Rayes
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
@@ -28,16 +28,16 @@ function template_errors_above(): void
 {
 	global $context, $txt;
 
-	if (!empty($context['post_error']))
-	{
+	if (!empty($context['post_error'])) {
 		echo '
 					<div class="errorbox" id="errors">
 						<strong>', $txt[$context['error_title']], '</strong>
 						<ul>';
 
-		foreach ($context['post_error'] as $error)
+		foreach ($context['post_error'] as $error) {
 			echo '
 							<li>', $txt[$error], '</li>';
+		}
 
 		echo '
 						</ul>
@@ -69,7 +69,7 @@ function template_main(): void
 						<dd>
 							<select name="position" size="10" style="width: 22%;">';
 
-	foreach (['after', 'child_of', 'before'] as $v)
+	foreach (['after', 'child_of', 'before'] as $v) {
 		printf(
 			'
 								<option value="%s"%s>%s...</option>',
@@ -77,12 +77,13 @@ function template_main(): void
 			$sel($context['button_data']['position'] == $v, 'selected'),
 			$txt['um_menu_' . $v]
 		);
+	}
 
 	echo '
 							</select>
 							<select name="parent" size="10" style="width: 75%;">';
 
-	foreach ($context['button_names'] as $idx => $title)
+	foreach ($context['button_names'] as $idx => $title) {
 		printf(
 			'
 								<option value="%s"%s>%s</option>',
@@ -90,6 +91,7 @@ function template_main(): void
 			$sel($context['button_data']['parent'] == $idx, 'selected'),
 			str_repeat('&emsp;', $title[0] * 2) . $title[1]
 		);
+	}
 
 	echo '
 							</select>
@@ -122,15 +124,15 @@ function template_main(): void
 							<fieldset id="group_perms">
 								<legend>', $txt['avatar_select_permission'], '</legend>';
 
-	foreach ($context['button_data']['permissions'] as $id => $permission)
-	{
+	foreach ($context['button_data']['permissions'] as $id => $permission) {
 		echo '
 								<label>
 									<input type="checkbox" name="permissions[]" value="', $id, '"', $sel($permission['checked'], 'checked'), ' />
 									<span';
 
-		if ($permission['is_post_group'])
+		if ($permission['is_post_group']) {
 			echo ' title="' . $txt['mboards_groups_post_group'] . '"';
+		}
 
 		echo '>', $permission['name'], '</span>
 								</label>
@@ -169,8 +171,7 @@ function template_main(): void
 							<span style="flex-basis: 85%;">
 								<select id="um_icon" name="icon">
 									<optgroup label="' . $txt['um_admin_menu_opt_file'] . '">';
-	foreach ($context['um_button_icons'] as $filename)
-	{
+	foreach ($context['um_button_icons'] as $filename) {
 		echo '
 									<option value="', (!empty($filename) ? $filename : '______'), '"', ($context['button_data']['icon'] == $filename ? ' selected="selected"' : ''), '>
 										', (!empty($filename) && $filename != '______' ? $filename : $txt['um__menu_icons_none']), '

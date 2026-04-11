@@ -6,8 +6,7 @@ if (umdiv) {
 	umel.className = "toggle_down";
 	umel.href = "#";
 	umel.style.display = "";
-	umel.addEventListener("click", function(event)
-	{
+	umel.addEventListener("click", function(event) {
 		umdiv.classList.remove("hidden");
 		this.style.display = "none";
 		event.stopPropagation();
@@ -19,8 +18,7 @@ if (umdiv) {
 	a.textContent = uml.textContent;
 	a.href = "#";
 	a.style.display = "";
-	a.addEventListener("click", function(event)
-	{
+	a.addEventListener("click", function(event) {
 		umdiv.classList.add("hidden");
 		umel.style.display = "";
 		event.stopPropagation();
@@ -28,8 +26,7 @@ if (umdiv) {
 	});
 	uml.textContent = "";
 	uml.appendChild(a);
-	umdiv.lastElementChild.firstElementChild.addEventListener("click", function()
-	{
+	umdiv.lastElementChild.firstElementChild.addEventListener("click", function() {
 		invertAll(this, this.form, "permissions[]");
 	});
 }
