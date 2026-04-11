@@ -11,7 +11,9 @@ require_once './vendor/autoload.php';
 // What are you doing here, SMF?
 define('SMF', 1);
 
-global $context, $scripturl, $smcFunc, $modSettings;
+global $context, $scripturl, $smcFunc, $modSettings, $user_info;
+
+$scripturl = dirname(__DIR__);
 $user_info = ['is_admin' => true, 'is_guest' => false, 'language' => '', 'groups' => [0], 'permissions' => []];
 $context = [
 	'user' => ['can_mod' => true, 'is_guest' => false, 'id' => 1],
@@ -23,10 +25,8 @@ $context = [
 	'admin_menu_name' => '',
 ];
 $modSettings = ['lastActive' => 0, 'settings_updated' => 0, 'postmod_active' => false];
-$scripturl = dirname(__DIR__);
 
-$smcFunc['db_query'] = function($name, $query, $args)
-{
+$smcFunc['db_query'] = function($name, $query, $args) {
 	global $current_item, $modSettings;
 
 	$current_item = 0;
@@ -37,23 +37,19 @@ $smcFunc['db_query'] = function($name, $query, $args)
 
 	return [['']];
 };
-$smcFunc['db_fetch_assoc'] = function($request)
-{
+$smcFunc['db_fetch_assoc'] = function($request) {
 	global $current_item;
 
 	return $request[$current_item++] ?? null;
 };
-$smcFunc['db_fetch_row'] = function($request)
-{
+$smcFunc['db_fetch_row'] = function($request) {
 	global $current_item;
 
 	return $request[$current_item++] ?? null;
 };
-$smcFunc['db_free_result'] = function(): void
-{
+$smcFunc['db_free_result'] = function(): void {
 };
-$smcFunc['db_insert'] = function(): void
-{
+$smcFunc['db_insert'] = function(): void {
 };
 $smcFunc['htmltrim'] = fn(string $string): string => trim($string);
 $smcFunc['htmlspecialchars'] = fn(string $string): string => htmlspecialchars($string, ENT_QUOTES);
