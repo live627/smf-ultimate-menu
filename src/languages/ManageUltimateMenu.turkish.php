@@ -5,7 +5,7 @@ declare(strict_types=1);
  * @package Ultimate Menu mod
  * @version   2.0.3
  * @author John Rayes <live627@gmail.com>
- * @copyright Copyright (c) 2014, John Rayes
+ * @copyright Copyright (c) 2026, John Rayes
  * @license http://opensource.org/licenses/MIT MIT
  */
 

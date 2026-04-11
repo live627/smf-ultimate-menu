@@ -5,7 +5,7 @@ declare(strict_types=1);
  * @package   Ultimate Menu mod
  * @version   2.0.3
  * @author    John Rayes <live627@gmail.com>
- * @copyright Copyright (c) 2014, John Rayes
+ * @copyright Copyright (c) 2026, John Rayes
  * @license   http://opensource.org/licenses/MIT MIT
  */
 class ManageUltimateMenu
@@ -53,54 +53,49 @@ class ManageUltimateMenu
 	public function ManageMenu(): void
 	{
 		// Get rid of all of em!
-		if (isset($_POST['removeAll']))
-		{
+		if (isset($_POST['removeAll'])) {
 			checkSession();
 			$this->um->deleteallButtons();
 			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen');
 		}
 		// User pressed the 'remove selection button'.
-		elseif (isset($_POST['removeButtons'], $_POST['remove']) && is_array($_POST['remove']))
-		{
+		elseif (isset($_POST['removeButtons'], $_POST['remove']) && is_array($_POST['remove'])) {
 			checkSession();
 			$this->um->deleteButton(array_filter($_POST['remove'], 'ctype_digit'));
 			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen');
 		}
 		// Changing the status?
-		elseif (isset($_POST['save']))
-		{
+		elseif (isset($_POST['save'])) {
 			checkSession();
 			$this->um->updateButton($_POST);
 			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen');
 		}
 		// New item?
-		elseif (isset($_POST['new']))
+		elseif (isset($_POST['new'])) {
 			redirectexit('action=admin;area=umen;sa=addbutton');
+		}
 
 		$this->listButtons();
 	}
 
 	public function FilesList(): void
 	{
-		if (isset($_POST['removeAll']))
-		{
+		if (isset($_POST['removeAll'])) {
 			checkSession();
 			$this->um->deleteIcons('all', []);
 			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen;sa=fileslist');
 		}
-		if (isset($_POST['removeUnassigned']))
-		{
+		if (isset($_POST['removeUnassigned'])) {
 			checkSession();
 			$this->um->deleteIcons('unassigned', []);
 			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen;sa=fileslist');
 		}
-		elseif (isset($_POST['removeSelected'], $_POST['remove']) && is_array($_POST['remove']))
-		{
+		elseif (isset($_POST['removeSelected'], $_POST['remove']) && is_array($_POST['remove'])) {
 			checkSession();
 			$this->um->deleteIcons('selected', array_filter($_POST['remove']));
 			$this->um->rebuildMenu();
@@ -393,23 +388,29 @@ class ManageUltimateMenu
 			$post_errors[] = 'um_menu_session_verify_fail';
 
 		// These fields are required!
-		foreach ($required_fields as $required_field)
-			if (empty($menu_entry[$required_field]))
+		foreach ($required_fields as $required_field) {
+			if (empty($menu_entry[$required_field])) {
 				$post_errors[$required_field] = 'um_menu_empty_' . $required_field;
+			}
+		}
 
 		// Stop making numeric names!
-		if (is_numeric($menu_entry['name']))
+		if (is_numeric($menu_entry['name'])) {
 			$post_errors['name'] = 'um_menu_numeric';
+		}
 
-		// Ensure icon filename is legit
-		if (isset($menu_entry['icon']) && empty($this->um->sanitizeFilename($menu_entry['icon'])))
+		// Ensure the icon filename is legit
+		if (isset($menu_entry['icon']) && empty($this->um->sanitizeFilename($menu_entry['icon']))) {
 			$post_errors['icon'] = 'um_menu_filename_illegal';
-		elseif (isset($menu_entry['icon']) && $menu_entry['icon'] != '______' && !file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $menu_entry['icon']))
+		}
+		elseif (isset($menu_entry['icon']) && $menu_entry['icon'] != '______' && !file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $menu_entry['icon'])) {
 			$post_errors['icon'] = 'um_menu_filename_exists';
+		}
 
 		// Let's make sure you're not trying to make a name that's already taken.
-		if (!empty($this->um->checkButton($menu_entry['in'], $menu_entry['name'])))
+		if (!empty($this->um->checkButton($menu_entry['in'], $menu_entry['name']))) {
 			$post_errors['name'] = 'um_menu_mysql';
+		}
 
 		return $post_errors;
 	}
@@ -418,8 +419,7 @@ class ManageUltimateMenu
 	{
 		global $context, $txt, $settings, $modSettings;
 
-		if (isset($_POST['submit']))
-		{
+		if (isset($_POST['submit'])) {
 			$menu_entry = array_replace(
 				[
 					'target' => '_self',
@@ -436,10 +436,10 @@ class ManageUltimateMenu
 			$post_errors = $this->validateInput($menu_entry);
 
 			// I see you made it to the final stage, my young padawan.
-			if (empty($post_errors))
-			{
-				if (isset($_FILES['attachment']))
+			if (empty($post_errors)) {
+				if (isset($_FILES['attachment'])) {
 					unset($_FILES['attachment']);
+				}
 
 				clearstatcache();
 				$menu_entry['icon'] = $menu_entry['icon'] == '______' ? '' : $menu_entry['icon'];
@@ -484,8 +484,9 @@ class ManageUltimateMenu
 				$context['um_button_icons'] = ['______', ...$this->um->getIconPathContents()];
 			}
 		}
-		else
+		else {
 			fatal_lang_error('no_access', false);
+		}
 	}
 
 	public function EditButton(): void
@@ -493,8 +494,9 @@ class ManageUltimateMenu
 		global $settings, $modSettings, $context, $txt;
 
 		$row = isset($_GET['in']) ? $this->um->fetchButton($_GET['in']) : [];
-		if (empty($row))
+		if (empty($row)) {
 			fatal_lang_error('no_access', false);
+		}
 
 		$bytes = random_bytes(10);
 		$codeValue = strval(bin2hex($bytes));
@@ -576,55 +578,46 @@ class ManageUltimateMenu
 		$checkCode = isset($_POST['um_checkcode']) ? $_POST['um_checkcode'] : '';
 		$umCode = !empty($modSettings['um_secureCode']) ? $modSettings['um_secureCode'] : '';
 
-		if (empty($checkCode) || empty($umCode) || $checkCode != $umCode)
+		if (empty($checkCode) || empty($umCode) || $checkCode != $umCode) {
 			exit(json_encode($json_msg));
+		}
 
 		clearstatcache();
-		if (!empty($postVar) && !empty($postVar['name']))
-		{
+		if (!empty($postVar) && !empty($postVar['name'])) {
 			$newname = $postVar['name'] = $this->um->sanitizeFilename(basename($postVar['name']));
 			$target = $this->um->unixDirSeparator($settings['default_theme_dir'] . '/images/um_icons');
 			$tmp_name = $postVar['tmp_name'];
 			$ext = mb_strtolower(pathinfo($newname, PATHINFO_EXTENSION), 'UTF-8');
 			$filename = pathinfo($newname, PATHINFO_FILENAME);
 			$file = $this->um->hexadecimal_filename($filename) . '.' . $ext;
-			if (!in_array($ext, $types))
+			if (!in_array($ext, $types)) {
 				$json_msg['error'] = $txt['um_menu_filename_illegal'];
-			else
-			{
-				if (file_exists($target . '/' . $newname))
-				{
-					unlink($target . '/' . $newname);
-					clearstatcache();
-				}
-				$com = fopen($target . '/' . $newname, "ab");
+			}
+			else {
+				$com = fopen($target . '/' . $newname, "wb");
 				$in = fopen($tmp_name, "rb");
-				if ($in)
-				{
-					while ($buff = fread($in, 1048576))
-					{
-						fwrite($com, $buff);
-						sleep(1);
-					}
+				if ($in) {
+					stream_copy_to_stream($in, $com);
 					fclose($in);
 				}
 				fclose($com);
 				clearstatcache();
-				if (!empty($newname) && file_exists($target . '/' . $newname))
-				{
+				if (!empty($newname) && file_exists($target . '/' . $newname)) {
 					$renamed = $this->um->imageResize($target . '/' . $newname, $target . '/' . $file, $ext, 16, 16, false);
-					if (!empty($renamed) && $renamed != $newname)
-					{
+					if (!empty($renamed) && $renamed != $newname) {
 						$newname = $renamed;
 						$json_msg = ['error' => '', 'file' => $newname];
 					}
-					elseif (!empty($renamed))
+					elseif (!empty($renamed)) {
 						$json_msg = ['error' => $txt['um_menu_filename_compress'], 'file' => $newname];
-					else
+					}
+					else {
 						$json_msg['error'] = $txt['um_menu_filename_unknown'];
+					}
 				}
-				else
+				else {
 					$json_msg['error'] = $txt['um_menu_filename_exists'];
+				}
 			}
 			unset($_FILES['attachment']);
 		}

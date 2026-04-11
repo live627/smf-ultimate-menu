@@ -6,7 +6,7 @@ declare(strict_types=1);
  * @package Ultimate Menu mod
  * @version   2.0.3
  * @author John Rayes <live627@gmail.com>
- * @copyright Copyright (c) 2014, John Rayes
+ * @copyright Copyright (c) 2026, John Rayes
  * @license http://opensource.org/licenses/MIT MIT
  */
 
@@ -61,7 +61,7 @@ $tables = [
 			[
 				'name' => 'permissions',
 				'type' => 'varchar',
-				'size' => 191,
+				'size' => 255,
 			],
 			[
 				'name' => 'parent',
@@ -84,8 +84,7 @@ $tables = [
 	]
 ];
 
-foreach ($tables as $table)
-{
+foreach ($tables as $table) {
 	$smcFunc['db_create_table'](
 		'{db_prefix}' . $table['name'],
 		$table['columns'],
@@ -104,8 +103,7 @@ foreach ($tables as $table)
 		);
 }
 
-if (!checkFieldExistsUMInstaller('um_menu', 'icon'))
-{
+if (!checkFieldExistsUMInstaller('um_menu', 'icon')) {
 	$smcFunc['db_add_column']('{db_prefix}um_menu', [
 			'name' => 'icon',
 			'type' => 'varchar',
@@ -118,11 +116,9 @@ if (!checkFieldExistsUMInstaller('um_menu', 'icon'))
 }
 
 // update link column to text to facilitate elongated hyperlinks
-if (checkFieldExistsUMInstaller('um_menu', 'link'))
-{
+if (checkFieldExistsUMInstaller('um_menu', 'link')) {
 	$checkUmTable = $smcFunc['db_list_columns']('{db_prefix}um_menu', true);
-	if (!empty($checkUmTable) && !empty($checkUmTable['link']) && $checkUmTable['link']['type'] != 'text')
-	{
+	if (!empty($checkUmTable) && !empty($checkUmTable['link']) && $checkUmTable['link']['type'] != 'text') {
 		$adjust = array(
 			'name' => 'link',
 			'type' => 'text',
@@ -133,22 +129,6 @@ if (checkFieldExistsUMInstaller('um_menu', 'link'))
 	}
 }
 
-// update varchar size of permissions column to 191 for utf8mb4 compatibility
-if (checkFieldExistsUMInstaller('um_menu', 'permissions'))
-{
-	$checkUmTable = $smcFunc['db_list_columns']('{db_prefix}um_menu', true);
-	if (!empty($checkUmTable) && !empty($checkUmTable['permissions']) && intval($checkUmTable['permissions']['size']) != 191)
-	{
-		$adjust = array(
-			'name' => 'permissions',
-			'type' => 'varchar',
-			'size' => 191,
-		);
-
-		$smcFunc['db_change_column']('{db_prefix}um_menu', 'permissions', $adjust);
-	}
-}
-
 $buttons = [];
 $request = $smcFunc['db_query']('', '
 	SELECT
@@ -156,7 +136,7 @@ $request = $smcFunc['db_query']('', '
 	FROM {db_prefix}um_menu'
 );
 
-while ($row = $smcFunc['db_fetch_assoc']($request))
+while ($row = $smcFunc['db_fetch_assoc']($request)){
 	$buttons['um_button_' . $row['id_button']] = json_encode([
 		'name' => $row['name'],
 		'target' => $row['target'],
@@ -168,10 +148,10 @@ while ($row = $smcFunc['db_fetch_assoc']($request))
 		'parent' => $row['parent'],
 		'icon' => !empty($row['icon']) ? $row['icon'] : '',
 	]);
+}
 $smcFunc['db_free_result']($request);
 
-if (!empty($buttons))
-{
+if (!empty($buttons)) {
 	$request = $smcFunc['db_query']('', '
 		SELECT MAX(id_button)
 		FROM {db_prefix}um_menu'
@@ -200,8 +180,9 @@ function check_table_existsUMInstaller($table)
 {
 	global $db_prefix, $smcFunc;
 
-	if ($smcFunc['db_list_tables'](false, $db_prefix . $table))
+	if ($smcFunc['db_list_tables'](false, $db_prefix . $table)) {
 		return true;
+	}
 
 	return false;
 }
@@ -209,11 +190,11 @@ function check_table_existsUMInstaller($table)
 function checkFieldExistsUMInstaller($tableName, $columnName)
 {
 	global $smcFunc;
-	if (check_table_existsUMInstaller($tableName))
-	{
+	if (check_table_existsUMInstaller($tableName)) {
 		$check = $smcFunc['db_list_columns'] ('{db_prefix}' . $tableName, false, []);
-		if (in_array($columnName, $check))
+		if (in_array($columnName, $check)) {
 			return true;
+		}
 	}
 
 	return false;

@@ -7,7 +7,7 @@ declare(strict_types=1);
  * @version   2.0.3
  * @author John Rayes <live627@gmail.com>
  * @translation digger <digger@mysmf.net>
- * @copyright Copyright (c) 2014, John Rayes
+ * @copyright Copyright (c) 2026, John Rayes
  * @license http://opensource.org/licenses/MIT MIT
  */
 

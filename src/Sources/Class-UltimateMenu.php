@@ -6,7 +6,7 @@ declare(strict_types=1);
  * @package   Ultimate Menu mod
  * @version   2.0.3
  * @author    John Rayes <live627@gmail.com>
- * @copyright Copyright (c) 2014, John Rayes
+ * @copyright Copyright (c) 2026, John Rayes
  * @license   http://opensource.org/licenses/MIT MIT
  */
 class UltimateMenu
@@ -39,8 +39,7 @@ class UltimateMenu
 		];
 		$where = ['id_group NOT IN (1, 3)'];
 
-		if (!$inherited)
-		{
+		if (!$inherited) {
 			$where[] = 'id_parent = {int:not_inherited}';
 
 			if (empty($modSettings['permission_enable_postgroups']))
@@ -57,12 +56,13 @@ class UltimateMenu
 			]
 		);
 
-		while ([$id, $name, $min_posts] = $smcFunc['db_fetch_row']($request))
+		while ([$id, $name, $min_posts] = $smcFunc['db_fetch_row']($request)) {
 			$groups[$id] = [
 				'name' => trim($name),
 				'checked' => in_array($id, $checked) || in_array(-3, $checked),
 				'is_post_group' => $min_posts != -1,
 			];
+		}
 		$smcFunc['db_free_result']($request);
 
 		return $groups;
@@ -84,8 +84,9 @@ class UltimateMenu
 		);
 		$buttons = [];
 
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = $smcFunc['db_fetch_assoc']($request)) {
 			$buttons[] = $row;
+		}
 
 		return $buttons;
 	}
@@ -117,8 +118,9 @@ class UltimateMenu
 			]
 		);
 
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = $smcFunc['db_fetch_assoc']($request)) {
 			$buttons[] = $row;
+		}
 
 		return $buttons;
 	}
@@ -152,9 +154,7 @@ class UltimateMenu
 		global $settings;
 
 		$images = glob($settings['default_theme_dir'] . "/images/um_icons/*.{jpg,jpeg,png}", GLOB_BRACE);
-		$numIcons = count($images);
-
-		return $numIcons;
+		return count($images);
 	}
 
 	/**
@@ -173,7 +173,7 @@ class UltimateMenu
 			FROM {db_prefix}um_menu'
 		);
 
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = $smcFunc['db_fetch_assoc']($request)) {
 			$buttons['um_button_' . $row['id_button']] = json_encode([
 				'name' => $row['name'],
 				'target' => $row['target'],
@@ -185,6 +185,7 @@ class UltimateMenu
 				'parent' => $row['parent'],
 				'icon' => !empty($row['icon']) && file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $row['icon']) ? $row['icon'] : '',
 			]);
+		}
 		$smcFunc['db_free_result']($request);
 
 		$request = $smcFunc['db_query']('', '
@@ -232,11 +233,10 @@ class UltimateMenu
 	{
 		global $smcFunc;
 
-		foreach ($this->total_getMenu() as $item)
-		{
+		foreach ($this->total_getMenu() as $item) {
 			$status = !empty($updates['status'][$item['id_button']]) ? 'active' : 'inactive';
 
-			if ($status != $item['status'])
+			if ($status != $item['status']) {
 				$smcFunc['db_query'](
 					'',
 					'
@@ -248,6 +248,7 @@ class UltimateMenu
 						'item' => $item['id_button'],
 					]
 				);
+			}
 		}
 	}
 
@@ -286,8 +287,7 @@ class UltimateMenu
 	{
 		global $smcFunc;
 
-		if (!empty($menu_entry['in']))
-		{
+		if (!empty($menu_entry['in'])) {
 			$smcFunc['db_query'](
 				'',
 				'
@@ -317,8 +317,7 @@ class UltimateMenu
 				]
 			);
 		}
-		else
-		{
+		else {
 			$smcFunc['db_insert'](
 				'insert',
 				'{db_prefix}um_menu',
@@ -435,8 +434,7 @@ class UltimateMenu
 		$start = isset($_REQUEST['start']) ? intval($_REQUEST['start']) : 0;
 		$files = $this->getIconPathContents();
 		$buttons = $this->total_getMenu();
-		foreach ($files as $index => $file)
-		{
+		foreach ($files as $index => $file) {
 			$assignedIndex = array_search($file, array_column($buttons, 'icon'));
 			$filesList[] = [
 				'id_file' => $index,
@@ -460,27 +458,25 @@ class UltimateMenu
 		$icons = glob($settings['default_theme_dir'] . "/images/um_icons/*.{jpg,jpeg,png}", GLOB_BRACE);
 		$buttons = $this->total_getMenu();
 
-		switch ($task)
-		{
+		switch ($task) {
 			case 'all':
-				foreach ($icons as $icon)
+				foreach ($icons as $icon) {
 					unlink($icon);
-
+				}
 				break;
 			case 'unassigned':
-				foreach ($icons as $icon)
-				{
+				foreach ($icons as $icon) {
 					$assignedIndex = array_search(basename($icon), array_column($buttons, 'icon'));
-					if (is_bool($assignedIndex))
+					if (is_bool($assignedIndex)) {
 						unlink($icon);
-
+					}
 				}
 				break;
 			default:
-				foreach ($files as $file)
-				{
-					if (in_array($settings['default_theme_dir'] . '/images/um_icons/' . $file, $icons))
+				foreach ($files as $file) {
+					if (in_array($settings['default_theme_dir'] . '/images/um_icons/' . $file, $icons)) {
 						unlink($settings['default_theme_dir'] . '/images/um_icons/' . $file);
+					}
 				}
 		}
 
@@ -504,15 +500,13 @@ class UltimateMenu
 			RecursiveIteratorIterator::LEAVES_ONLY
 		);
 
-		foreach ($files as $file)
-		{
-			if (!$file->isDir() && in_array($file->getExtension(), ['jpg', 'jpeg', 'png']))
+		foreach ($files as $file) {
+			if (!$file->isDir() && in_array($file->getExtension(), ['jpg', 'jpeg', 'png'])) {
 				$images[] = basename($file->getRealPath());
+			}
 		}
 
 		$pathContents = $this->icon_files_sort($images);
-
-
 		return !empty($pathContents) && is_array($pathContents) ? array_filter($pathContents) : [];
 	}
 
@@ -539,75 +533,73 @@ class UltimateMenu
 		$src = $this->unixDirSeparator($settings['default_theme_dir']) . '/images/um_icons/' . basename($src);
 		list($error, $imagick, $baseFile, $imgTypes) = [false, false, basename($src), ['jpg', 'png']];
 
-		if ($ext == 'jpeg')
-		{
+		if ($ext == 'jpeg') {
 			$renamed = rtrim($src, '.jpeg') . '.jpg';
-			if (file_exists($renamed))
-			{
+			if (file_exists($renamed)) {
 				unlink($renamed);
 				clearstatcache();
 			}
 			rename($src, $renamed);
 			clearstatcache();
-			if (file_exists($renamed))
+			if (file_exists($renamed)) {
 				list($src, $ext) = [$renamed, 'jpg'];
+			}
 		}
 
-		if (empty($src) || !file_exists($src))
+		if (empty($src) || !file_exists($src)) {
 			return $baseFile;
+		}
 
-		if (!list($w, $h) = getimagesize($src))
+		if (!list($w, $h) = getimagesize($src)) {
 			return $baseFile;
+		}
 
-		if (!in_array($ext, $imgTypes))
+		if (!in_array($ext, $imgTypes)) {
 			return $baseFile;
+		}
 
 		$imgInfo = getimagesize($src);
 		$imgMime = $imgInfo['mime'];
-		foreach ($imgTypes as $imgType)
-		{
-			if (stripos($imgMime, $imgType) !== false)
+		foreach ($imgTypes as $imgType) {
+			if (stripos($imgMime, $imgType) !== false) {
 				$ext = $imgType;
+			}
 		}
 		$ext = $ext == 'jpeg' ? 'jpg' : $ext;
 
-		if (!in_array($ext, $imgTypes))
+		if (!in_array($ext, $imgTypes)) {
 			return $baseFile;
+		}
 
 		clearstatcache();
-		if (extension_loaded('imagick'))
-		{
-			try
-			{
+		if (extension_loaded('imagick')) {
+			try {
 				$icon = new \Imagick($src);
 			}
-			catch (ImagickException $e)
-			{
+			catch (ImagickException $e) {
 				$error = true;
 			}
-			if (empty($error))
-			{
+			if (empty($error)) {
 				$w = $icon->getImageWidth();
 				$h = $icon->getImageHeight();
-				if ($w < $width && $h < $height)
+				if ($w < $width && $h < $height) {
 					return $baseFile;
+				}
 
-				if ($w > $h)
-				{
+				if ($w > $h) {
 					$resize_width = $w * $height / $h;
 					$resize_height = $height;
 				}
-				else
-				{
+				else {
 					$resize_width = $width;
 					$resize_height = $h * $width / $w;
 				}
 
 				$icon->setCompressionQuality(100);
-				if (!$crop)
+				if (!$crop) {
 					$icon->resizeImage($width, $height, Imagick::FILTER_CATROM, 0);
-				else
-				{
+				}
+				else {
 					$icon->resizeImage($resize_width, $resize_height, Imagick::FILTER_LANCZOS, 0.9);
 					$icon->cropImage($width, $height, ($resize_width - $width) / 2, ($resize_height - $height) / 2);
 				}
@@ -618,48 +610,48 @@ class UltimateMenu
 				$imagick = true;
 
 				clearstatcache();
-				if (!file_exists($dst))
+				if (!file_exists($dst)) {
 					$imagick = false;
-				else
-				{
+				}
+				else {
 					unlink($src);
 					$baseFile = basename($dst);
 				}
 			}
 		}
 
-		if (empty($imagick))
-		{
-			switch ($ext)
-			{
+		if (empty($imagick)) {
+			switch ($ext) {
 				case 'png':
-					if (!$img = imagecreatefrompng($src))
+					if (!$img = imagecreatefrompng($src)) {
 						$img = imagecreatefromstring(file_get_contents($src));
-
+					}
 					break;
 				default:
-					if (!$img = imagecreatefromjpeg($src))
+					if (!$img = imagecreatefromjpeg($src)) {
 						$img = imagecreatefromstring(file_get_contents($src));
+					}
 			}
 
-			if (empty($img))
+			if (empty($img)) {
 				return $baseFile;
+			}
 
 			imageinterlace($img, true);
-			if ($crop)
-			{
-				if ($w < $width || $h < $height)
+			if ($crop) {
+				if ($w < $width || $h < $height) {
 					return $baseFile;
+				}
 
 				$ratio = max($width / $w, $height / $h);
 				$h = $height / $ratio;
 				$x = ($w - $width / $ratio) / 2;
 				$w = $width / $ratio;
 			}
-			else
-			{
-				if ($w < $width && $h < $height)
+			else {
+				if ($w < $width && $h < $height) {
 					return $baseFile;
+				}
 
 				$ratio = min($width / $w, $height / $h);
 				$width = intval($w * $ratio);
@@ -674,8 +666,7 @@ class UltimateMenu
 			imagesavealpha($new, true);
 			imagecopyresampled($new, $img, 0, 0, $x, 0, $width, $height, $w, $h);
 
-			switch ($ext)
-			{
+			switch ($ext) {
 				case 'png':
 					imagepng($new, $dst, 0);
 					break;
@@ -683,17 +674,16 @@ class UltimateMenu
 					imagejpeg($new, $dst, 0);
 			}
 			clearstatcache();
-			if (file_exists($dst))
-			{
+			if (file_exists($dst)) {
 				$baseFile = basename($dst);
-				if (file_exists($src))
-				{
+				if (file_exists($src)) {
 					unlink($src);
 					clearstatcache();
 				}
 			}
-			else
+			else {
 				$baseFile = basename($src);
+			}
 		}
 
 		return $baseFile;
@@ -722,17 +712,16 @@ class UltimateMenu
 	 */
 	public function sanitizeFilename($filename = ''): string
 	{
-		if (extension_loaded('intl'))
-		{
+		if (extension_loaded('intl')) {
 			$transliterator = \Transliterator::create('Any-Latin; Latin-ASCII');
 			$filename = $transliterator->transliterate($filename);
 		}
-		else
+		else {
 			$filename = str_replace('?', '_', iconv("UTF-8", "ASCII//TRANSLIT", $filename));
+		}
 
 		$filename = preg_replace('/--+/u', '--', preg_replace('/[^a-zA-Z0-9\-\._]/u', '-', basename($filename)));
-		$filename = trim(mb_strtolower($filename, 'UTF-8'), '.-');
-		return trim($filename);
+		return trim(trim(mb_strtolower($filename, 'UTF-8'), '.-'));
 	}
 
 	/**
@@ -745,7 +734,11 @@ class UltimateMenu
 		global $settings;
 
 		$filename = !empty($filename) ? $this->sanitizeFilename(basename($filename)) : '';
-		return !empty($filename) && in_array(pathinfo($filename, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png']) && file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $filename) ? $settings['default_theme_url'] . '/images/um_icons/' . $filename : 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+		return !empty($filename)
+			&& in_array(pathinfo($filename, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png'])
+			&& file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $filename)
+			? $settings['default_theme_url'] . '/images/um_icons/' . $filename
+			: 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
 	}
 
 	/**
@@ -755,8 +748,7 @@ class UltimateMenu
 	 */
 	public function icon_files_sort($array): array
 	{
-		usort($array, function($a, $b)
-		{
+		usort($array, function($a, $b) {
 			return $a <=> $b;
 		});
 
@@ -773,24 +765,25 @@ class UltimateMenu
 		global $settings;
 
 		$files = $this->getIconPathContents();
-		usort($files, function($a, $b)
-		{
+		usort($files, function($a, $b) {
 			list($numberA, $numberB, $matches) = [0, 0, []];
-			if (preg_match('/^um--(\\d+)/u', $a, $matches))
+			if (preg_match('/^um--(\\d+)/u', $a, $matches)) {
 				$numberA = (float) $matches[1];
+			}
 
-			if (preg_match('/^um--(\\d+)/u', $b, $matches))
+			if (preg_match('/^um--(\\d+)/u', $b, $matches)) {
 				$numberB = (float) $matches[1];
+			}
 
 			return $numberA <=> $numberB;
 		});
 
 		$numbers = array_unique(array_filter(array_map(fn($value): int => (int) preg_replace('/\D/u', '', strstr((string) $value, '_', true)), $files)));
 		sort($numbers);
-		foreach ($numbers as $value)
-		{
-			if (!in_array($number, $numbers))
+		foreach ($numbers as $value) {
+			if (!in_array($number, $numbers)) {
 				break;
+			}
 
 			$number++;
 		}
@@ -806,11 +799,11 @@ class UltimateMenu
 	private function flatten(array $array, int $i = 0): array
 	{
 		$result = [];
-		foreach ($array as $key => $value)
-		{
+		foreach ($array as $key => $value) {
 			$result[$key] = [$i, $value['title']];
-			if (!empty($value['sub_buttons']))
+			if (!empty($value['sub_buttons'])) {
 				$result += $this->flatten($value['sub_buttons'], $i + 1);
+			}
 		}
 		return $result;
 	}

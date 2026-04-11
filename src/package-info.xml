@@ -21,19 +21,9 @@
 		?>]]></code>
 		<readme parsebbc="true">install.txt</readme>
 		<database>install.php</database>
-		<require-file name="Sources/Subs-UltimateMenu.php" destination="$sourcedir" />
-		<require-file name="Sources/Class-UltimateMenu.php" destination="$sourcedir" />
-		<require-file name="Sources/ManageUltimateMenu.php" destination="$sourcedir" />
-		<require-file name="languages/ManageUltimateMenu.english.php" destination="$languagedir" />
-		<require-file name="languages/ManageUltimateMenu.turkish.php" destination="$languagedir" />
-		<require-file name="languages/ManageUltimateMenu.spanish_latin.php" destination="$languagedir" />
-		<require-file name="languages/ManageUltimateMenu.russian.php" destination="$languagedir" />
-		<require-file name="Themes/default/ManageUltimateMenu.template.php" destination="$themes_dir/default" />
-		<require-file name="Themes/default/images/admin/umen.png" destination="$themes_dir/default/images/admin" />
- 		<require-file name="Themes/default/images/admin/big/umen.png" destination="$themes_dir/default/images/admin/big" />
-		<require-file name="Themes/default/scripts/ultimate-menu.js" destination="$themes_dir/default/scripts" />
-		<require-file name="Themes/default/css/ultimate-menu.css" destination="$themes_dir/default/css" />
-		<require-dir name="Themes/default/images/um_icons" destination="$themes_dir/default/images" />
+		<require-dir name="Sources" destination="$boarddir" />
+		<require-dir name="Themes" destination="$boarddir" />
+		<require-dir name="languages" destination="$boarddir/Themes/default" />
 		<redirect url="?action=admin;area=umen" />
 	</install>
 

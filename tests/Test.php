@@ -117,7 +117,7 @@ final class Test extends TestCase
 							'show' => true,
 							'sub_buttons' => [
 								'inserted_sub' => $btn,
-								'sub' => $btn ,
+								'sub' => $btn,
 								'sub1' => $btn,
 							],
 						],
