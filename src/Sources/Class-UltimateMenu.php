@@ -744,8 +744,8 @@ class UltimateMenu
 		usort($array, function($a, $b) {
 			preg_match('/\d+/', $a, $matchesA);
 			preg_match('/\d+/', $b, $matchesB);
-			$numA = isset($matchesA[0]) ? (int)$matchesA[0] : 0;
-			$numB = isset($matchesB[0]) ? (int)$matchesB[0] : 0;
+			$numA = isset($matchesA[0]) ? (int) $matchesA[0] : 0;
+			$numB = isset($matchesB[0]) ? (int) $matchesB[0] : 0;
 			return $numA <=> $numB;
 		});
 
