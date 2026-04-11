@@ -47,9 +47,9 @@ function um_replay_menu(&$menu_buttons)
 
 function recursive_button(array $needle, array &$haystack, $insertion_point, $where, $key): void
 {
-	foreach ($haystack as $area => &$info)
+	foreach ($haystack as $area => &$info) {
 		if ($area == $insertion_point) {
-			switch($where) {
+			switch ($where) {
 				case 'before':
 				case 'after':
 					insert_button([$key => $needle], $haystack, $insertion_point, $where);
@@ -59,10 +59,10 @@ function recursive_button(array $needle, array &$haystack, $insertion_point, $wh
 					$info['sub_buttons'][$key] = $needle;
 					break 2;
 			}
-		}
-		elseif (!empty($info['sub_buttons'])) {
+		} elseif (!empty($info['sub_buttons'])) {
 			recursive_button($needle, $info['sub_buttons'], $insertion_point, $where, $key);
 		}
+	}	
 }
 
 function insert_button(array $needle, array &$haystack, $insertion_point, $where = 'after'): void

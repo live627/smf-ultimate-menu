@@ -13,9 +13,7 @@ declare(strict_types=1);
 // If SSI.php is in the same place as this file, and SMF isn't defined...
 if (file_exists(__DIR__ . '/SSI.php') && !defined('SMF')) {
 	require_once __DIR__ . '/SSI.php';
-}
-// Hmm... no SSI.php and no SMF?
-elseif (!defined('SMF')) {
+} elseif (!defined('SMF')) {
 	die('<b>Error:</b> Cannot uninstall - please verify you put this in the same place as SMF\'s index.php.');
 }
 global $settings, $smcFunc, $modSettings;
@@ -47,8 +45,9 @@ function um_deleteIconsPath($directory)
 	clearstatcache();
 	$um_icons_dir = rtrim(str_replace('\\', '/', $settings['default_theme_dir'] . '/images/um_icons'), '/\\');
 	$directory = rtrim(str_replace('\\', '/', $directory), '/\\');
-	if (!str_starts_with($directory, $um_icons_dir))
+	if (!str_starts_with($directory, $um_icons_dir)) {
 		return false;
+	}
 
 	if (is_dir($directory)) {
 		$directoryHandle = opendir($directory);
@@ -57,8 +56,7 @@ function um_deleteIconsPath($directory)
 				$path = $directory . "/" . $contents;
 				if (is_dir($path)) {
 					um_deleteIconsPath($path);
-				}
-				elseif (file_exists($path)) {
+				} elseif (file_exists($path)) {
 					unlink($path);
 				}
 			}
@@ -66,11 +64,9 @@ function um_deleteIconsPath($directory)
 		closedir($directoryHandle);
 		clearstatcache();
 		rmdir($directory);
-	}
-	elseif (file_exists($directory)) {
+	} elseif (file_exists($directory)) {
 		@unlink($directory);
-	}
-	else {
+	} else {
 		return false;
 	}
 

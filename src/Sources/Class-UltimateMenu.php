@@ -42,8 +42,9 @@ class UltimateMenu
 		if (!$inherited) {
 			$where[] = 'id_parent = {int:not_inherited}';
 
-			if (empty($modSettings['permission_enable_postgroups']))
+			if (empty($modSettings['permission_enable_postgroups'])) {
 				$where[] = 'min_posts = {int:min_posts}';
+			}
 		}
 		$request = $smcFunc['db_query']('', '
 			SELECT
@@ -575,8 +576,7 @@ class UltimateMenu
 		if (extension_loaded('imagick')) {
 			try {
 				$icon = new \Imagick($src);
-			}
-			catch (ImagickException $e) {
+			} catch (ImagickException $e) {
 				$error = true;
 			}
 			if (empty($error)) {
@@ -589,8 +589,7 @@ class UltimateMenu
 				if ($w > $h) {
 					$resize_width = $w * $height / $h;
 					$resize_height = $height;
-				}
-				else {
+				} else {
 					$resize_width = $width;
 					$resize_height = $h * $width / $w;
 				}
@@ -598,8 +597,7 @@ class UltimateMenu
 				$icon->setCompressionQuality(100);
 				if (!$crop) {
 					$icon->resizeImage($width, $height, Imagick::FILTER_CATROM, 0);
-				}
-				else {
+				} else {
 					$icon->resizeImage($resize_width, $resize_height, Imagick::FILTER_LANCZOS, 0.9);
 					$icon->cropImage($width, $height, ($resize_width - $width) / 2, ($resize_height - $height) / 2);
 				}
@@ -612,8 +610,7 @@ class UltimateMenu
 				clearstatcache();
 				if (!file_exists($dst)) {
 					$imagick = false;
-				}
-				else {
+				} else {
 					unlink($src);
 					$baseFile = basename($dst);
 				}
@@ -680,8 +677,7 @@ class UltimateMenu
 					unlink($src);
 					clearstatcache();
 				}
-			}
-			else {
+			} else {
 				$baseFile = basename($src);
 			}
 		}
@@ -715,8 +711,7 @@ class UltimateMenu
 		if (extension_loaded('intl')) {
 			$transliterator = \Transliterator::create('Any-Latin; Latin-ASCII');
 			$filename = $transliterator->transliterate($filename);
-		}
-		else {
+		} else {
 			$filename = str_replace('?', '_', iconv("UTF-8", "ASCII//TRANSLIT", $filename));
 		}
 
