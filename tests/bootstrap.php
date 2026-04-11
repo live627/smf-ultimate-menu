@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 require_once './src/ManageUltimateMenu.php';
 require_once './src/Subs-UltimateMenu.php';
@@ -11,7 +11,7 @@ require_once './vendor/autoload.php';
 // What are you doing here, SMF?
 define('SMF', 1);
 
-global $context;
+global $context, $scripturl, $smcFunc, $modSettings;
 $user_info = ['is_admin' => true, 'is_guest' => false, 'language' => '', 'groups' => [0], 'permissions' => []];
 $context = [
 	'user' => ['can_mod' => true, 'is_guest' => false, 'id' => 1],
@@ -23,8 +23,9 @@ $context = [
 	'admin_menu_name' => '',
 ];
 $modSettings = ['lastActive' => 0, 'settings_updated' => 0, 'postmod_active' => false];
+$scripturl = dirname(__DIR__);
 
-$smcFunc['db_query'] = function($name, $query, $args)
+$smcFunc['db_query'] = function ($name, $query, $args)
 {
 	global $current_item, $modSettings;
 
@@ -36,22 +37,22 @@ $smcFunc['db_query'] = function($name, $query, $args)
 
 	return [['']];
 };
-$smcFunc['db_fetch_assoc'] = function($request)
+$smcFunc['db_fetch_assoc'] = function ($request)
 {
 	global $current_item;
 
 	return $request[$current_item++] ?? null;
 };
-$smcFunc['db_fetch_row'] = function($request)
+$smcFunc['db_fetch_row'] = function ($request)
 {
 	global $current_item;
 
 	return $request[$current_item++] ?? null;
 };
-$smcFunc['db_free_result'] = function(): void
+$smcFunc['db_free_result'] = function (): void
 {
 };
-$smcFunc['db_insert'] = function(): void
+$smcFunc['db_insert'] = function (): void
 {
 };
 $smcFunc['htmltrim'] = fn(string $string): string => trim($string);
