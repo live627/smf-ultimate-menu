@@ -34,8 +34,9 @@ $smcFunc['db_query'] = function($name, $query, $args)
 
 	$current_item = 0;
 
-	if (isset($args['variable']) && $args['variable'] == 'integrate_menu_buttons')
+	if (isset($args['variable']) && $args['variable'] == 'integrate_menu_buttons') {
 		return [[$modSettings[$args['variable']] ?? null]];
+	}	
 
 	return [['']];
 };
