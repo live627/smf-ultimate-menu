@@ -422,32 +422,6 @@ class UltimateMenu
 	}
 
 	/**
-	 * Returns list of icons formatted for the admin section $listOptions
-	 *
-	 * @return array
-	 */
-	public function listIconPathContents(): array
-	{
-		global $txt;
-
-		$filesList = [];
-		$start = isset($_REQUEST['start']) ? intval($_REQUEST['start']) : 0;
-		$files = $this->getIconPathContents();
-		$buttons = $this->total_getMenu();
-		foreach ($files as $index => $file) {
-			$assignedIndex = array_search($file, array_column($buttons, 'icon'));
-			$filesList[] = [
-				'id_file' => $index,
-				'name' => $file,
-				'assigned' => is_bool($assignedIndex) ? $txt['um_menu_icon_unassigned'] : $buttons[$assignedIndex]['name'],
-			];
-		}
-
-		$list = isset($_REQUEST['desc']) ? array_reverse($filesList) : $filesList;
-		return array_slice($list, $start, 20);
-	}
-
-	/**
 	 * Deletes opted icon files
 	 */
 	public function deleteIcons($task = 'selected', $files = []): void
@@ -484,11 +458,11 @@ class UltimateMenu
 	}
 
 	/**
-	 * Lists all jpg or png files contained in the um_icons path
+	 * Lists all or standardized jpg and png files contained in the um_icons path
 	 *
 	 * @return array
 	 */
-	public function getIconPathContents(): array
+	public function getIconPathContents($standardized =  false): array
 	{
 		global $settings;
 
@@ -502,12 +476,75 @@ class UltimateMenu
 
 		foreach ($files as $file) {
 			if (!$file->isDir() && in_array($file->getExtension(), ['jpg', 'jpeg', 'png'])) {
-				$images[] = basename($file->getRealPath());
+				if (!$standardized || preg_match('/^um--(\\d+)/u', basename($file->getRealPath()), $matches)) {
+					$images[] = basename($file->getRealPath());
+				}
 			}
 		}
 
 		$pathContents = $this->icon_files_sort($images);
 		return !empty($pathContents) && is_array($pathContents) ? array_filter($pathContents) : [];
+	}
+
+	/**
+	 * Returns the list of icons formatted for the admin section $listOptions
+	 *
+	 * @return array
+	 */
+	public function listIconPathContents(): array
+	{
+		global $txt;
+
+		$filesList = [];
+		$start = isset($_REQUEST['start']) ? intval($_REQUEST['start']) : 0;
+		$files = $this->getIconPathContents();
+		$buttons = $this->total_getMenu();
+		foreach ($files as $index => $file) {
+			$assignedIndex = array_search($file, array_column($buttons, 'icon'));
+			$filesList[] = [
+				'id_file' => $index,
+				'name' => $file,
+				'assigned' => is_bool($assignedIndex) ? $txt['um_menu_icon_unassigned'] : $buttons[$assignedIndex]['name'],
+				'standardized' => boolval(preg_match('/^um--(\\d+)/u', $file, $matches)),
+			];
+		}
+
+		$list = isset($_REQUEST['desc']) ? array_reverse($filesList) : $filesList;
+		return array_slice($list, $start, 20);
+	}
+
+	/**
+	 * Renames unassigned icons to the Ultimate Menu standard format
+	 *
+	 * @return array
+	 */
+	public function standardizeIconPathContents(): void
+	{
+		global $settings;
+
+		list($filesList, $files, $buttons, $umIconsPath) = [[], $this->getIconPathContents(), $this->total_getMenu(), $this->unixDirSeparator($settings['default_theme_dir'] . '/images/um_icons')];
+		foreach ($files as $file) {
+			list($fileType, $ext, $assigned) = [exif_imagetype($umIconsPath . '/' . $file), mb_strtolower(pathinfo($file, PATHINFO_EXTENSION), 'UTF-8'), array_search(basename($file), array_column($buttons, 'icon'))];
+			if (in_array($fileType, [IMAGETYPE_JPEG, IMAGETYPE_PNG]) && in_array($ext, ['jpg', 'jpeg', 'png'])) {
+				if (($ext == 'png' && $fileType != IMAGETYPE_PNG) || $ext == 'jpeg') {
+					rename($umIconsPath . '/' . $file, $umIconsPath . '/' . pathinfo($file, PATHINFO_FILENAME) . '.jpg');
+					list($file, $ext) = [pathinfo($file, PATHINFO_FILENAME) . '.jpg', 'jpg'];
+					clearstatcache();
+				}
+
+				if (!preg_match('/^um--(\d+)_/', $file, $matches) && is_bool($assigned)) {
+					$newFilename = $this->hexadecimal_filename(true) . '.' . $ext;
+					$this->imageResize($umIconsPath . '/' . $file, $umIconsPath . '/' . $newFilename, $ext);
+				} elseif ($size = getimagesize($umIconsPath . '/' . $file)) {
+					if ($size[0] > 16 || $size[1] > 16) {
+						$tempFile = 'temp_' . $this->hexadecimal_filename(false) . ($fileType == IMAGETYPE_JPEG ? '.jpg' : '.png');
+						rename($umIconsPath . '/' . $file, $umIconsPath . '/' . $tempFile);
+						clearstatcache();
+						$this->imageResize($umIconsPath . '/' . $tempFile, $umIconsPath . '/' . $file, $ext);
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -616,7 +653,7 @@ class UltimateMenu
 			}
 		}
 
-		if (empty($imagick)) {
+		if (empty($imagick) && extension_loaded('gd')) {
 			switch ($ext) {
 				case 'png':
 					if (!$img = imagecreatefrompng($src)) {
@@ -684,11 +721,11 @@ class UltimateMenu
 	}
 
 	/**
-	 * Returns a random hexadecimal representation of a filename with an incrementing um prefix
+	 * Returns a random hexadecimal representation of a filename with an optional incrementing um prefix
 	 *
 	 * @return string
 	 */
-	public function hexadecimal_filename($filename): string
+	public function hexadecimal_filename($prefix = false): string
 	{
 		global $modSettings;
 
@@ -696,7 +733,7 @@ class UltimateMenu
 		$random_key = array_rand($letters);
 		$bytes = random_bytes(5);
 		$codeValue = mb_strtolower(strval(bin2hex($bytes)), 'UTF-8') . $letters[$random_key];
-		return 'um--' . $this->um_file_increment() . '_' . $codeValue;
+		return !empty($prefix) ? 'um--' . $this->um_file_increment() . '_' . $codeValue : $codeValue;
 	}
 
 	/**
@@ -742,10 +779,10 @@ class UltimateMenu
 	public function icon_files_sort($array): array
 	{
 		usort($array, function($a, $b) {
-			preg_match('/\d+/', $a, $matchesA);
-			preg_match('/\d+/', $b, $matchesB);
-			$numA = isset($matchesA[0]) ? (int) $matchesA[0] : 0;
-			$numB = isset($matchesB[0]) ? (int) $matchesB[0] : 0;
+			preg_match('/^um--(\d+)_/', $a, $matchesA);
+			preg_match('/^um--(\d+)_/', $b, $matchesB);
+			$numA = isset($matchesA[0]) ? (int) preg_replace("/^\D+/", "", $matchesA[0]) : 0;
+			$numB = isset($matchesB[0]) ? (int) preg_replace("/^\D+/", "", $matchesB[0]) : 0;
 			return $numA <=> $numB;
 		});
 
@@ -764,18 +801,18 @@ class UltimateMenu
 		$files = $this->getIconPathContents();
 		usort($files, function($a, $b) {
 			list($numberA, $numberB, $matches) = [0, 0, []];
-			if (preg_match('/^um--(\\d+)/u', $a, $matches)) {
+			if (preg_match('/^um--(\\d+)_/u', $a, $matches)) {
 				$numberA = (float) $matches[1];
 			}
 
-			if (preg_match('/^um--(\\d+)/u', $b, $matches)) {
+			if (preg_match('/^um--(\\d+)_/u', $b, $matches)) {
 				$numberB = (float) $matches[1];
 			}
 
 			return $numberA <=> $numberB;
 		});
 
-		$numbers = array_unique(array_filter(array_map(fn($value): int => (int) preg_replace('/\D/u', '', strstr((string) $value, '_', true)), $files)));
+		$numbers = array_unique(array_filter(array_map(fn($value): int => intval(preg_match('/^um--(\d+)_/', $value, $matches) ? $matches[1] : 0), $files)));
 		sort($numbers);
 		foreach ($numbers as $value) {
 			if (!in_array($number, $numbers)) {
