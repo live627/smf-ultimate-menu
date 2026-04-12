@@ -70,9 +70,11 @@ $txt['um_menu_standardize_all_confirm'] = 'Tüm dosya adlarını ve görüntü b
 $txt['um_menu_delete_selected_confirm'] = 'Seçili simge dosyalarını silmek istediğinizden emin misiniz?';
 $txt['um_menu_delete_unassigned_confirm'] = 'Atanmamış tüm simge dosyalarını silmek istediğinizden emin misiniz?';
 $txt['um_menu_delete_all_confirm'] = 'Tüm simge dosyalarını silmek istediğinizden emin misiniz?';
-$txt['um_menu_icon_unassigned'] = '&#10062;';
 $txt['um_menu_icons_uninstall'] = 'Tüm Ultimate Menu simgelerini "um_icons" yolundan kaldırın';
 $txt['um__menu_icons_none'] = 'Hiç';
+$txt['um_menu_icon_unassigned'] = '&#11160; Atanmamış';
+$txt['um_menu_icon_assigned_button'] = '&#8658; %s';
+$txt['um_menu_icon_unstandardized'] = '&#11079; Standartlaştırılmamış';
 
 // Gönderim hataları
 $txt['um_menu_session_verify_fail'] = 'Oturum doğrulama başarısız oldu. Lütfen tekrar deneyin.';

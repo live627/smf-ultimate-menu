@@ -69,9 +69,11 @@ $txt['um_menu_standardize_all_confirm'] = 'Вы уверены, что хотите стандартизиров
 $txt['um_menu_delete_selected_confirm'] = 'Вы уверены, что хотите удалить выбранные файлы значков?';
 $txt['um_menu_delete_unassigned_confirm'] = 'Вы уверены, что хотите удалить все неназначенные файлы значков?';
 $txt['um_menu_delete_all_confirm'] = 'Вы уверены, что хотите удалить все файлы значков?';
-$txt['um_menu_icon_unassigned'] = '&#10062;';
 $txt['um_menu_icons_uninstall'] = 'Удалить все значки Ultimate Menu из пути "um_icons"';
 $txt['um__menu_icons_none'] = 'ничего';
+$txt['um_menu_icon_unassigned'] = '&#11160; неназначенный';
+$txt['um_menu_icon_assigned_button'] = '&#8658; %s';
+$txt['um_menu_icon_unstandardized'] = '&#11079; Нестандартизированный';
 
 // Submission errors
 $txt['um_menu_session_verify_fail'] = 'Session verification failed. Please then try again.';
