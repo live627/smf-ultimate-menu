@@ -75,9 +75,11 @@ $txt['um_menu_standardize_all_confirm'] = 'Are you sure that you want to standar
 $txt['um_menu_delete_selected_confirm'] = 'Are you sure you want to delete the selected icon files?';
 $txt['um_menu_delete_unassigned_confirm'] = 'Are you sure you want to delete all unassigned icon files?';
 $txt['um_menu_delete_all_confirm'] = 'Are you sure you want to delete all of the icon files?';
-$txt['um_menu_icon_unassigned'] = '&#10062;';
 $txt['um_menu_icons_uninstall'] = 'Remove all Ultimate Menu icons from the "um_icons" path';
 $txt['um__menu_icons_none'] = 'None';
+$txt['um_menu_icon_unassigned'] = '&#11160; Unassigned';
+$txt['um_menu_icon_assigned_button'] = '&#8658; %s';
+$txt['um_menu_icon_unstandardized'] = '&#11079; Non-standardized';
 
 // Submission errors
 $txt['um_menu_session_verify_fail'] = 'Session verification failed. Please then try again.';

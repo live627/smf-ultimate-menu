@@ -72,9 +72,11 @@ $txt['um_menu_standardize_all_confirm'] = 'Êtes-vous sûr de vouloir standardis
 $txt['um_menu_delete_selected_confirm'] = 'Êtes-vous sûr de vouloir supprimer les fichiers d\'icônes sélectionnés ?';
 $txt['um_menu_delete_unassigned_confirm'] = 'Êtes-vous sûr de vouloir supprimer tous les fichiers d\'icônes non attribués ?';
 $txt['um_menu_delete_all_confirm'] = 'Êtes-vous sûr de vouloir supprimer tous les fichiers d\'icônes ?';
-$txt['um_menu_icon_unassigned'] = '&#10062;';
 $txt['um_menu_icons_uninstall'] = 'Supprimer toutes les icônes Ultimate Menu du dossier "um_icons"';
 $txt['um__menu_icons_none'] = 'Rien';
+$txt['um_menu_icon_unassigned'] = '&#11160; Non attribué';
+$txt['um_menu_icon_assigned_button'] = '&#8658; %s';
+$txt['um_menu_icon_unstandardized'] = '&#11079; Non standardisé';
 
 // Submission errors
 $txt['um_menu_session_verify_fail'] = 'Session verification failed. Please then try again.';

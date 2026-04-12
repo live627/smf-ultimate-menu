@@ -504,7 +504,11 @@ class UltimateMenu
 			$filesList[] = [
 				'id_file' => $index,
 				'name' => $file,
-				'assigned' => is_bool($assignedIndex) ? $txt['um_menu_icon_unassigned'] : $buttons[$assignedIndex]['name'],
+				'assigned' => preg_match('/^um--(\d+)_/', $file, $matches) && is_bool($assignedIndex)
+								? $txt['um_menu_icon_unassigned']
+								: (is_bool($assignedIndex)
+								? $txt['um_menu_icon_unstandardized']
+								: sprintf($txt['um_menu_icon_assigned_button'], $buttons[$assignedIndex]['name'])),
 				'standardized' => boolval(preg_match('/^um--(\\d+)/u', $file, $matches)),
 			];
 		}
@@ -514,7 +518,7 @@ class UltimateMenu
 	}
 
 	/**
-	 * Renames unassigned icons to the Ultimate Menu standard format
+	 * Renames unassigned icons and/or resizes them to the Ultimate Menu standard format
 	 *
 	 * @return array
 	 */
