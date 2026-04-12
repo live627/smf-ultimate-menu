@@ -462,7 +462,7 @@ class UltimateMenu
 	 *
 	 * @return array
 	 */
-	public function getIconPathContents($standardized =  false): array
+	public function getIconPathContents($standardized = false): array
 	{
 		global $settings;
 
@@ -524,11 +524,12 @@ class UltimateMenu
 
 		list($filesList, $files, $buttons, $umIconsPath) = [[], $this->getIconPathContents(), $this->total_getMenu(), $this->unixDirSeparator($settings['default_theme_dir'] . '/images/um_icons')];
 		foreach ($files as $file) {
-			list($fileType, $ext, $assigned) = [exif_imagetype($umIconsPath . '/' . $file), mb_strtolower(pathinfo($file, PATHINFO_EXTENSION), 'UTF-8'), array_search(basename($file), array_column($buttons, 'icon'))];
+			list($fileType, $pathInfo, $assigned) = [exif_imagetype($umIconsPath . '/' . $file), pathinfo($file), array_search(basename($file), array_column($buttons, 'icon'))];
+			$ext = mb_strtolower($pathInfo['extension'], 'UTF-8');
 			if (in_array($fileType, [IMAGETYPE_JPEG, IMAGETYPE_PNG]) && in_array($ext, ['jpg', 'jpeg', 'png'])) {
 				if (($ext == 'png' && $fileType != IMAGETYPE_PNG) || $ext == 'jpeg') {
-					rename($umIconsPath . '/' . $file, $umIconsPath . '/' . pathinfo($file, PATHINFO_FILENAME) . '.jpg');
-					list($file, $ext) = [pathinfo($file, PATHINFO_FILENAME) . '.jpg', 'jpg'];
+					rename($umIconsPath . '/' . $file, $umIconsPath . '/' . $pathInfo['filename'] . '.jpg');
+					list($file, $ext) = [$pathInfo['filename'] . '.jpg', 'jpg'];
 					clearstatcache();
 				}
 
