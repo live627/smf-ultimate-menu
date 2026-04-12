@@ -76,13 +76,17 @@ class ManageUltimateMenu
 
 	public function FilesList(): void
 	{
-		if (isset($_POST['removeAll'])) {
+		if (isset($_POST['standardizeAll'])) {
+			checkSession();
+			$this->um->standardizeIconPathContents();
+			$this->um->rebuildMenu();
+			redirectexit('action=admin;area=umen;sa=fileslist');
+		} elseif (isset($_POST['removeAll'])) {
 			checkSession();
 			$this->um->deleteIcons('all', []);
 			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen;sa=fileslist');
-		}
-		if (isset($_POST['removeUnassigned'])) {
+		} elseif (isset($_POST['removeUnassigned'])) {
 			checkSession();
 			$this->um->deleteIcons('unassigned', []);
 			$this->um->rebuildMenu();
@@ -305,15 +309,18 @@ class ManageUltimateMenu
 					'position' => 'below_table_data',
 					'value' => sprintf(
 						'
-						<input type="submit" name="removeSelected" value="%s" onclick="return confirm(\'%s\');" class="button" />
-						<input type="submit" name="removeUnassigned" value="%s" onclick="return confirm(\'%s\');" class="button" />
-						<input type="submit" name="removeAll" value="%s" onclick="return confirm(\'%s\');" class="button" />',
+						<input type="submit" name="removeSelected" value="%s" onclick="return confirm(\'%s\');" class="button um_button" />
+						<input type="submit" name="removeUnassigned" value="%s" onclick="return confirm(\'%s\');" class="button um_button" />
+						<input type="submit" name="removeAll" value="%s" onclick="return confirm(\'%s\');" class="button um_button" />
+						<input type="submit" name="standardizeAll" value="%s" onclick="return confirm(\'%s\');" class="button um_button" />',
 						$txt['um_menu_delete_selected'],
 						$txt['um_menu_delete_selected_confirm'],
 						$txt['um_menu_delete_unassigned'],
 						$txt['um_menu_delete_unassigned_confirm'],
 						$txt['um_menu_delete_all'],
 						$txt['um_menu_delete_all_confirm'],
+						$txt['um_menu_standardize_all'],
+						$txt['um_menu_standardize_all_confirm'],
 					),
 					'class' => 'righttext',
 				],
@@ -471,7 +478,7 @@ class ManageUltimateMenu
 				));
 				$context['template_layers'][] = 'form';
 				$context['template_layers'][] = 'errors';
-				$context['um_button_icons'] = ['______', ...$this->um->getIconPathContents()];
+				$context['um_button_icons'] = ['______', ...$this->um->getIconPathContents(true)];
 			}
 		} else {
 			fatal_lang_error('no_access', false);
@@ -515,7 +522,7 @@ class ManageUltimateMenu
 		$context['page_title'] = $txt['um_menu_edit_title'];
 		$context['button_names'] = $this->um->getButtonNames();
 		$context['template_layers'][] = 'form';
-		$context['um_button_icons'] = ['______', ...$this->um->getIconPathContents()];
+		$context['um_button_icons'] = ['______', ...$this->um->getIconPathContents(true)];
 		$context['html_headers'] .= '
 		<script>
 			let um_secureCode = "' . $codeValue . '";
@@ -551,7 +558,7 @@ class ManageUltimateMenu
 		$context['page_title'] = $txt['um_menu_add_title'];
 		$context['button_names'] = $this->um->getButtonNames();
 		$context['template_layers'][] = 'form';
-		$context['um_button_icons'] = ['______', ...$this->um->getIconPathContents()];
+		$context['um_button_icons'] = ['______', ...$this->um->getIconPathContents(true)];
 		$context['html_headers'] .= '
 		<script>
 			let um_secureCode = "' . $codeValue . '";
@@ -574,7 +581,7 @@ class ManageUltimateMenu
 				$tmp_name = $postVar['tmp_name'];
 				$ext = mb_strtolower(pathinfo($newname, PATHINFO_EXTENSION), 'UTF-8');
 				$filename = pathinfo($newname, PATHINFO_FILENAME);
-				$file = $this->um->hexadecimal_filename($filename) . '.' . $ext;
+				$file = $this->um->hexadecimal_filename(true) . '.' . $ext;
 				if (!in_array($ext, $types)) {
 					$json_msg['error'] = $txt['um_menu_filename_illegal'];
 				} elseif ($com = fopen($target . '/' . $newname, "wb")) {

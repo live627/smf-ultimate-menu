@@ -14,3 +14,6 @@
 @keyframes umloader {
 	100% {background-position:top right,bottom right}
 }
+input.um_button {
+	margin-left: 0.25rem !important;
+}	
