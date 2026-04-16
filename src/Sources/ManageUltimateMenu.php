@@ -438,8 +438,7 @@ class ManageUltimateMenu
 			if (empty($post_errors)) {
 				if (isset($_FILES['attachment']) && isset($_POST['um_jq'])) {
 					unset($_FILES['attachment']);
-				}
-				elseif (isset($_FILES['attachment'])) {
+				} elseif (isset($_FILES['attachment'])) {
 					$uploadedFile = $this->UmUploadIcon(true);
 					$menu_entry['icon'] = !empty($uploadedFile['file']) ? $uploadedFile['file'] : $menu_entry['icon'];
 				}
