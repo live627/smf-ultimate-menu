@@ -44,8 +44,8 @@ $(document).ready(function() {
 	}), $um_ul = $("<ul />", {
 		class: "um_icons windowbg",
 		id: "um_list"
-	}), $um_nofile = $("select#um_icon_select option:first").text(),
-		$um_selected = $("select#um_icon_select option:selected").text();
+	}), $um_nofile = $("select#um_icon_select option:first").text() ?? "",
+		$um_selected = $("select#um_icon_select option:selected").text() ?? "";
 	$("#advum_icons").css("display","flex").addClass("advum_icons");
 	$("#um_file").on("change", function(e) {
 		if (!um_secureCode) {
@@ -65,9 +65,9 @@ $(document).ready(function() {
 			data: formData,
 			type: "POST",
 			success: function(response) {
-				console.log("Upload successful: " + JSON.stringify(response.file, null, 2));
 				$("#um_file").val("");
 				if (response.file) {
+					console.log("Upload successful: " + JSON.stringify(response.file, null, 2));
 					$("#um_icon_img").attr("src", smf_default_theme_url + "/images/um_icons/" + $.trim(response.file));
 					$(".ultimateMenu_drop>ul li").removeClass("um_icon_selected").addClass("um_icon");
 					$("<li />", {
@@ -85,7 +85,7 @@ $(document).ready(function() {
 			},
 			error: function(xhr, status, error) {
 				$("#um_file").val("");
-				console.log("Upload failed: " + error);
+				console.log("Upload failed: " + JSON.stringify(error));
 				$("#um_loader").css("display", "none");
 			}
 		});
@@ -114,14 +114,14 @@ $(document).ready(function() {
 	});
 	$("#um_icon_select").find("option").each(function() {
 		$("<li />", {
-			"data-value": $.trim($(this).val()),
-			text: $.trim($(this).text()),
+			"data-value": $.trim($(this).val()) ?? "",
+			text: $.trim($(this).text()) || "",
 		}).appendTo($um_ul);
 	});
 	$("#um_icon_select").remove();
 	$um_ul.appendTo(".ultimateMenu_drop");
 	$(".hideSelect").css("display", "inline-block");
-	$(".hideSelect").text( (!$("input#um_icon").val() ? $.trim($um_selected) : $.trim($("input#um_icon").val())));
+	$(".hideSelect").text($.trim($("input#um_icon").val()) || $.trim($um_selected));
 	$umInput.appendTo('#um_icon_list');
 	$(".ultimateMenu_drop").on("click", function(e) {
       e.stopPropagation();
@@ -131,10 +131,12 @@ $(document).ready(function() {
       });
     });
     $(".ultimateMenu_drop>ul li").on('click', function() {
-		$(".ultimateMenu_drop>ul li").removeClass("um_icon_selected").addClass("um_icon");
-		$(this).removeClass("um_icon").addClass("um_icon_selected");
-		$(".hideSelect").text($.trim($(this).text()));
-		$("input#um_icon").val($.trim($(this).data("value")));
-		$("img#um_icon_img").attr("src", smf_default_theme_url + "/images/um_icons/" + $.trim($(this).data("value")));
+		if ($(this).text() && $(this).data("value")) {
+			$(".ultimateMenu_drop>ul li").removeClass("um_icon_selected").addClass("um_icon");
+			$(this).removeClass("um_icon").addClass("um_icon_selected");
+			$(".hideSelect").text($.trim($(this).text()));
+			$("input#um_icon").val($.trim($(this).data("value")));
+			$("img#um_icon_img").attr("src", smf_default_theme_url + "/images/um_icons/" + $.trim($(this).data("value")));
+		}
     });
 });
