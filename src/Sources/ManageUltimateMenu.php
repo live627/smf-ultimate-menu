@@ -400,7 +400,7 @@ class ManageUltimateMenu
 		}
 
 		// Ensure the icon filename is legit
-		if (isset($menu_entry['icon']) && empty($this->um->sanitizeFilename($menu_entry['icon']))) {
+		if (isset($menu_entry['icon']) && !empty($menu_entry['icon']) && empty($this->um->sanitizeFilename($menu_entry['icon']))) {
 			$post_errors['icon'] = 'um_menu_filename_illegal';
 		} elseif (isset($menu_entry['icon']) && $menu_entry['icon'] != '______' && !file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $menu_entry['icon'])) {
 			$post_errors['icon'] = 'um_menu_filename_exists';
