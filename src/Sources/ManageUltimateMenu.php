@@ -436,8 +436,12 @@ class ManageUltimateMenu
 
 			// I see you made it to the final stage, my young padawan.
 			if (empty($post_errors)) {
-				if (isset($_FILES['attachment'])) {
+				if (isset($_FILES['attachment']) && isset($_POST['um_jq'])) {
 					unset($_FILES['attachment']);
+				}
+				elseif (isset($_FILES['attachment'])) {
+					$uploadedFile = $this->UmUploadIcon(true);
+					$menu_entry['icon'] = !empty($uploadedFile['file']) ? $uploadedFile['file'] : $menu_entry['icon'];
 				}
 
 				clearstatcache();
@@ -565,14 +569,14 @@ class ManageUltimateMenu
 		</script>';
 	}
 
-	public function UmUploadIcon(): void
+	public function UmUploadIcon($noscript = false): array
 	{
 		global $txt, $settings, $modSettings, $sourcedir;
 		checkSession('post');
 		list($types, $json_msg) = [['jpeg', 'jpg', 'png'], ['error' => $txt['um_menu_filename_illegal'], 'file' => '']];
 		$postVar = !empty($_FILES['attachment']) ? $_FILES['attachment'] : '';
-		$checkCode = isset($_POST['um_checkcode']) ? $_POST['um_checkcode'] : '';
 		$umCode = !empty($modSettings['um_secureCode']) ? $modSettings['um_secureCode'] : '';
+		$checkCode = isset($_POST['um_checkcode']) ? $_POST['um_checkcode'] : (empty($noscript) ? '' : $umCode);
 		if (!empty($checkCode) && !empty($umCode) && $checkCode == $umCode) {
 			clearstatcache();
 			if (!empty($postVar) && !empty($postVar['name'])) {
@@ -610,10 +614,14 @@ class ManageUltimateMenu
 			}
 		}
 
-		header('Content-Type: application/json; charset=utf-8');
-		header('Cache-Control: no-cache, must-revalidate');
-		header('Expires: Mon, 01 Jan 1990 00:00:00 GMT');
-		echo json_encode($json_msg, JSON_THROW_ON_ERROR);
-		exit(0);
+		if (!$noscript) {
+			header('Content-Type: application/json; charset=utf-8');
+			header('Cache-Control: no-cache, must-revalidate');
+			header('Expires: Mon, 01 Jan 1990 00:00:00 GMT');
+			echo json_encode($json_msg, JSON_THROW_ON_ERROR);
+			exit(0);
+		}
+
+		return $json_msg;
 	}
 }

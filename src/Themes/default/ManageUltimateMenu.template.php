@@ -168,8 +168,8 @@ function template_main(): void
 							<strong>', $txt['um_menu_button_icon'], ':</strong>
 						</dt>
 						<dd style="display: inline-flex;height: 42px;" class="windowbg2">
-							<span style="flex-basis: 85%;">
-								<select id="um_icon" name="icon">
+							<span id="um_icon_list" style="flex-basis: 85%;">
+								<select id="um_icon_select" name="icon">
 									<optgroup label="' . $txt['um_admin_menu_opt_file'] . '">';
 	foreach ($context['um_button_icons'] as $filename) {
 		echo '
@@ -180,8 +180,17 @@ function template_main(): void
 
 	echo '
 								</select>
+								<span style="display: none;" id="advum_icons">
+									<span class="ultimateMenu_drop">
+										<span class="ultimateMenuDrop">
+											<span style="display: none;" class="hideSelect">
+												' . $txt['um_admin_menu_opt_file'] . '											
+											</span>
+										</span>									
+									</span>
+								</span>	
 							</span>
-							<span style="flex-basis: 15%;justify-content: flex-end;padding-left: 0.25rem;">
+							<span class="um_icon_container">
 								' . $context['button_data']['image'] . '
 							</span>
 						</dd>
