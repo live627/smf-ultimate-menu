@@ -621,6 +621,6 @@ class ManageUltimateMenu
 			exit(0);
 		}
 
-		return $json_msg;
+		return $json_msg ?? [];
 	}
 }
