@@ -113,8 +113,8 @@ span.um_icon_container {
 }
 .um_grid_line {
 	display: grid;
-	grid-template-columns: fit-content(2rem) 1fr;
-	gap: 1rem;
+	grid-template-columns: fit-content(1rem) 1fr;
+	gap: 0.5rem;
 	padding-bottom: 0.15rem;
 }
 .um_dl_padding {
