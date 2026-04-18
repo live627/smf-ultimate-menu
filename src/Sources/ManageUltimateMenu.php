@@ -468,7 +468,7 @@ class ManageUltimateMenu
 					'link' => $menu_entry['link'],
 					'parent' => $menu_entry['parent'],
 					'icon' => $menu_entry['icon'] ?: '',
-					'image' => '<img id="um_icon_img" style="width: 16px;height: 16px;object-fit: contain;" alt="" src="' . $this->um->iconFilePath($menu_entry['icon'] ?: 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=') . '">',
+					'image' => '<img id="um_icon_img" style="width: 16px;height: 16px;object-fit: contain;" alt="" src="' . $this->um->iconFilePath($menu_entry['icon'] ?: '') . '">',
 					'permissions' => $this->um->listGroups(
 						array_filter($menu_entry['permissions'], 'strlen')
 					),
@@ -514,7 +514,7 @@ class ManageUltimateMenu
 			'status' => $row['status'],
 			'parent' => $row['parent'],
 			'icon' => !empty($row['icon']) ? $row['icon'] : '',
-			'image' => '<img id="um_icon_img" style="width: 16px;height: 16px;object-fit: contain;" alt="" src="' . $this->um->iconFilePath($row['icon'] ?: 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=') . '">',
+			'image' => '<img id="um_icon_img" style="width: 16px;height: 16px;object-fit: contain;" alt="" src="' . $this->um->iconFilePath($row['icon'] ?: '') . '">',
 			'um_secureCode' => $codeValue,
 
 		];
