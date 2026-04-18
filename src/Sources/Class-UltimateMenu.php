@@ -764,7 +764,7 @@ class UltimateMenu
 	 *
 	 * @return string
 	 */
-	public function iconFilePath($filename): string
+	public function iconFilePath($filename = ''): string
 	{
 		global $settings;
 
