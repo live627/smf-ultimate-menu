@@ -171,7 +171,7 @@ class ManageUltimateMenu
 					'data' => [
 						'function' => fn(array $rowData) : string =>
 							sprintf(
-								'<input type="checkbox" name="status[%1$s]" id="status_%1$s" value="%1$s"%2$s />',
+								'<input type="checkbox" name="status[%1$s]" id="status_%1$s" value="%1$s"%2$s>',
 								$rowData['id_button'],
 								$rowData['status'] == 'inactive' ? '' : ' checked="checked"'
 							),
@@ -200,12 +200,12 @@ class ManageUltimateMenu
 				],
 				'check' => [
 					'header' => [
-						'value' => '<input type="checkbox" onclick="invertAll(this, this.form);" class="input_check" />',
+						'value' => '<input type="checkbox" onclick="invertAll(this, this.form);" class="input_check">',
 						'class' => 'centertext',
 					],
 					'data' => [
 						'sprintf' => [
-							'format' => '<input type="checkbox" name="remove[]" value="%d" class="input_check" />',
+							'format' => '<input type="checkbox" name="remove[]" value="%d" class="input_check">',
 							'params' => [
 								'id_button' => false,
 							],
@@ -222,10 +222,10 @@ class ManageUltimateMenu
 					'position' => 'below_table_data',
 					'value' => sprintf(
 						'
-						<input type="submit" name="removeButtons" value="%s" onclick="return confirm(\'%s\');" class="button" />
-						<input type="submit" name="removeAll" value="%s" onclick="return confirm(\'%s\');" class="button" />
-						<input type="submit" name="new" value="%s" class="button" />
-						<input type="submit" name="save" value="%s" class="button" />',
+						<input type="submit" name="removeButtons" value="%s" onclick="return confirm(\'%s\');" class="button um_button">
+						<input type="submit" name="removeAll" value="%s" onclick="return confirm(\'%s\');" class="button um_button">
+						<input type="submit" name="new" value="%s" class="button um_button">
+						<input type="submit" name="save" value="%s" class="button um_button">',
 						$txt['um_menu_remove_selected'],
 						$txt['um_menu_remove_confirm'],
 						$txt['um_menu_remove_all'],
@@ -287,12 +287,12 @@ class ManageUltimateMenu
 				],
 				'check' => [
 					'header' => [
-						'value' => '<input type="checkbox" onclick="invertAll(this, this.form);" class="input_check" />',
+						'value' => '<input type="checkbox" onclick="invertAll(this, this.form);" class="input_check">',
 						'class' => 'centertext',
 					],
 					'data' => [
 						'sprintf' => [
-							'format' => '<input type="checkbox" name="remove[]" value="%s" class="input_check" />',
+							'format' => '<input type="checkbox" name="remove[]" value="%s" class="input_check">',
 							'params' => [
 								'name' => false,
 							],
@@ -309,10 +309,10 @@ class ManageUltimateMenu
 					'position' => 'below_table_data',
 					'value' => sprintf(
 						'
-						<input type="submit" name="removeSelected" value="%s" onclick="return confirm(\'%s\');" class="button um_button" />
-						<input type="submit" name="removeUnassigned" value="%s" onclick="return confirm(\'%s\');" class="button um_button" />
-						<input type="submit" name="removeAll" value="%s" onclick="return confirm(\'%s\');" class="button um_button" />
-						<input type="submit" name="standardizeAll" value="%s" onclick="return confirm(\'%s\');" class="button um_button" />',
+						<input type="submit" name="removeSelected" value="%s" onclick="return confirm(\'%s\');" class="button um_button">
+						<input type="submit" name="removeUnassigned" value="%s" onclick="return confirm(\'%s\');" class="button um_button">
+						<input type="submit" name="removeAll" value="%s" onclick="return confirm(\'%s\');" class="button um_button">
+						<input type="submit" name="standardizeAll" value="%s" onclick="return confirm(\'%s\');" class="button um_button">',
 						$txt['um_menu_delete_selected'],
 						$txt['um_menu_delete_selected_confirm'],
 						$txt['um_menu_delete_unassigned'],
