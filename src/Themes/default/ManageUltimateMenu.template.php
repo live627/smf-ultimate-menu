@@ -138,14 +138,14 @@ function template_main(): void
 
 	foreach ($context['button_data']['permissions'] as $id => $permission) {
 		echo '
-								<label>
+								<label class="um_grid_line">
 									<input type="checkbox" name="permissions[]" value="', $id, '"', $sel($permission['checked'], 'checked'), '>
 									<span' . ($permission['is_post_group'] ? ' title="' . $txt['mboards_groups_post_group'] . '"' : '') . '>', $permission['name'], '</span>
 								</label>';
 	}
 
 	echo '
-								<label>
+								<label class="um_grid_line">
 									<input type="checkbox"', $sel($context['all_groups_checked'], 'checked'), '>
 									<span class="um_italic">', $txt['check_all'], '</span>
 								</label>
