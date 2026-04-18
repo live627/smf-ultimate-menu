@@ -56,15 +56,15 @@ function template_main(): void
 	$sel = fn(bool $x, string $str): string => $x ? ' ' . $str : '';
 
 	echo '
-					<dl class="settings">
+					<dl class="settings um_dl_padding">
 						<dt>
-							<strong>', $txt['um_menu_button_name'], ':</strong>
+							<span class="um_strong">', $txt['um_menu_button_name'], ':</span>
 						</dt>
 						<dd>
-							<input type="text" name="name" value="', $context['button_data']['name'], '" style="width: 100%;" />
+							<input type="text" name="name" value="', $context['button_data']['name'], '" style="width: 100%;">
 						</dd>
 						<dt>
-							<strong>', $txt['um_menu_button_position'], ':</strong>
+							<span class="um_strong">', $txt['um_menu_button_position'], ':</span>
 						</dt>
 						<dd>
 							<select name="position" size="10" style="width: 22%;">';
@@ -97,28 +97,40 @@ function template_main(): void
 							</select>
 						</dd>
 						<dt>
-							<strong>', $txt['um_menu_button_type'], ':</strong>
+							<span class="um_strong">', $txt['um_menu_button_type'], ':</span>
 						</dt>
 						<dd>
-							<input type="radio" name="type" value="forum"', $sel($context['button_data']['type'] == 'forum', 'checked'), '/>', $txt['um_menu_forum'], '<br />
-							<input type="radio" name="type" value="external"', $sel($context['button_data']['type'] == 'external', 'checked'), '/>', $txt['um_menu_external'], '
+							<span class="um_grid_line">
+								<input id="um_type_forum" type="radio" name="type" value="forum"', $sel($context['button_data']['type'] == 'forum', 'checked'), '>
+								<label for="um_type_forum">', $txt['um_menu_forum'], '</label>
+							</span>
+							<span class="um_grid_line">
+								<input id="um_type_external" type="radio" name="type" value="external"', $sel($context['button_data']['type'] == 'external', 'checked'), '>
+								<label for="um_type_external">', $txt['um_menu_external'], '</label>
+							</span>
 						</dd>
 						<dt>
-							<strong>', $txt['um_menu_link_type'], ':</strong>
+							<span class="um_strong">', $txt['um_menu_link_type'], ':</span>
 						</dt>
 						<dd>
-							<input type="radio" name="target" value="_self"', $sel($context['button_data']['target'] == '_self', 'checked'), '/>', $txt['um_menu_same_window'], '<br />
-							<input type="radio" name="target" value="_blank"', $sel($context['button_data']['target'] == '_blank', 'checked'), '/>', $txt['um_menu_new_tab'], '
+							<span class="um_grid_line">
+								<input id="um_target_self" type="radio" name="target" value="_self"', $sel($context['button_data']['target'] == '_self', 'checked'), '>
+								<label for="um_target_self">', $txt['um_menu_same_window'], '</label>
+							</span>
+							<span class="um_grid_line">
+								<input type="radio" name="target" value="_blank"', $sel($context['button_data']['target'] == '_blank', 'checked'), '>
+								<label for="um_target_blank">', $txt['um_menu_new_tab'], '</label>
+							</span>
 						</dd>
 						<dt>
-							<strong>', $txt['um_menu_button_link'], ':</strong><br />
+							<span class="um_strong">', $txt['um_menu_button_link'], ':</span>
 						</dt>
 						<dd>
-							<input type="text" name="link" value="', $context['button_data']['link'], '" style="width: 100%;" />
+							<input type="text" name="link" value="', $context['button_data']['link'], '" style="width: 100%;">
 							<span class="smalltext">', $txt['um_menu_button_link_desc'], '</span>
 						</dd>
 						<dt>
-							<strong>', $txt['um_menu_button_perms'], ':</strong>
+							<span class="um_strong">', $txt['um_menu_button_perms'], ':</span>
 						</dt>
 						<dd>
 							<fieldset id="group_perms">
@@ -127,48 +139,47 @@ function template_main(): void
 	foreach ($context['button_data']['permissions'] as $id => $permission) {
 		echo '
 								<label>
-									<input type="checkbox" name="permissions[]" value="', $id, '"', $sel($permission['checked'], 'checked'), ' />
-									<span';
-
-		if ($permission['is_post_group']) {
-			echo ' title="' . $txt['mboards_groups_post_group'] . '"';
-		}
-
-		echo '>', $permission['name'], '</span>
-								</label>
-								<br>';
+									<input type="checkbox" name="permissions[]" value="', $id, '"', $sel($permission['checked'], 'checked'), '>
+									<span' . ($permission['is_post_group'] ? ' title="' . $txt['mboards_groups_post_group'] . '"' : '') . '>', $permission['name'], '</span>
+								</label>';
 	}
 
 	echo '
 								<label>
-									<input type="checkbox"', $sel($context['all_groups_checked'], 'checked'), ' />
-									<em>', $txt['check_all'], '</em>
+									<input type="checkbox"', $sel($context['all_groups_checked'], 'checked'), '>
+									<span class="um_italic">', $txt['check_all'], '</span>
 								</label>
 							</fieldset>
 						</dd>
 						<dt>
-							<strong>', $txt['um_menu_button_status'], ':</strong>
+							<span class="um_strong">', $txt['um_menu_button_status'], ':</span>
 						</dt>
 						<dd>
-							<input type="radio" name="status" value="active"', $sel($context['button_data']['status'] == 'active', 'checked'), ' />', $txt['um_menu_button_active'], ' <br />
-							<input type="radio" name="status" value="inactive"', $sel($context['button_data']['status'] == 'inactive', 'checked'), ' />', $txt['um_menu_button_inactive'], '
-						</dd>
-						<dt>
-							<strong>', $txt['um_menu_button_upload'], ':</strong>
-						</dt>
-						<dd style="display: inline-flex;justify-content: space-between;align-items: center;">
-							<span style="flex-basis: 60%;">
-								<input id="um_file" type="file" name="attachment" accept="image/png, image/jpeg, .png, .jpg, .jpeg" value="', $context['button_data']['icon'], '" style="width: 100%;" />
+							<span class="um_grid_line">
+								<input id="um_status_active" type="radio" name="status" value="active"', $sel($context['button_data']['status'] == 'active', 'checked'), '>
+								<label for="um_status_active">', $txt['um_menu_button_active'], '</label>
 							</span>
-							<span style="flex-basis: 30%;height: 100%;">
-								<span id="um_loader" style="width: 80%;display: none;"></span>
+							<span class="um_grid_line">
+								<input id="um_status_inactive" type="radio" name="status" value="inactive"', $sel($context['button_data']['status'] == 'inactive', 'checked'), '>
+								<label for="um_status_inactive">', $txt['um_menu_button_inactive'], '</label>
 							</span>
 						</dd>
 						<dt>
-							<strong>', $txt['um_menu_button_icon'], ':</strong>
+							<span class="um_strong">', $txt['um_menu_button_upload'], ':</span>
 						</dt>
-						<dd style="display: inline-flex;height: 42px;" class="windowbg2">
-							<span id="um_icon_list" style="flex-basis: 85%;">
+						<dd class="um_dd_file">
+							<span class="um_file_button">
+								<input id="um_file" type="file" name="attachment" accept="image/png, image/jpeg, .png, .jpg, .jpeg" value="', $context['button_data']['icon'], '" style="width: 100%;">
+							</span>
+							<span class="um_file_loading">
+								<span id="um_loader"></span>
+							</span>
+						</dd>
+						<dt>
+							<span class="um_strong">', $txt['um_menu_button_icon'], ':</span>
+						</dt>
+						<dd class="um_dd_files_list windowbg2">
+							<span id="um_icon_list">
 								<select id="um_icon_select" name="icon">
 									<optgroup label="' . $txt['um_admin_menu_opt_file'] . '">';
 	foreach ($context['um_button_icons'] as $filename) {
@@ -184,11 +195,11 @@ function template_main(): void
 									<span class="ultimateMenu_drop">
 										<span class="ultimateMenuDrop">
 											<span style="display: none;" class="hideSelect">
-												' . $txt['um_admin_menu_opt_file'] . '											
+												' . $txt['um_admin_menu_opt_file'] . '
 											</span>
-										</span>									
+										</span>
 									</span>
-								</span>	
+								</span>
 							</span>
 							<span class="um_icon_container">
 								' . $context['button_data']['image'] . '
@@ -202,10 +213,10 @@ function template_form_below(): void
 	global $settings, $context, $scripturl, $txt;
 
 	echo '
-					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
-					<input name="in" value="', $context['button_data']['id'], '" type="hidden" />
+					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
+					<input name="in" value="', $context['button_data']['id'], '" type="hidden">
 					<div class="righttext padding">
-						<input name="submit" value="', $txt['admin_manage_menu_submit'], '" class="button" type="submit" />
+						<input name="submit" value="', $txt['admin_manage_menu_submit'], '" class="button" type="submit">
 					</div>
 				</div>
 			</form>';

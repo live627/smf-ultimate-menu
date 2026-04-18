@@ -1,5 +1,7 @@
 /* Ultimate-menu CSS */
 #um_loader {
+	width: 80%;
+	display: none;
 	position: relative;
 	width: calc(80px / cos(45deg));
 	height: 0.25rem;
@@ -10,6 +12,12 @@
 	background-size:  200% 50%;
 	background-repeat: no-repeat;
 	animation: umloader 2s infinite linear;
+}
+#um_icon_list {
+	flex-basis: 85%;
+}
+#advum_icons {
+	display: none;
 }
 @keyframes umloader {
 	100% {background-position:top right,bottom right}
@@ -72,9 +80,6 @@ span.um_icon_container {
 	justify-content: flex-end;
 	align-items: center;
 }
-#advum_icons {
-	display: none;
-}
 .advum_icons {
 	display: flex;
 	flex-direction: column;
@@ -82,4 +87,35 @@ span.um_icon_container {
 	width: fit-content;
 	flex-wrap: nowrap;
 	white-space: nowrap;
+}
+.um_dd_file {
+	display: inline-flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.um_file_button {
+	flex-basis: 60%;
+}
+.um_file_loading {
+	flex-basis: 30%;
+	height: 100%;
+}
+.um_dd_files_list {
+	display: inline-flex;
+	height: 42px;
+}
+.um_strong {
+	font-weight: 800;
+}
+.um_italic {
+	font-style: italic;
+}
+.um_grid_line {
+	display: grid;
+	grid-template-columns: fit-content(2rem) 1fr;
+	gap: 1rem;
+	padding-bottom: 0.15rem;
+}
+dl.um_dl_padding > * {
+	padding: 0.35rem 0rem;
 }
