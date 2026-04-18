@@ -67,6 +67,7 @@ input.um_button {
 }
 span.um_icon_container {
 	padding: 5px 10px 5px 0.5rem;
+	display: inline-flex;
 }
 .um_icon {
 	border: 0px;
@@ -116,6 +117,25 @@ span.um_icon_container {
 	gap: 1rem;
 	padding-bottom: 0.15rem;
 }
+.um_dl_padding {
+	overflow: hidden;
+}
 dl.um_dl_padding > * {
 	padding: 0.35rem 0rem;
+}
+img#um_icon_img {
+	cursor: default;
+	width: 16px;
+	height: 16px;
+	image-rendering: -webkit-optimize-contrast;
+	image-rendering: crisp-edges;
+	backface-visibility: hidden;
+	transform: translateZ(0);
+	transition: all 1.5s ease-in-out;
+}
+img#um_icon_img:hover {
+	cursor: zoom-in;
+	transform: scale(2.5, 2.5);
+	transition: all 1.5s ease-in-out;
+	filter: contrast(1.1) brightness(1.05);
 }

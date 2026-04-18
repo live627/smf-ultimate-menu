@@ -96,23 +96,6 @@ $(document).ready(function() {
 			$("#um_icon_img").attr("src", smf_default_theme_url + "/images/um_icons/" + $(this).val());
 		}
 	});
-	$("img#um_icon_img").on("mouseover", function() {
-		$(this).css("cursor", "zoom-in");
-		$(this).stop().animate({
-			width: "40px",
-			height: "40px",
-			top: "-25px",
-			left: "-25px"
-		}, "medium");
-	}).on("mouseout", function() {
-		$(this).css("cursor", "default");
-		$(this).stop().animate({
-			width: "16px",
-			height: "16px",
-			top: "0px",
-			left: "0px"
-		}, "medium");
-	});
 	$("#um_icon_select").find("option").each(function() {
 		$("<li />", {
 			"data-value": $.trim($(this).val()) ?? "",
