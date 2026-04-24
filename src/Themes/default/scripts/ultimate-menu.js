@@ -75,7 +75,7 @@ $(document).ready(function() {
 						text: $.trim(response.file),
 						class: "um_icon_selected"
 					}).appendTo($um_ul);
-					$(".hideSelect").text(response.file);
+					$(".um_hideSelect").text(response.file);
 					$("input#um_icon").val($.trim(response.file));
 				}
 				else if (response.error) {
@@ -104,8 +104,8 @@ $(document).ready(function() {
 	});
 	$("#um_icon_select").remove();
 	$um_ul.appendTo(".ultimateMenu_drop");
-	$(".hideSelect").css("display", "inline-block");
-	$(".hideSelect").text($.trim($("input#um_icon").val()) || $.trim($um_selected));
+	$(".um_hideSelect").css("display", "inline-block");
+	$(".um_hideSelect").text($.trim($("input#um_icon").val()) || $.trim($um_selected));
 	$umInput.appendTo('#um_icon_list');
 	$(".ultimateMenu_drop").on("click", function(e) {
       e.stopPropagation();
@@ -117,8 +117,9 @@ $(document).ready(function() {
     $(".ultimateMenu_drop>ul li").on('click', function() {
 		$(".ultimateMenu_drop>ul li").removeClass("um_icon_selected").addClass("um_icon");
 		$(this).removeClass("um_icon").addClass("um_icon_selected");
-		$(".hideSelect").text($.trim($(this).text()) || "");
+		$(".um_hideSelect").text($.trim($(this).text()) || "");
 		$("input#um_icon").val($.trim($(this).data("value")) || "______");
 		$("img#um_icon_img").attr("src", $.trim($(this).data("value")) ? smf_default_theme_url + "/images/um_icons/" + $.trim($(this).data("value")) : "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=");
     });
+	$("input#um_icon").val($.trim($("span#um_hideSelect").text()) || "______");
 });
