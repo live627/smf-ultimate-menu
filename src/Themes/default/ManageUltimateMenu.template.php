@@ -194,7 +194,7 @@ function template_main(): void
 								<span style="display: none;" id="advum_icons">
 									<span class="ultimateMenu_drop">
 										<span class="ultimateMenuDrop">
-											<span style="display: none;" class="hideSelect">
+											<span style="display: none;" class="um_hideSelect" id="um_hideSelect">
 												' . $txt['um_admin_menu_opt_file'] . '
 											</span>
 										</span>
