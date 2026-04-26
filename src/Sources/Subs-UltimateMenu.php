@@ -18,7 +18,6 @@ function um_load_menu(&$menu_buttons): void
 	if (substr($modSettings['integrate_menu_buttons'], -12) !== 'um_load_menu') {
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
-		return;
 	}
 
 	for ($i = 1; $i <= ($modSettings['um_count'] ?? 0); $i++) {
