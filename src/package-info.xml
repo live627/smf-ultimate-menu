@@ -39,6 +39,8 @@
 		<remove-file name="$themes_dir/default/images/admin/big/umen.png" />
 		<remove-file name="$themes_dir/default/scripts/ultimate-menu.js" />
 		<remove-file name="$themes_dir/default/css/ultimate-menu.css" />
+		<remove-file name="$themes_dir/default/css/ultimate-menu-buttons.css" />
+		<remove-file name="$themes_dir/default/css/ultimate-menu-buttons.min.css" />
 		<remove-file name="$languagedir/ManageUltimateMenu.english.php" />
 		<remove-file name="$languagedir/ManageUltimateMenu.turkish.php" />
 		<remove-file name="$languagedir/ManageUltimateMenu.spanish_latin.php" />

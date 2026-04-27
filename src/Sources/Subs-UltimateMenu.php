@@ -12,13 +12,17 @@ declare(strict_types=1);
 
 function um_load_menu(&$menu_buttons): void
 {
-	global $smcFunc, $user_info, $scripturl, $modSettings, $settings;
+	global $smcFunc, $user_info, $scripturl, $modSettings, $settings, $context;
 
 	// Make damn sure we ALWAYS load last. Priority: 100!
 	if (substr($modSettings['integrate_menu_buttons'], -12) !== 'um_load_menu') {
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
+		return;
 	}
+
+	$context['html_headers'] .= '
+		<link rel="stylesheet" href="' . $settings['default_theme_url']. '/css/ultimate-menu-buttons' . (!empty($modSettings['minimize_files']) ? '.min' : '') . '.css?v=' . um_cache_busting(false) . '">';
 
 	for ($i = 1; $i <= ($modSettings['um_count'] ?? 0); $i++) {
 		$key = 'um_button_' . $i;
@@ -30,7 +34,7 @@ function um_load_menu(&$menu_buttons): void
 			'title' => $row['name'],
 			'href' => ($row['type'] == 'forum' ? $scripturl . '?' : '') . $row['link'],
 			'target' => $row['target'],
-			'icon' => !empty($row['icon']) ? 'um_icons/' . $row['icon'] : '',
+			'icon' => !empty($row['icon']) && empty($row['sprite']) ? 'um_icons/' . $row['icon'] : (!empty($row['sprite']) ? null : 'um_icons/blank.png'),
 			'show' => (allowedTo('admin_forum') || array_intersect($user_info['groups'], $row['groups']) != []) && $row['active'],
 		];
 
@@ -82,13 +86,25 @@ function insert_button(array $needle, array &$haystack, $insertion_point, $where
 	$haystack = array_slice($haystack, 0, $offset, true) + $needle + array_slice($haystack, $offset, null, true);
 }
 
+function um_cache_busting($force = false): string
+{
+	global $modSettings;
+
+	list($count, $requestPairs) = [0, ['action' => 'admin', 'area' => 'umen']];
+	array_walk_recursive($requestPairs, function($value, $request) use (&$count) {
+		$count = isset($_REQUEST[$request]) && stripos($_REQUEST[$request], $value) !== false ? $count + 1 : $count;
+	}, $count);
+
+	return !empty($modSettings['um_fingerprint']) && $count < 2 && empty($force) ? $modSettings['um_fingerprint'] : mb_strtolower(strval(bin2hex(random_bytes(5))), 'UTF-8');
+}
+
 function um_admin_areas(&$admin_areas): void
 {
 	global $context, $txt;
 
 	loadLanguage('ManageUltimateMenu');
 	$admin_areas['config']['areas']['umen'] = [
-		'label' => $txt['um_admin_menu'],
+		'label' => $txt['um_admin_menu_um'],
 		'file' => 'ManageUltimateMenu.php',
 		'function' => function(): void
 		{
