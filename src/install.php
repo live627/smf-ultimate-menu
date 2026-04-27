@@ -73,6 +73,12 @@ $tables = [
 				'size' => 191,
 				'default' => '',
 			],
+			[
+				'name' => 'sprite',
+				'type' => 'tinyint',
+				'size' => 1,
+				'default' => 0,
+			],
 		],
 		'indexes' => [
 			[
@@ -115,6 +121,18 @@ if (!checkFieldExistsUMInstaller('um_menu', 'icon')) {
 	);
 }
 
+if (!checkFieldExistsUMInstaller('um_menu', 'sprite')) {
+	$smcFunc['db_add_column']('{db_prefix}um_menu', [
+			'name' => 'sprite',
+			'type' => 'tinyint',
+			'size' => 1,
+			'default' => 0,
+		],
+		[],
+		false
+	);
+}
+
 // update link column to text to facilitate elongated hyperlinks
 if (checkFieldExistsUMInstaller('um_menu', 'link')) {
 	$checkUmTable = $smcFunc['db_list_columns']('{db_prefix}um_menu', true);
@@ -132,7 +150,7 @@ if (checkFieldExistsUMInstaller('um_menu', 'link')) {
 $buttons = [];
 $request = $smcFunc['db_query']('', '
 	SELECT
-		id_button, name, target, type, position, link, status, permissions, parent, icon
+		id_button, name, target, type, position, link, status, permissions, parent, icon, sprite
 	FROM {db_prefix}um_menu'
 );
 
@@ -147,6 +165,7 @@ while ($row = $smcFunc['db_fetch_assoc']($request)) {
 		'active' => $row['status'] == 'active',
 		'parent' => $row['parent'],
 		'icon' => !empty($row['icon']) ? $row['icon'] : '',
+		'sprite' => !empty($row['sprite']) ? 1 : 0,
 	]);
 }
 $smcFunc['db_free_result']($request);
@@ -172,6 +191,7 @@ if (!empty($buttons)) {
 }
 
 // Now presenting... *drumroll*
+updateSettings(['um_fingerprint' => mb_strtolower(strval(bin2hex(random_bytes(5))), 'UTF-8')]);
 add_integration_function('integrate_pre_include', '$sourcedir/Subs-UltimateMenu.php');
 add_integration_function('integrate_menu_buttons', 'um_load_menu');
 add_integration_function('integrate_admin_areas', 'um_admin_areas');

@@ -80,8 +80,9 @@ class UltimateMenu
 
 		$request = $smcFunc['db_query']('', '
 			SELECT
-				id_button, name, target, type, position, link, status, permissions, parent, icon
-			FROM {db_prefix}um_menu'
+				id_button, name, target, type, position, link, status, permissions, parent, icon, sprite
+			FROM {db_prefix}um_menu
+			ORDER BY id_button ASC'
 		);
 		$buttons = [];
 
@@ -108,7 +109,7 @@ class UltimateMenu
 		$buttons = [];
 		$request = $smcFunc['db_query']('', '
 			SELECT
-				id_button, name, target, type, position, link, status, parent, icon
+				id_button, name, target, type, position, link, status, parent, icon, sprite
 			FROM {db_prefix}um_menu
 			ORDER BY {raw:sort}
 			LIMIT {int:offset}, {int:limit}',
@@ -170,7 +171,7 @@ class UltimateMenu
 		$buttons = [];
 		$request = $smcFunc['db_query']('', '
 			SELECT
-				id_button, name, target, type, position, link, status, permissions, parent, icon
+				id_button, name, target, type, position, link, status, permissions, parent, icon, sprite
 			FROM {db_prefix}um_menu'
 		);
 
@@ -185,6 +186,7 @@ class UltimateMenu
 				'active' => $row['status'] == 'active',
 				'parent' => $row['parent'],
 				'icon' => !empty($row['icon']) && file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $row['icon']) ? $row['icon'] : '',
+				'sprite' => !empty($row['sprite']),
 			]);
 		}
 		$smcFunc['db_free_result']($request);
@@ -289,9 +291,7 @@ class UltimateMenu
 		global $smcFunc;
 
 		if (!empty($menu_entry['in'])) {
-			$smcFunc['db_query'](
-				'',
-				'
+			$smcFunc['db_query']('', '
 				UPDATE {db_prefix}um_menu
 				SET
 					name = {string:name},
@@ -302,7 +302,8 @@ class UltimateMenu
 					status = {string:status},
 					permissions = {string:permissions},
 					parent = {string:parent},
-					icon = {string:icon}
+					icon = {string:icon},
+					sprite = {int:sprite}
 				WHERE id_button = {int:id}',
 				[
 					'id' => $menu_entry['in'],
@@ -315,6 +316,7 @@ class UltimateMenu
 					'permissions' => implode(',', array_filter($menu_entry['permissions'], 'strlen')),
 					'parent' => $menu_entry['parent'],
 					'icon' => $menu_entry['icon'],
+					'sprite' => (int)$menu_entry['sprite'] ?: 0,
 				]
 			);
 		} else {
@@ -331,6 +333,7 @@ class UltimateMenu
 					'permissions' => 'string',
 					'parent' => 'string',
 					'icon' => 'string',
+					'sprite' => 'int',
 				],
 				[
 					$menu_entry['name'],
@@ -342,6 +345,7 @@ class UltimateMenu
 					implode(',', array_filter($menu_entry['permissions'], 'strlen')),
 					$menu_entry['parent'],
 					$menu_entry['icon'],
+					(int)$menu_entry['sprite'],
 				],
 				['id_button']
 			);
@@ -361,7 +365,7 @@ class UltimateMenu
 
 		$request = $smcFunc['db_query']('', '
 			SELECT
-				id_button, name, target, type, position, link, status, permissions, parent, icon
+				id_button, name, target, type, position, link, status, permissions, parent, icon, sprite
 			FROM {db_prefix}um_menu
 			WHERE id_button = {int:button}',
 			[
@@ -382,6 +386,7 @@ class UltimateMenu
 			'status' => $row['status'],
 			'parent' => $row['parent'],
 			'icon' => $row['icon'],
+			'sprite' => (int)$row['sprite'],
 		];
 	}
 
@@ -418,7 +423,7 @@ class UltimateMenu
 		// We are in the endgame now.
 		remove_integration_function('integrate_menu_buttons', 'um_replay_menu');
 
-		return $this->flatten($context['replayed_menu_buttons']);
+		return $this->um_flatten($context['replayed_menu_buttons']);
 	}
 
 	/**
@@ -432,26 +437,26 @@ class UltimateMenu
 		$icons = glob($settings['default_theme_dir'] . "/images/um_icons/*.{jpg,jpeg,png}", GLOB_BRACE);
 		$buttons = $this->total_getMenu();
 
-		switch ($task) {
-			case 'all':
-				foreach ($icons as $icon) {
+		foreach ($icons as $icon) {
+			if (basename($icon) == 'blank.png') {
+				continue;
+			}
+
+			switch ($task) {
+				case 'all':
 					unlink($icon);
-				}
-				break;
-			case 'unassigned':
-				foreach ($icons as $icon) {
+					break;
+				case 'unassigned':
 					$assignedIndex = array_search(basename($icon), array_column($buttons, 'icon'));
 					if (is_bool($assignedIndex)) {
 						unlink($icon);
 					}
-				}
-				break;
-			default:
-				foreach ($files as $file) {
+					break;
+				default:
 					if (in_array($settings['default_theme_dir'] . '/images/um_icons/' . $file, $icons)) {
 						unlink($settings['default_theme_dir'] . '/images/um_icons/' . $file);
 					}
-				}
+			}
 		}
 
 		clearstatcache();
@@ -473,9 +478,10 @@ class UltimateMenu
 			new RecursiveDirectoryIterator(realpath($pathName)),
 			RecursiveIteratorIterator::LEAVES_ONLY
 		);
+		$files->setMaxDepth(0);
 
 		foreach ($files as $file) {
-			if (!$file->isDir() && in_array($file->getExtension(), ['jpg', 'jpeg', 'png'])) {
+			if (!$file->isDir() && in_array($file->getExtension(), ['jpg', 'jpeg', 'png']) && $file->getBasename('.' . $file->getExtension()) !== 'blank') {
 				if (!$standardized || preg_match('/^um--(\\d+)/u', basename($file->getRealPath()), $matches)) {
 					$images[] = basename($file->getRealPath());
 				}
@@ -538,11 +544,11 @@ class UltimateMenu
 				}
 
 				if (!preg_match('/^um--(\d+)_/', $file, $matches) && is_bool($assigned)) {
-					$newFilename = $this->hexadecimal_filename(true) . '.' . $ext;
+					$newFilename = $this->hexadecimal_string(true) . '.' . $ext;
 					$this->imageResize($umIconsPath . '/' . $file, $umIconsPath . '/' . $newFilename, $ext);
 				} elseif ($size = getimagesize($umIconsPath . '/' . $file)) {
 					if ($size[0] > 16 || $size[1] > 16) {
-						$tempFile = 'temp_' . $this->hexadecimal_filename(false) . ($fileType == IMAGETYPE_JPEG ? '.jpg' : '.png');
+						$tempFile = 'temp_' . $this->hexadecimal_string(false) . ($fileType == IMAGETYPE_JPEG ? '.jpg' : '.png');
 						rename($umIconsPath . '/' . $file, $umIconsPath . '/' . $tempFile);
 						clearstatcache();
 						$this->imageResize($umIconsPath . '/' . $tempFile, $umIconsPath . '/' . $file, $ext);
@@ -637,7 +643,7 @@ class UltimateMenu
 
 				$icon->setCompressionQuality(100);
 				if (!$crop) {
-					$icon->resizeImage($width, $height, Imagick::FILTER_CATROM, 0);
+					$icon->resizeImage($width, $height, Imagick::FILTER_CATROM, 1);
 				} else {
 					$icon->resizeImage($resize_width, $resize_height, Imagick::FILTER_LANCZOS, 0.9);
 					$icon->cropImage($width, $height, ($resize_width - $width) / 2, ($resize_height - $height) / 2);
@@ -708,7 +714,7 @@ class UltimateMenu
 					imagepng($new, $dst, 0);
 					break;
 				default:
-					imagejpeg($new, $dst, 0);
+					imagejpeg($new, $dst, 99);
 			}
 			clearstatcache();
 			if (file_exists($dst)) {
@@ -726,11 +732,11 @@ class UltimateMenu
 	}
 
 	/**
-	 * Returns a random hexadecimal representation of a filename with an optional incrementing um prefix
+	 * Returns a random hexadecimal string with an optional incrementing um prefix
 	 *
 	 * @return string
 	 */
-	public function hexadecimal_filename($prefix = false): string
+	public function hexadecimal_string($prefix = false): string
 	{
 		global $modSettings;
 
@@ -795,6 +801,154 @@ class UltimateMenu
 	}
 
 	/**
+	 * Returns boolean dependent on detected button sprite CSS
+	 *
+	 * @return boolean
+	 */
+	public function um_detect_sprite_css($button = ''): bool
+	{
+		global $settings, $modSettings;
+
+		$minified = !empty($modSettings['minimize_files']) ? '.min' : '';
+		if (file_exists($settings['default_theme_dir'] . '/images/um_icons/um_sprite/ultimate-menu-buttons.png') && file_exists($settings['default_theme_dir'] . '/css/ultimate-menu-buttons' . $minified . '.css')) {
+			$um_buttons_css = preg_replace('/\s+(?!\.\,)/', '', str_replace('/* Ultimate-menu CSS */', '', file_get_contents($settings['default_theme_dir'] . '/css/ultimate-menu-buttons' . $minified . '.css')));
+			return empty($button) && !empty($um_buttons_css) ? true : (!empty($um_buttons_css) ? strpos($um_buttons_css, '.main_icons.' . $button . '::before,.um_icon_pseudo.' . $button . '{') !== false : false);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Generates sprite and CSS files for all buttons
+	 *
+	 * @return boolean
+	 */
+	public function um_generate_sprite($changeAll = 0): bool
+	{
+		global $sourcedir, $settings, $smcFunc;
+
+		list($allButtons, $buttons) = [$this->total_getMenu(), []];
+		array_walk($allButtons, function($row) use (&$buttons, $settings) {
+			$buttons['um_button_' . $row['id_button']] = (!empty($row['icon']) && file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $row['icon']) ? $row['icon'] : '');
+		});
+
+		clearstatcache();
+		foreach (['/images/um_icons/um_sprite/ultimate-menu-buttons.png', '/css/ultimate-menu-buttons.css', '/css/ultimate-menu-buttons.min.css'] as $file) {
+			if (file_exists($settings['default_theme_dir'] . $file)) {
+				unlink($settings['default_theme_dir'] . $file);
+				clearstatcache(true, $settings['default_theme_dir'] . $file);
+			}
+		}
+
+		$coordinates = $this->um_sprite_generation($buttons);
+		$this->um_css_generation($coordinates);
+
+
+		clearstatcache();
+		$success = $this->um_detect_sprite_css();
+
+		// only adjust buttons to use the sprite if the file was created
+		if ($success && !empty($changeAll)) {
+			array_walk($buttons, function($row, $key) use ($smcFunc) {
+				$number = sscanf($key, "um_button_%d", $id);
+				if (!empty($row) && !empty($id)) {
+					$smcFunc['db_query']('', '
+						UPDATE {db_prefix}um_menu
+						SET	sprite = {int:sprite}
+						WHERE id_button = {int:id}',
+						[
+							'id' => $id,
+							'sprite' => 1,
+						]
+					);
+				}
+			});
+
+			$modSettings['um_fingerprint'] = $this->um_cache_fingerprint('new');
+		}
+
+		return $success;
+	}
+
+	/**
+	 * Checks if sprite related files should be created
+	 *
+	 * @return boolean
+	 */
+	public function um_sprite_pending($buttonIconCount = 0, $buttonCssCount = 0):bool
+	{
+		global $settings;
+
+		$css_files = [$settings['default_theme_dir'] . '/css/ultimate-menu-buttons.css', $settings['default_theme_dir'] . '/css/ultimate-menu-buttons.min.css'];
+		if (file_exists($css_files[0]) && file_exists($css_files[1])) {
+			list($allButtons, $sprite_css, $sprite_min_css) = [$this->total_getMenu(), $this->um_minify_css(file_get_contents($css_files[0])), file_get_contents($css_files[1])];
+			array_walk($allButtons, function($row) use (&$buttonIconCount, &$buttonCssCount, $settings, $sprite_css, $sprite_min_css) {
+				if (!empty($row['icon']) && file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $row['icon'])) {
+					$buttonIconCount++;
+					$find = ".main_icons.um_button_" . (int)$row['id_button'] . "::before, .um_icon_pseudo.um_button_" . (int)$row['id_button'];
+					if (strpos($sprite_css, $find) !== false && strpos($sprite_min_css, $find) !== false) {
+						$buttonCssCount++;
+					}
+				}
+			});
+		}
+
+		if ($buttonIconCount != $buttonCssCount) {
+			$modSettings['um_fingerprint'] = $this->um_cache_fingerprint('new');
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns existing or new Ultimate Menu cache buster fingerprint
+	 *
+	 * @return string
+	 */
+	public function um_cache_fingerprint($mode = 'get'): string
+	{
+		global $modSettings;
+
+		switch ($mode) {
+			case 'new':
+				$vcode = um_cache_busting(true);
+				updateSettings(
+					['um_fingerprint' => $vcode]
+				);
+				break;
+			case 'temp':
+				$vcode = um_cache_busting(true);
+				break;
+			default:
+				$vcode = um_cache_busting(false);
+		}
+
+		$modSettings['um_fingerprint'] = $vcode;
+		return $vcode;
+	}
+
+	/**
+	 * Creates Ultimate Menu admin message and/or console.log verbose
+	 */
+	public function um_alert_verbose($msg = '', $alert = false): void
+	{
+		global $context;
+
+		$generate = isset($_REQUEST['generate']) ? $_REQUEST['generate'] : '';
+
+		$context['html_headers'] .= '
+		<script>
+			$(function() {
+				console.log("' . addcslashes($msg, '"') . '");
+			});
+		</script>';
+
+		// All admin messages are one liners with some escaped character conversion
+		$context['um_admin_message'] = !empty($alert) ? stripcslashes(str_replace(["\\t", "\\n", "\\r", "\\s", "\\'"], ["&emsp;", "&emsp;", "&nbsp;", "&nbsp;", "&apos;"], addcslashes($msg, '\\'))) : '';
+	}
+
+	/**
 	 * Returns the next Ultimate Menu icon increment
 	 *
 	 * @return int
@@ -823,7 +977,6 @@ class UltimateMenu
 			if (!in_array($number, $numbers)) {
 				break;
 			}
-
 			$number++;
 		}
 
@@ -831,17 +984,97 @@ class UltimateMenu
 	}
 
 	/**
+	 * Generates a new Ultimate Menu sprite for any buttons that have a valid icon
+	 *
+	 * @return array
+	 */
+	private function um_sprite_generation($buttons = []): array
+	{
+		global $settings, $smcFunc;
+
+		list($currentY, $currentX, $spriteWidth, $spriteHeight, $coordinates, $dir) = [0, 0, 0, 0, [], $settings['default_theme_dir'] . '/images/um_icons/'];
+
+		foreach ($buttons as $imagePath) {
+			$size = getimagesize($dir . $imagePath);
+			$spriteWidth += $size[0];
+			$spriteHeight = max($spriteHeight, $size[1]);
+		}
+
+		$sprite = imagecreatetruecolor($spriteWidth, $spriteHeight);
+		imagesavealpha($sprite, true);
+		$transparent = imagecolorallocatealpha($sprite, 0, 0, 0, 127);
+		imagefill($sprite, 0, 0, $transparent);
+
+		foreach ($buttons as $key => $imagePath) {
+			$finfo = new finfo(FILEINFO_MIME_TYPE);
+			$mime = $finfo->file($dir . $imagePath);
+			$img = $mime == 'image/jpeg' ?  imagecreatefromjpeg($dir . $imagePath) : imagecreatefrompng($dir . $imagePath);
+			$size = getimagesize($dir . $imagePath);
+			imagecopy($sprite, $img, $currentX, 0, 0, 0, $size[0], $size[1]);
+			$coordinates[$key] = $currentX;
+			$currentX += $size[0];
+			$currentY += $size[1];
+			imagedestroy($img);
+		}
+
+		$um_sprite = imagepng($sprite, $dir . '/um_sprite/ultimate-menu-buttons.png', 0);
+		imagedestroy($sprite);
+		clearstatcache();
+
+		return !empty($um_sprite) ? $coordinates : [];
+	}
+
+	/**
+	 * Generates CSS files for the Ultimate Menu sprite
+	 */
+	private function um_css_generation($coordinates = []): void
+	{
+		global $settings;
+
+		if (!empty($coordinates)) {
+			$css = 'background:url(../images/um_icons/um_sprite/ultimate-menu-buttons.png) %dpx 0px no-repeat;';
+			file_put_contents($settings['default_theme_dir'] . '/css/ultimate-menu-buttons.css', '/* Ultimate-menu CSS */' . PHP_EOL);
+			file_put_contents($settings['default_theme_dir'] . '/css/ultimate-menu-buttons.min.css', '/* Ultimate-menu minified CSS */' . PHP_EOL);
+
+			foreach ($coordinates as $key => $xVal) {
+				$content = '.main_icons.' . $key . '::before, .um_icon_pseudo.' . $key . ' {' . PHP_EOL . "\t" . sprintf($css, (!$xVal ? -1 : -$xVal)) . "\n\twidth: 16px;\n\theight: 16px;\n}\n";
+				file_put_contents($settings['default_theme_dir'] . '/css/ultimate-menu-buttons.css', $content, FILE_APPEND | LOCK_EX);
+				file_put_contents($settings['default_theme_dir'] . '/css/ultimate-menu-buttons.min.css', $this->um_minify_css($content), FILE_APPEND | LOCK_EX);
+			}
+
+			file_put_contents($settings['default_theme_dir'] . '/css/ultimate-menu-buttons.min.css', PHP_EOL, FILE_APPEND | LOCK_EX);
+			clearstatcache();
+		}
+	}
+
+	/**
+	 * Minfies data written to the ultimate-menu-buttons.min.css file
+	 *
+	 * @return string
+	 */
+	private function um_minify_css($css = ''): string
+	{
+		return str_replace("@importurl(", "@import url(", trim(
+			preg_replace(
+				array('/\s*(\w)\s*{\s*/','/\s*(\S*:)(\s*)([^;]*)(\s|\n)*;(\n|\s)*/','/\n/','/\s*}\s*/'),
+				array('$1{ ','$1$3;',"",'} '),
+				$css
+			)
+		));
+	}
+
+	/**
 	 * Flattens an array to a single subset of values
 	 *
 	 * @return array
 	 */
-	private function flatten(array $array, int $i = 0): array
+	private function um_flatten(array $array, int $i = 0): array
 	{
 		$result = [];
 		foreach ($array as $key => $value) {
 			$result[$key] = [$i, $value['title']];
 			if (!empty($value['sub_buttons'])) {
-				$result += $this->flatten($value['sub_buttons'], $i + 1);
+				$result += $this->um_flatten($value['sub_buttons'], $i + 1);
 			}
 		}
 		return $result;

@@ -165,6 +165,22 @@ function template_main(): void
 							</span>
 						</dd>
 						<dt>
+							<span class="um_strong">', (!empty($context['um_sprite_detected']) ? $txt['um_menu_button_sprite_detected'] : $txt['um_menu_button_sprite_undetected']), ':</span>
+						</dt>
+						<dd>
+							<span class="um_sprite_info">', $txt['um_menu_button_sprite_info'], '</span>
+							<span class="um_grid_line">
+								<input id="um_sprite" type="radio" name="sprite" value="1"', (!empty($context['button_data']['sprite']) ? ' checked' : ''), (empty($context['um_sprite_detected']) ? ' disabled' : ''), '>
+								<label for="um_sprite_active">', $txt['um_menu_sprite_active'], '</label>
+								<span class="um_icon_pseudo um_button_' . $context['button_data']['id'] . '" style="visibility: ' . (!empty($context['button_data']['sprite']) && !empty($context['um_sprite_detected']) ? 'visible' : 'hidden') . ';"></span>
+							</span>
+							<span class="um_grid_line">
+								<input id="um_sprite_inactive" type="radio" name="sprite" value="0"', (empty($context['button_data']['sprite']) || empty($context['um_sprite_detected']) ? ' checked' : ''), '>
+								<label for="um_sprite_inactive">', $txt['um_menu_sprite_inactive'], '</label>
+								<span class="um_icon_container" style="background-image: url(\'' . $context['button_data']['image'] . '\');visibility: ' . (empty($context['button_data']['sprite']) ? 'visible' : 'hidden') . ';"></span>
+							</span>
+						</dd>
+						<dt>
 							<span class="um_strong">', $txt['um_menu_button_upload'], ':</span>
 						</dt>
 						<dd class="um_dd_file">
@@ -181,11 +197,11 @@ function template_main(): void
 						<dd class="um_dd_files_list windowbg2">
 							<span id="um_icon_list">
 								<select id="um_icon_select" name="icon">
-									<optgroup label="' . $txt['um_admin_menu_opt_file'] . '">';
+									<optgroup label="' . $txt['um_admin_menu_um_opt_file'] . '">';
 	foreach ($context['um_button_icons'] as $filename) {
 		echo '
 									<option value="', (!empty($filename) ? $filename : '______'), '"', ($context['button_data']['icon'] == $filename ? ' selected="selected"' : ''), '>
-										', (!empty($filename) && $filename != '______' ? $filename : $txt['um__menu_icons_none']), '
+										', (!empty($filename) && $filename != '______' ? $filename : $txt['um_menu_icons_none']), '
 									</option>';
 	}
 
@@ -195,14 +211,11 @@ function template_main(): void
 									<span class="ultimateMenu_drop">
 										<span class="ultimateMenuDrop">
 											<span style="display: none;" class="um_hideSelect" id="um_hideSelect">
-												' . $txt['um_admin_menu_opt_file'] . '
+												' . $txt['um_admin_menu_um_opt_file'] . '
 											</span>
 										</span>
 									</span>
 								</span>
-							</span>
-							<span class="um_icon_container">
-								' . $context['button_data']['image'] . '
 							</span>
 						</dd>
 					</dl>';
@@ -216,7 +229,7 @@ function template_form_below(): void
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">
 					<input name="in" value="', $context['button_data']['id'], '" type="hidden">
 					<div class="righttext padding">
-						<input name="submit" value="', $txt['admin_manage_menu_submit'], '" class="button" type="submit">
+						<input name="submit" value="', $txt['admin_manage_um_submit'], '" class="button" type="submit">
 					</div>
 				</div>
 			</form>';

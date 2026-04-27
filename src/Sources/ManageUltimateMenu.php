@@ -17,27 +17,28 @@ class ManageUltimateMenu
 		global $settings, $modSettings, $context, $txt;
 
 		isAllowedTo('admin_forum');
+		$this->um = new UltimateMenu();
 
 		$context['html_headers'] .= '
-		<link rel="stylesheet" href="' . $settings['default_theme_url'] . '/css/ultimate-menu.css">
-		<script src="' . $settings['default_theme_url'] . '/scripts/ultimate-menu.js" defer></script>';
-		$context['page_title'] = $txt['admin_menu_title'];
+		<link rel="stylesheet" href="' . $settings['default_theme_url'] . '/css/ultimate-menu.css?v=' . $this->um->um_cache_fingerprint('get') . '">
+		<script src="' . $settings['default_theme_url'] . '/scripts/ultimate-menu.js?v=' . $this->um->um_cache_fingerprint('get') . '" defer></script>';
+
+		$context['page_title'] = $txt['admin_menu_um_title'];
 		$context[$context['admin_menu_name']]['tab_data'] = [
-			'title' => $txt['admin_menu'],
-			'description' => $txt['admin_menu_desc'],
+			'title' => $txt['admin_menu_um'],
+			'description' => $txt['admin_menu_um_desc'],
 			'tabs' => [
 				'manmenu' => [
-					'description' => $txt['admin_manage_menu_desc'],
+					'description' => $txt['admin_manage_um_desc'],
 				],
 				'fileslist' => [
-					'description' => $txt['admin_manage_icons_desc'],
+					'description' => $txt['admin_manage_um_icons_desc'],
 				],
 				'addbutton' => [
-					'description' => $txt['admin_menu_add_button_desc'],
+					'description' => $txt['admin_menu_um_add_button_desc'],
 				],
 			],
 		];
-		$this->um = new UltimateMenu();
 
 		$subActions = [
 			'manmenu' => 'ManageMenu',
@@ -52,6 +53,23 @@ class ManageUltimateMenu
 
 	public function ManageMenu(): void
 	{
+		global $context, $txt;
+
+		$generate = isset($_REQUEST['generate']) ? $_REQUEST['generate'] : '';
+		switch ($generate) {
+			case 'success':
+				$this->um->um_alert_verbose($txt['um_menu_button_sprite_generated'], true);
+				break;
+			case 'failure':
+				$this->um->um_alert_verbose($txt['um_menu_button_sprite_error'], true);
+				break;
+			case '':
+				$this->um->um_alert_verbose($txt['admin_menu_um'], false);
+				break;
+			default:
+				$this->um->um_alert_verbose($txt['um_menu_button_sprite_drivel'], false);
+		}
+
 		if (isset($_POST['removeAll'])) {
 			checkSession();
 			$this->um->deleteallButtons();
@@ -69,6 +87,11 @@ class ManageUltimateMenu
 			redirectexit('action=admin;area=umen');
 		} elseif (isset($_POST['new'])) {
 			redirectexit('action=admin;area=umen;sa=addbutton');
+		} elseif (isset($_POST['generate'])) {
+			checkSession();
+			$generateMsg = $this->um->um_generate_sprite($_POST['sprite_all'] ?? 0) ? 'success' : 'failure';
+			$this->um->rebuildMenu();
+			redirectexit('action=admin;area=umen;generate=' . $generateMsg);
 		}
 
 		$this->listButtons();
@@ -219,11 +242,28 @@ class ManageUltimateMenu
 			],
 			'additional_rows' => [
 				[
+					'position' => 'top_of_list',
+					'value' => '
+						<div class="um_admin_message"><span class="um_message_' . (!empty($context['um_admin_message']) ? 'show' : 'hide') . '">' . $context['um_admin_message'] . '</span></div>',
+					'class' => 'righttext',
+				],
+				[
 					'position' => 'below_table_data',
 					'value' => sprintf(
 						'
-						<input type="submit" name="removeButtons" value="%s" onclick="return confirm(\'%s\');" class="button um_button">
-						<input type="submit" name="removeAll" value="%s" onclick="return confirm(\'%s\');" class="button um_button">
+						<input type="submit" name="generate" onclick="return confirm(\'%s\');" value="%s" class="button' . ($this->um->um_sprite_pending() ? ' um_pending' : '') . '">
+						<input type="checkbox" id="sprite_all" name="sprite_all" value="1">',
+						$txt['um_menu_button_sprite_generate_confirm'],
+						$txt['um_menu_button_sprite_generate'],
+					),
+					'class' => 'um_lefttext',
+				],
+				[
+					'position' => 'below_table_data',
+					'value' => sprintf(
+						'
+						<input type="submit" name="removeButtons" value="%s" onclick="return confirm(\'%s\');" class="button">
+						<input type="submit" name="removeAll" value="%s" onclick="return confirm(\'%s\');" class="button">
 						<input type="submit" name="new" value="%s" class="button um_button">
 						<input type="submit" name="save" value="%s" class="button um_button">',
 						$txt['um_menu_remove_selected'],
@@ -233,7 +273,7 @@ class ManageUltimateMenu
 						$txt['um_admin_add_button'],
 						$txt['save']
 					),
-					'class' => 'righttext',
+					'class' => 'um_righttext',
 				],
 			],
 		];
@@ -309,20 +349,27 @@ class ManageUltimateMenu
 					'position' => 'below_table_data',
 					'value' => sprintf(
 						'
+						<input type="submit" name="standardizeAll" value="%s" onclick="return confirm(\'%s\');" class="button um_button">',
+						$txt['um_menu_standardize_all'],
+						$txt['um_menu_standardize_all_confirm'],
+					),
+					'class' => 'um_lefttext',
+				],
+				[
+					'position' => 'below_table_data',
+					'value' => sprintf(
+						'
 						<input type="submit" name="removeSelected" value="%s" onclick="return confirm(\'%s\');" class="button um_button">
 						<input type="submit" name="removeUnassigned" value="%s" onclick="return confirm(\'%s\');" class="button um_button">
-						<input type="submit" name="removeAll" value="%s" onclick="return confirm(\'%s\');" class="button um_button">
-						<input type="submit" name="standardizeAll" value="%s" onclick="return confirm(\'%s\');" class="button um_button">',
+						<input type="submit" name="removeAll" value="%s" onclick="return confirm(\'%s\');" class="button um_button">',
 						$txt['um_menu_delete_selected'],
 						$txt['um_menu_delete_selected_confirm'],
 						$txt['um_menu_delete_unassigned'],
 						$txt['um_menu_delete_unassigned_confirm'],
 						$txt['um_menu_delete_all'],
 						$txt['um_menu_delete_all_confirm'],
-						$txt['um_menu_standardize_all'],
-						$txt['um_menu_standardize_all_confirm'],
 					),
-					'class' => 'righttext',
+					'class' => 'um_righttext',
 				],
 			],
 		];
@@ -340,6 +387,7 @@ class ManageUltimateMenu
 			'in' => FILTER_VALIDATE_INT,
 			'name' => FILTER_UNSAFE_RAW,
 			'icon' => FILTER_UNSAFE_RAW,
+			'sprite' => FILTER_VALIDATE_INT,
 			'position' => [
 				'filter' => FILTER_CALLBACK,
 				'options' => fn($v) => in_array($v, ['before', 'child_of', 'after']) ? $v : false,
@@ -428,6 +476,7 @@ class ManageUltimateMenu
 					'status' => 'active',
 					'parent' => '',
 					'icon' => '',
+					'sprite' => 0,
 					'image' => '',
 				],
 				$this->getInput()
@@ -445,12 +494,14 @@ class ManageUltimateMenu
 
 				clearstatcache();
 				$menu_entry['icon'] = $menu_entry['icon'] == '______' ? '' : $menu_entry['icon'];
+				$menu_entry['sprite'] = isset($menu_entry['sprite']) ? (int)$menu_entry['sprite'] : null;
 				$this->um->saveButton($menu_entry);
 				$this->um->rebuildMenu();
 
 				// Before we leave, we must clear the cache. See, SMF
 				// caches its menu at level 2 or higher.
 				clean_cache('menu_buttons');
+				$modSettings['um_fingerprint'] = $this->um->um_cache_fingerprint('new');
 
 				redirectexit('action=admin;area=umen');
 			} else {
@@ -468,7 +519,8 @@ class ManageUltimateMenu
 					'link' => $menu_entry['link'],
 					'parent' => $menu_entry['parent'],
 					'icon' => $menu_entry['icon'] ?: '',
-					'image' => '<img id="um_icon_img" style="width: 16px;height: 16px;object-fit: contain;" alt="" src="' . $this->um->iconFilePath($menu_entry['icon'] ?: '') . '">',
+					'sprite' => (int)$menu_entry['sprite'] ?: 0,
+					'image' => $this->um->iconFilePath($menu_entry['icon'] ?: ''),
 					'permissions' => $this->um->listGroups(
 						array_filter($menu_entry['permissions'], 'strlen')
 					),
@@ -513,11 +565,13 @@ class ManageUltimateMenu
 			'link' => $row['link'],
 			'status' => $row['status'],
 			'parent' => $row['parent'],
-			'icon' => !empty($row['icon']) ? $row['icon'] : '',
-			'image' => '<img id="um_icon_img" style="width: 16px;height: 16px;object-fit: contain;" alt="" src="' . $this->um->iconFilePath($row['icon'] ?: '') . '">',
+			'icon' => $row['icon'] ?? '',
+			'sprite' => (int)$row['sprite'] ?: 0,
+			'image' => $this->um->iconFilePath($row['icon'] ?: ''),
 			'um_secureCode' => $codeValue,
 
 		];
+
 		$context['all_groups_checked'] = empty(array_diff_key(
 			$context['button_data']['permissions'],
 			array_flip($row['permissions'])
@@ -526,6 +580,7 @@ class ManageUltimateMenu
 		$context['button_names'] = $this->um->getButtonNames();
 		$context['template_layers'][] = 'form';
 		$context['um_button_icons'] = ['______', ...$this->um->getIconPathContents(true)];
+		$context['um_sprite_detected'] = $this->um->um_detect_sprite_css('um_button_' . strval((int)$context['button_data']['id']));
 		$context['html_headers'] .= '
 		<script>
 			let um_secureCode = "' . $codeValue . '";
@@ -553,7 +608,8 @@ class ManageUltimateMenu
 			'permissions' => $this->um->listGroups([-3]),
 			'parent' => 'home',
 			'icon' => '',
-			'image' => '<img id="um_icon_img" style="width: 16px;height: 16px;object-fit: contain;" alt="" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=">',
+			'sprite' => 0,
+			'image' => 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
 			'id' => 0,
 			'um_secureCode' => $codeValue,
 		];
@@ -562,6 +618,7 @@ class ManageUltimateMenu
 		$context['button_names'] = $this->um->getButtonNames();
 		$context['template_layers'][] = 'form';
 		$context['um_button_icons'] = ['______', ...$this->um->getIconPathContents(true)];
+		$context['um_sprite_detected'] = false;
 		$context['html_headers'] .= '
 		<script>
 			let um_secureCode = "' . $codeValue . '";
@@ -584,7 +641,7 @@ class ManageUltimateMenu
 				$tmp_name = $postVar['tmp_name'];
 				$ext = mb_strtolower(pathinfo($newname, PATHINFO_EXTENSION), 'UTF-8');
 				$filename = pathinfo($newname, PATHINFO_FILENAME);
-				$file = $this->um->hexadecimal_filename(true) . '.' . $ext;
+				$file = $this->um->hexadecimal_string(true) . '.' . $ext;
 				if (!in_array($ext, $types)) {
 					$json_msg['error'] = $txt['um_menu_filename_illegal'];
 				} elseif ($com = fopen($target . '/' . $newname, "wb")) {

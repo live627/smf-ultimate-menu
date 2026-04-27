@@ -42,7 +42,7 @@ $(document).ready(function() {
 		name: "um_jq",
 		value: "1",
 	}), $um_ul = $("<ul />", {
-		class: "um_icons windowbg",
+		class: "um_icons",
 		id: "um_list"
 	}), $um_nofile = $("select#um_icon_select option:first").text() ?? "",
 		$um_selected = $("select#um_icon_select option:selected").text() ?? "";
@@ -67,8 +67,8 @@ $(document).ready(function() {
 			success: function(response) {
 				$("#um_file").val("");
 				if (response.file) {
-					console.log("Upload successful: " + JSON.stringify(response.file, null, 2));
-					$("#um_icon_img").attr("src", smf_default_theme_url + "/images/um_icons/" + $.trim(response.file));
+					console.log("Upload successful: " + JSON.stringify(response.file, null, 2));					
+					$("span.um_icon_container").css("background-image", "url('" + smf_default_theme_url + "/images/um_icons/" + $.trim(response.file) + "')");
 					$(".ultimateMenu_drop>ul li").removeClass("um_icon_selected").addClass("um_icon");
 					$("<li />", {
 						"data-value": $.trim(response.file),
@@ -77,6 +77,7 @@ $(document).ready(function() {
 					}).appendTo($um_ul);
 					$(".um_hideSelect").text(response.file);
 					$("input#um_icon").val($.trim(response.file));
+					$("#um_sprite_inactive").trigger("click");
 				}
 				else if (response.error) {
 					console.log(response.error);
@@ -93,7 +94,7 @@ $(document).ready(function() {
 	});
 	$("#um_icon").on("change", function() {
 		if ($(this).val()) {
-			$("#um_icon_img").attr("src", smf_default_theme_url + "/images/um_icons/" + $(this).val());
+			$("span.um_icon_container").css("background-image", "url('" + smf_default_theme_url + "/images/um_icons/" + $(this).val() + "')");
 		}
 	});
 	$("#um_icon_select").find("option").each(function() {
@@ -107,10 +108,14 @@ $(document).ready(function() {
 	$(".um_hideSelect").css("display", "inline-block");
 	$(".um_hideSelect").text($.trim($("input#um_icon").val()) || $.trim($um_selected));
 	$umInput.appendTo('#um_icon_list');
+	$("#um_sprite_inactive").on('click', function(e) {
+		e.stopPropagation();
+	});
 	$(".ultimateMenu_drop").on("click", function(e) {
-      e.stopPropagation();
-      $(".ultimateMenu_drop>ul").stop().slideToggle(1000);
-      $(document).on("click", function() {
+		e.stopPropagation();
+		$("#um_sprite_inactive").trigger("click");
+		$(".ultimateMenu_drop>ul").stop().slideToggle(1000);
+		$(document).on("click", function() {
         $(".ultimateMenu_drop>ul").hide();
       });
     });
@@ -119,7 +124,16 @@ $(document).ready(function() {
 		$(this).removeClass("um_icon").addClass("um_icon_selected");
 		$(".um_hideSelect").text($.trim($(this).text()) || "");
 		$("input#um_icon").val($.trim($(this).data("value")) || "______");
-		$("img#um_icon_img").attr("src", $.trim($(this).data("value")) ? smf_default_theme_url + "/images/um_icons/" + $.trim($(this).data("value")) : "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=");
+		$("span.um_icon_container").css("background-image", "url('" + ($.trim($(this).data("value")) ? smf_default_theme_url + "/images/um_icons/" + $.trim($(this).data("value")) : "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=") + "')");
     });
 	$("input#um_icon").val($.trim($("span#um_hideSelect").text()) || "______");
+	$('input[name="sprite"]').on("change", function(value) {
+		if (parseInt($(this).val()) == 1) {
+			$("span.um_icon_container").hide().css("visibility", "hidden");
+			$("span.um_icon_pseudo").show().css("visibility", "visible");
+		} else {
+			$("span.um_icon_pseudo").hide().css("visibility", "hidden");
+			$("span.um_icon_container").show().css("visibility", "visible");
+		}
+	});
 });

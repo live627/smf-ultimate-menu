@@ -10,20 +10,20 @@ declare(strict_types=1);
  * @license http://opensource.org/licenses/MIT MIT
  */
 
-$txt['um_admin_menu'] = 'Ultimate Menu';
+$txt['um_admin_menu_um'] = 'Ultimate Menu';
 $txt['um_admin_add_button'] = 'Add Button';
 $txt['um_admin_manage_menu'] = 'Manage Menu';
-$txt['um_admin_menu_opt_file'] = 'Choose Icon';
-$txt['um_admin_manage_icons'] = 'Manage Icons';
+$txt['um_admin_menu_um_opt_file'] = 'Choose Icon';
+$txt['um_admin_manage_icons'] = 'Manage Files';
 
-$txt['admin_menu'] = 'Menu';
-$txt['admin_menu_title'] = 'Menu Settings';
-$txt['admin_menu_desc'] = 'This page allows you to add and edit custom menu buttons.';
+$txt['admin_menu_um'] = 'Ultimate Menu';
+$txt['admin_menu_um_title'] = 'Menu Settings';
+$txt['admin_menu_um_desc'] = 'This page allows you to add and edit custom menu buttons.';
 
-$txt['admin_manage_menu_submit'] = 'Submit';
-$txt['admin_manage_menu_desc'] = 'Manage your created  Menu buttons';
-$txt['admin_menu_add_button_desc'] = 'Add new buttons to  Menu';
-$txt['admin_manage_icons_desc'] = 'Manage your uploaded icons';
+$txt['admin_manage_um_submit'] = 'Submit';
+$txt['admin_manage_um_desc'] = 'Manage your Ultimate Menu buttons and icons';
+$txt['admin_menu_um_add_button_desc'] = 'Add new buttons to Ultimate Menu';
+$txt['admin_manage_um_icons_desc'] = 'Manage your uploaded Ultimate Menu icons';
 
 $txt['um_menu_external_link'] = 'External Link';
 $txt['um_menu_forum_link'] = 'Forum Link';
@@ -45,8 +45,8 @@ $txt['um_menu_remove_selected'] = 'Remove Selected Buttons';
 $txt['um_menu_remove_all'] = 'Remove All Buttons';
 $txt['um_menu_remove_confirm'] = 'Are you sure you want to remove the selected buttons?';
 $txt['um_menu_remove_all_confirm'] = 'Are you sure you want to remove all of the buttons?';
-$txt['um_menu_add_title'] = 'Add  Button';
-$txt['um_menu_edit_title'] = 'Edit  Button';
+$txt['um_menu_add_title'] = 'Add Button';
+$txt['um_menu_edit_title'] = 'Edit Button';
 $txt['um_menu_button_name'] = 'Button Name';
 $txt['um_menu_button_type'] = 'Button Type';
 $txt['um_menu_external'] = 'External Link';
@@ -76,17 +76,26 @@ $txt['um_menu_delete_selected_confirm'] = 'Are you sure you want to delete the s
 $txt['um_menu_delete_unassigned_confirm'] = 'Are you sure you want to delete all unassigned icon files?';
 $txt['um_menu_delete_all_confirm'] = 'Are you sure you want to delete all of the icon files?';
 $txt['um_menu_icons_uninstall'] = 'Remove all Ultimate Menu icons from the "um_icons" path';
-$txt['um__menu_icons_none'] = 'None';
+$txt['um_menu_icons_none'] = 'None';
 $txt['um_menu_icon_unassigned'] = '&#11160; Unassigned';
 $txt['um_menu_icon_assigned_button'] = '&#8658; %s';
 $txt['um_menu_icon_unstandardized'] = '&#11079; Non-standardized';
+
+$txt['um_menu_button_sprite_generate'] = 'Generate';
+$txt['um_menu_button_sprite_generate_confirm'] = 'This will generate a fresh sprite containing all current Ultimate Menu button icons.\n\nIf the checkbox is selected, it will auto adjust each button that has an icon set to use the sprite.\n\nAre you sure you want to do this?';
+$txt['um_menu_button_sprite_info'] = 'Sprites reduce HTTP requests resulting in quicker page loads.';
+$txt['um_menu_button_sprite_detected'] = 'Sprite Available';
+$txt['um_menu_button_sprite_undetected'] = 'Sprite Unavailable';
+$txt['um_menu_sprite_active'] = 'Sprite';
+$txt['um_menu_sprite_inactive'] = 'Icon';
+$txt['um_menu_button_sprite_generated'] = 'Sprite was successfully generated!';
 
 // Submission errors
 $txt['um_menu_session_verify_fail'] = 'Session verification failed. Please then try again.';
 $txt['um_menu_not_found'] = 'The button you tried to edit does not exist!';
 $txt['um_menu_errors_create'] = 'The following error or errors occurred while adding your  Button:';
 $txt['um_menu_errors_modify'] = 'The following error or errors occurred while editing your  Button:';
-$txt['um_menu_numeric_desc'] = 'The button name you chose is all numeric. You must use a name that contains at least one non-numeric character.<br />1e5 is considered numeric (scientific notation) 1.5 is considered numeric (decimal number)';
+$txt['um_menu_numeric_desc'] = 'The button name you chose is all numeric. You must use a name that contains at least one non-numeric character.<br>1e5 is considered numeric (scientific notation) 1.5 is considered numeric (decimal number)';
 $txt['um_menu_empty_name'] = 'The name was left empty.';
 $txt['um_menu_empty_link'] = 'The link was left empty.';
 $txt['um_menu_empty_parent'] = 'The parent was left empty.';
@@ -98,3 +107,10 @@ $txt['um_menu_filename_illegal'] = 'The filename entered contains illegal charac
 $txt['um_menu_filename_exists'] = 'The filename entered does not exist within the Ultimate Menu icons path.';
 $txt['um_menu_filename_compress'] = 'The file can be used but cannot be compressed.';
 $txt['um_menu_filename_unknown'] = 'An unknown error occurred with the image file.';
+
+$txt['um_menu_sprite_create'] = 'Could not create empty sprite image.';
+$txt['um_menu_sprite_sourcepath'] = 'Source path does not exist: %s';
+$txt['um_menu_sprite_savepath'] = 'Save path does not exist: %s';
+$txt['um_menu_sprite_csspath'] = 'CSS path does not exist: %s';
+$txt['um_menu_button_sprite_error'] = 'An error occurred attempting to generate the sprite.\nPlease check file permissions and attempt this again.';
+$txt['um_menu_button_sprite_drivel'] = 'The intended message is non sequitur!';
