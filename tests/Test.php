@@ -117,7 +117,7 @@ final class Test extends TestCase
 							'show' => true,
 							'sub_buttons' => [
 								'inserted_sub' => $btn,
-								'sub' => $btn,
+								'sub' => $btn ,
 								'sub1' => $btn,
 							],
 						],
@@ -270,17 +270,23 @@ final class Test extends TestCase
 	{
 		global $modSettings;
 
+		$modSettings['um_count'] = 2;
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup"}';
+		$haystack = ['signup' => 'l'];
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 		add_integration_function('integrate_menu_buttons', 'my_func');
 		$this->assertEquals('um_load_menu,my_func', $modSettings['integrate_menu_buttons']);
-		$dummy = [];
-		um_load_menu($dummy);
+		um_load_menu($haystack);
 		$this->assertEquals('my_func,um_load_menu', $modSettings['integrate_menu_buttons']);
-		$dummy = [];
-		um_load_menu($dummy);
+		$this->assertCount(1, $haystack);
+		$this->assertArrayNotHasKey('um_button_2', $haystack);
+		um_load_menu($haystack);
 		$this->assertEquals('my_func,um_load_menu', $modSettings['integrate_menu_buttons']);
+		$this->assertCount(2, $haystack);
+		$this->assertArrayHasKey('um_button_2', $haystack);
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
 		remove_integration_function('integrate_menu_buttons', 'my_func');
+		unset($modSettings['um_count'], $modSettings['um_button_2']);
 	}
 
 	public function testMenu(): void
@@ -288,9 +294,11 @@ final class Test extends TestCase
 		global $modSettings;
 
 		$modSettings['um_count'] = 2;
-		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup","icon":""}';
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup"}';
 		$haystack = ['signup' => 'l'];
+		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 		um_load_menu($haystack);
+		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
 		$this->assertCount(2, $haystack);
 		$this->assertArrayHasKey('um_button_2', $haystack);
 		$this->assertCount(4, $haystack['um_button_2']);
@@ -306,7 +314,7 @@ final class Test extends TestCase
 		global $modSettings;
 
 		$modSettings['um_count'] = 2;
-		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup","icon":""}';
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup"}';
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 		$haystack = (new UltimateMenu)->getButtonNames();
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
@@ -322,7 +330,7 @@ final class Test extends TestCase
 		global $context, $modSettings;
 
 		$modSettings['um_count'] = 2;
-		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[0],"parent":"search","icon":""}';
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[0],"parent":"search"}';
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 		setupMenuContext();
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
