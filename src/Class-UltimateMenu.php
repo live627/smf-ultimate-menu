@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @package   Ultimate Menu mod
- * @version   2.0.3
+ * @version   2.0.2
  * @author    John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2014, John Rayes
  * @license   http://opensource.org/licenses/MIT MIT
@@ -392,16 +392,11 @@ class UltimateMenu
 		// It's expected to be present.
 		$context['user']['unread_messages'] = 0;
 
-		// Shuffle-me-not
-		$context['um_replaying_menu'] = true;
-
 		// Load SMF's default menu context.
 		setupMenuContext();
 
 		// We are in the endgame now.
 		remove_integration_function('integrate_menu_buttons', 'um_replay_menu', false);
-
-		unset($context['um_replaying_menu']);
 
 		return $this->flatten($context['replayed_menu_buttons']);
 	}
