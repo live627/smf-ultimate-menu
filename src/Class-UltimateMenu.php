@@ -403,7 +403,7 @@ class UltimateMenu
 
 	private function flatten(array $array, int $i = 0): array
 	{
-		$result = array();
+		$result = [];
 		foreach ($array as $key => $value)
 		{
 			$result[$key] = [$i, $value['title']];
