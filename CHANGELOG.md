@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.3](https://github.com/live627/smf-ultimate-menu/compare/v2.0.2...v2.0.3) (2026-04-27)
+
+
+### Bug Fixes
+
+* Do not load menu twice when reordering menu hooks ([#25](https://github.com/live627/smf-ultimate-menu/issues/25)) ([b99285a](https://github.com/live627/smf-ultimate-menu/commit/b99285a70f4e9ba0adbdc688a4734d2e6fc3c6ae))
+
 ### [2.0.2](https://www.github.com/live627/smf-ultimate-menu/compare/v2.0.1...v2.0.2) (2022-03-20)
 
 
