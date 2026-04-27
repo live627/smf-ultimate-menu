@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @package   Ultimate Menu mod
- * @version   2.0.3
+ * @version   2.0.2
  * @author    John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2014, John Rayes
  * @license   http://opensource.org/licenses/MIT MIT
@@ -12,15 +12,13 @@ declare(strict_types=1);
 
 function um_load_menu(&$menu_buttons): void
 {
-	global $context, $modSettings, $smcFunc, $user_info, $scripturl;
+	global $smcFunc, $user_info, $scripturl, $modSettings;
 
 	// Make damn sure we ALWAYS load last. Priority: 100!
-	if (!isset($context['um_replaying_menu']) && substr($modSettings['integrate_menu_buttons'], -12) !== 'um_load_menu')
+	if (substr($modSettings['integrate_menu_buttons'], -12) !== 'um_load_menu')
 	{
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
-
-		return;
 	}
 
 	for ($i = 1; $i <= ($modSettings['um_count'] ?? 0); $i++)
