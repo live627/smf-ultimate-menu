@@ -316,7 +316,7 @@ class UltimateMenu
 					'permissions' => implode(',', array_filter($menu_entry['permissions'], 'strlen')),
 					'parent' => $menu_entry['parent'],
 					'icon' => $menu_entry['icon'],
-					'sprite' => (int)$menu_entry['sprite'] ?: 0,
+					'sprite' => (int) $menu_entry['sprite'] ?: 0,
 				]
 			);
 		} else {
@@ -345,7 +345,7 @@ class UltimateMenu
 					implode(',', array_filter($menu_entry['permissions'], 'strlen')),
 					$menu_entry['parent'],
 					$menu_entry['icon'],
-					(int)$menu_entry['sprite'],
+					(int) $menu_entry['sprite'],
 				],
 				['id_button']
 			);
@@ -386,7 +386,7 @@ class UltimateMenu
 			'status' => $row['status'],
 			'parent' => $row['parent'],
 			'icon' => $row['icon'],
-			'sprite' => (int)$row['sprite'],
+			'sprite' => (int) $row['sprite'],
 		];
 	}
 
@@ -453,9 +453,11 @@ class UltimateMenu
 					}
 					break;
 				default:
-					if (in_array($settings['default_theme_dir'] . '/images/um_icons/' . $file, $icons)) {
-						unlink($settings['default_theme_dir'] . '/images/um_icons/' . $file);
-					}
+					foreach ($files as $file) {
+						if (in_array($settings['default_theme_dir'] . '/images/um_icons/' . $file, $icons)) {
+							unlink($settings['default_theme_dir'] . '/images/um_icons/' . $file);
+						}
+					}	
 			}
 		}
 
@@ -851,7 +853,7 @@ class UltimateMenu
 		if ($success && !empty($changeAll)) {
 			array_walk($buttons, function($row, $key) use ($smcFunc) {
 				$number = sscanf($key, "um_button_%d", $id);
-				if (!empty($row) && !empty($id)) {
+				if (!empty($row) && !empty($number)) {
 					$smcFunc['db_query']('', '
 						UPDATE {db_prefix}um_menu
 						SET	sprite = {int:sprite}
@@ -864,7 +866,7 @@ class UltimateMenu
 				}
 			});
 
-			$modSettings['um_fingerprint'] = $this->um_cache_fingerprint('new');
+			$this->um_cache_fingerprint('new');
 		}
 
 		return $success;
@@ -894,7 +896,7 @@ class UltimateMenu
 		}
 
 		if ($buttonIconCount != $buttonCssCount) {
-			$modSettings['um_fingerprint'] = $this->um_cache_fingerprint('new');
+			$this->um_cache_fingerprint('new');
 			return true;
 		}
 
@@ -933,9 +935,7 @@ class UltimateMenu
 	 */
 	public function um_alert_verbose($msg = '', $alert = false): void
 	{
-		global $context;
-
-		$generate = isset($_REQUEST['generate']) ? $_REQUEST['generate'] : '';
+		global $context;		
 
 		$context['html_headers'] .= '
 		<script>
@@ -1056,8 +1056,8 @@ class UltimateMenu
 	{
 		return str_replace("@importurl(", "@import url(", trim(
 			preg_replace(
-				array('/\s*(\w)\s*{\s*/','/\s*(\S*:)(\s*)([^;]*)(\s|\n)*;(\n|\s)*/','/\n/','/\s*}\s*/'),
-				array('$1{ ','$1$3;',"",'} '),
+				array('/\s*(\w)\s*{\s*/', '/\s*(\S*:)(\s*)([^;]*)(\s|\n)*;(\n|\s)*/', '/\n/', '/\s*}\s*/'),
+				array('$1{ ', '$1$3;', "", '} '),
 				$css
 			)
 		));

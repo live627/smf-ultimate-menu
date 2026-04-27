@@ -22,7 +22,7 @@ function um_load_menu(&$menu_buttons): void
 	}
 
 	$context['html_headers'] .= '
-		<link rel="stylesheet" href="' . $settings['default_theme_url']. '/css/ultimate-menu-buttons' . (!empty($modSettings['minimize_files']) ? '.min' : '') . '.css?v=' . um_cache_busting(false) . '">';
+		<link rel="stylesheet" href="' . $settings['default_theme_url'] . '/css/ultimate-menu-buttons' . (!empty($modSettings['minimize_files']) ? '.min' : '') . '.css?v=' . um_cache_busting(false) . '">';
 
 	for ($i = 1; $i <= ($modSettings['um_count'] ?? 0); $i++) {
 		$key = 'um_button_' . $i;

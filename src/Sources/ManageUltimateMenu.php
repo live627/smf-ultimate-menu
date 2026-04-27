@@ -494,14 +494,14 @@ class ManageUltimateMenu
 
 				clearstatcache();
 				$menu_entry['icon'] = $menu_entry['icon'] == '______' ? '' : $menu_entry['icon'];
-				$menu_entry['sprite'] = isset($menu_entry['sprite']) ? (int)$menu_entry['sprite'] : null;
+				$menu_entry['sprite'] = isset($menu_entry['sprite']) ? (int) $menu_entry['sprite'] : null;
 				$this->um->saveButton($menu_entry);
 				$this->um->rebuildMenu();
 
 				// Before we leave, we must clear the cache. See, SMF
 				// caches its menu at level 2 or higher.
 				clean_cache('menu_buttons');
-				$modSettings['um_fingerprint'] = $this->um->um_cache_fingerprint('new');
+				$this->um->um_cache_fingerprint('new');
 
 				redirectexit('action=admin;area=umen');
 			} else {
@@ -519,7 +519,7 @@ class ManageUltimateMenu
 					'link' => $menu_entry['link'],
 					'parent' => $menu_entry['parent'],
 					'icon' => $menu_entry['icon'] ?: '',
-					'sprite' => (int)$menu_entry['sprite'] ?: 0,
+					'sprite' => (int) $menu_entry['sprite'] ?: 0,
 					'image' => $this->um->iconFilePath($menu_entry['icon'] ?: ''),
 					'permissions' => $this->um->listGroups(
 						array_filter($menu_entry['permissions'], 'strlen')
@@ -566,7 +566,7 @@ class ManageUltimateMenu
 			'status' => $row['status'],
 			'parent' => $row['parent'],
 			'icon' => $row['icon'] ?? '',
-			'sprite' => (int)$row['sprite'] ?: 0,
+			'sprite' => (int) $row['sprite'] ?: 0,
 			'image' => $this->um->iconFilePath($row['icon'] ?: ''),
 			'um_secureCode' => $codeValue,
 
@@ -580,7 +580,7 @@ class ManageUltimateMenu
 		$context['button_names'] = $this->um->getButtonNames();
 		$context['template_layers'][] = 'form';
 		$context['um_button_icons'] = ['______', ...$this->um->getIconPathContents(true)];
-		$context['um_sprite_detected'] = $this->um->um_detect_sprite_css('um_button_' . strval((int)$context['button_data']['id']));
+		$context['um_sprite_detected'] = $this->um->um_detect_sprite_css('um_button_' . strval((int) $context['button_data']['id']));
 		$context['html_headers'] .= '
 		<script>
 			let um_secureCode = "' . $codeValue . '";
