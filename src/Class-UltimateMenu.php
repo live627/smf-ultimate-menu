@@ -392,11 +392,16 @@ class UltimateMenu
 		// It's expected to be present.
 		$context['user']['unread_messages'] = 0;
 
+		// Shuffle-me-not
+		$context['um_replaying_menu'] = true;
+
 		// Load SMF's default menu context.
 		setupMenuContext();
 
 		// We are in the endgame now.
 		remove_integration_function('integrate_menu_buttons', 'um_replay_menu', false);
+
+		unset($context['um_replaying_menu']);
 
 		return $this->flatten($context['replayed_menu_buttons']);
 	}
