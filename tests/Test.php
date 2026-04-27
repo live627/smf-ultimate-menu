@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 final class Test extends TestCase
 {
-	public function buttonProvider(): array
+	public static function buttonProvider(): array
 	{
 		$btn = ['href' => 'link', 'show' => true];
 		$btn1 = ['href' => 'link1', 'show' => true];
@@ -102,7 +102,7 @@ final class Test extends TestCase
 		}
 	}
 
-	public function childButtonProvider(): array
+	public static function childButtonProvider(): array
 	{
 		$btn = ['href' => 'link', 'show' => true];
 		return [
