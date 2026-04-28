@@ -2,10 +2,13 @@
 
 declare(strict_types=1);
 
-global $scripturl, $settings, $sourcedir, $boarddir, $context, $txt;
+global $scripturl, $settings, $sourcedir, $boarddir, $context, $txt, $umButtonKeyCount;
 
 $sourcePath = is_dir('./src/Sources') ? './src/Sources' : './src';
 $langPath = is_dir('./src/languages') ? './src/languages' : './src';
+
+// detect old/new directory scenario to determine $temp_menu[] key count
+$umButtonKeyCount = is_dir('./src/Sources') ? 5 : 4;
 
 require_once $sourcePath . '/ManageUltimateMenu.php';
 require_once $sourcePath . '/Subs-UltimateMenu.php';
@@ -52,7 +55,7 @@ $settings = [
 $scripturl = dirname(__DIR__);
 $sourcedir = './vendor/simplemachines/smf/Sources';
 $boarddir = './vendor/simplemachines/smf';
-$txt['assert_count'] = 'Test Array does not contain %d elements';
+$txt['assert_count'] = 'Test array does not contain %d elements';
 
 $smcFunc['db_query'] = function($name, $query, $args)
 {
