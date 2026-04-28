@@ -28,8 +28,10 @@ $context = [
 ];
 $modSettings = ['lastActive' => 0, 'settings_updated' => 0, 'postmod_active' => false];
 
-global $scripturl;
+global $scripturl, $settings, $sourcedir;
 $scripturl = dirname(__DIR__);
+$sourcedir = './vendor/simplemachines/smf/Sources';
+$settings['default_theme_dir'] = './src/Themes/default';
 
 $smcFunc['db_query'] = function($name, $query, $args)
 {
