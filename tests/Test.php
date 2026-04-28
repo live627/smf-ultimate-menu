@@ -301,7 +301,7 @@ final class Test extends TestCase
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
 		$this->assertCount(2, $haystack, sprintf($txt['assert_count'], 2));
 		$this->assertArrayHasKey('um_button_2', $haystack);
-		$this->assertCount(2, $haystack['um_button_2'], sprintf($txt['assert_count'], 2));
+		$this->assertCount(5, $haystack['um_button_2'], sprintf($txt['assert_count'], 5));
 		$this->assertArrayHasKey('title', $haystack['um_button_2']);
 		$this->assertArrayHasKey('href', $haystack['um_button_2']);
 		$this->assertEquals('Test', $haystack['um_button_2']['title']);
