@@ -44,14 +44,14 @@ $txt['um_menu_after'] = 'Après';
 $txt['um_menu_remove_selected'] = 'Supprimer les boutons sélectionnés';
 $txt['um_menu_remove_all'] = 'Supprimer tous les boutons';
 $txt['um_menu_remove_confirm'] = 'Etes-vous sûr de vouloir supprimer tous les boutons sélectionnés ?';
-$txt['um_menu_remove_all_confirm'] = 'Etes-vous sûr de vouloir retirer tous les boutons ?';
+$txt['um_menu_remove_all_confirm'] = 'Êtes-vous sûr de vouloir supprimer tous les boutons ?';
 $txt['um_menu_add_title'] = 'Ajouter un bouton';
 $txt['um_menu_edit_title'] = 'Modifier un bouton';
 $txt['um_menu_button_name'] = 'Nom du bouton';
 $txt['um_menu_button_type'] = 'Type de bouton';
 $txt['um_menu_external'] = 'Lien externe';
 $txt['um_menu_forum'] = 'Lien du forum';
-$txt['um_menu_button_link_desc'] = 'Pour le lien du forum vous pouvez juste mettre les choses après "index.php?" dans lien du forum.';
+$txt['um_menu_button_link_desc'] = 'Pour le lien de forum vous pouvez juste mettre les choses après "index.php?" dans le lien de votre forum.';
 $txt['um_menu_button_link'] = 'Lien du bouton';
 $txt['um_menu_button_perms'] = 'Autoriser groupes';
 $txt['um_menu_button_guest'] = 'Invités';
@@ -92,7 +92,7 @@ $txt['um_menu_button_sprite_generated'] = 'Le sprite a été généré avec succ
 
 // Submission errors
 $txt['um_menu_session_verify_fail'] = 'Session verification failed. Please then try again.';
-$txt['um_menu_not_found'] = 'le bouton que vous essayez de modifier n\'existe pas !';
+$txt['um_menu_not_found'] = 'Le bouton que vous essayez de modifier n\'existe pas !';
 $txt['um_menu_errors_create'] = 'L\'erreur ou les erreurs suivantes se sont produites lors de l\'ajout de votre bouton:';
 $txt['um_menu_errors_modify'] = 'L\'erreur ou les erreurs suivantes sont survenues lors de la modification de votre bouton:';
 $txt['um_menu_numeric_desc'] = 'Le nom du bouton que vous avez choisi est entièrement numérique. Vous devez utiliser un nom qui contient au moins un caractère non numérique.<br />1e5 est considéré numérique (notation scientifique) 1.5 est considéré numérique (nombre décimal)';

@@ -12,7 +12,7 @@ jobs:
       FORCE_COLOR: 1
       MOD_NAME: ultimate-menu
     steps:
-      - uses: googleapis/release-please-action@v4
+      - uses: googleapis/release-please-action@v5
         id: release
         with:
           config-file: .github/release-please-config.json
@@ -33,7 +33,6 @@ jobs:
             sed -i "/@version/c \ * @version   $VERSION" "$f"
           done
           sed -i "/<version>/c \	<version>$VERSION</version>" src/package-info.xml
-          sed -i -E "30s/[0-9]+\.[0-9]+\.[0-9]+/$VERSION/" src/CustomForm/ManageCustomForm.php
           sed -i -E "1s/[0-9]+\.[0-9]+\.[0-9]+/$VERSION/" src/install.txt
           sed -i -E "10s/[0-9]+\.[0-9]+\.[0-9]+/$VERSION/g" README.md
           sed -i -E "10s/[0-9]+-[0-9]+-[0-9]+/${MAJOR}-${MINOR}-${PATCH}/" README.md
@@ -46,7 +45,7 @@ jobs:
       - run: tar -czvf myfile.tgz LICENSE README.md -C src $(ls src)
         if: ${{ steps.release.outputs.release_created }}
       - name: Upload release asset
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const fs = require('fs');
