@@ -14,9 +14,16 @@ require_once './vendor/autoload.php';
 // What are you doing here, SMF?
 define('SMF', 1);
 
-global $context;
+global $scripturl, $settings, $sourcedir, $boarddir, $context;
 
-$user_info = ['is_admin' => true, 'is_guest' => false, 'language' => '', 'groups' => [0], 'permissions' => []];
+$user_info = [
+	'is_admin' => true,
+	'is_guest' => false,
+	'language' => '',
+	'groups' => [0],
+	'permissions' => []
+];
+
 $context = [
 	'user' => ['can_mod' => true, 'is_guest' => false, 'id' => 1],
 	'right_to_left' => false,
@@ -25,14 +32,25 @@ $context = [
 	'current_action' => '',
 	'forum_name' => '',
 	'admin_menu_name' => '',
+	'html_headers' => ''
 ];
-$modSettings = ['lastActive' => 0, 'settings_updated' => 0, 'postmod_active' => false];
 
-global $scripturl, $settings, $sourcedir;
+$modSettings = [
+	'lastActive' => 0,
+	'settings_updated' => 0,
+	'postmod_active' => false
+];
+
+$settings = [
+	'theme_dir' => './src/Themes/default',
+	'default_theme_dir' => './src/Themes/default',
+	'theme_url' => dirname(__DIR__) . '/Themes/default',
+	'default_theme_url' => dirname(__DIR__) . '/Themes/default',
+];
+
 $scripturl = dirname(__DIR__);
 $sourcedir = './vendor/simplemachines/smf/Sources';
-$settings['default_theme_dir'] = './src/Themes/default';
-$settings['theme_url'] = $settings['default_theme_url'] = dirname(__DIR__) . '/Themes/default';
+$boarddir = './vendor/simplemachines/smf';
 
 $smcFunc['db_query'] = function($name, $query, $args)
 {
