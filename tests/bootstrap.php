@@ -32,6 +32,7 @@ global $scripturl, $settings, $sourcedir;
 $scripturl = dirname(__DIR__);
 $sourcedir = './vendor/simplemachines/smf/Sources';
 $settings['default_theme_dir'] = './src/Themes/default';
+$settings['theme_url'] = $settings['default_theme_url'] = dirname(__DIR__) . '/Themes/default';
 
 $smcFunc['db_query'] = function($name, $query, $args)
 {
