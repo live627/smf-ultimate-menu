@@ -892,7 +892,7 @@ class UltimateMenu
 			array_walk($allButtons, function($row) use (&$buttonIconCount, &$buttonCssCount, $settings, $sprite_css, $sprite_min_css) {
 				if (!empty($row['icon']) && file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $row['icon'])) {
 					$buttonIconCount++;
-					$find = ".main_icons.um_button_" . (int)$row['id_button'] . "::before, .um_icon_pseudo.um_button_" . (int)$row['id_button'];
+					$find = ".main_icons.um_button_" . (int) $row['id_button'] . "::before, .um_icon_pseudo.um_button_" . (int) $row['id_button'];
 					if (strpos($sprite_css, $find) !== false && strpos($sprite_min_css, $find) !== false) {
 						$buttonCssCount++;
 					}
@@ -901,7 +901,7 @@ class UltimateMenu
 		}
 
 		if ($buttonIconCount != $buttonCssCount) {
-			$this->um_cache_fingerprint('new');
+			$this->um_cache_fingerprint('temp');
 			return true;
 		}
 
