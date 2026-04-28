@@ -14,7 +14,7 @@ require_once './vendor/autoload.php';
 // What are you doing here, SMF?
 define('SMF', 1);
 
-global $scripturl, $settings, $sourcedir, $boarddir, $context;
+global $scripturl, $settings, $sourcedir, $boarddir, $context, $txt;
 
 $user_info = [
 	'is_admin' => true,
@@ -52,6 +52,7 @@ $settings = [
 $scripturl = dirname(__DIR__);
 $sourcedir = './vendor/simplemachines/smf/Sources';
 $boarddir = './vendor/simplemachines/smf';
+$txt['assert_count'] = 'Test Array does not contains %d elements'; 
 
 $smcFunc['db_query'] = function($name, $query, $args)
 {

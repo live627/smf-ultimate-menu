@@ -268,7 +268,7 @@ final class Test extends TestCase
 
 	public function testHook(): void
 	{
-		global $modSettings;
+		global $modSettings, $txt;
 
 		$modSettings['um_count'] = 2;
 		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
@@ -278,11 +278,11 @@ final class Test extends TestCase
 		$this->assertEquals('um_load_menu,my_func', $modSettings['integrate_menu_buttons']);
 		um_load_menu($haystack);
 		$this->assertEquals('my_func,um_load_menu', $modSettings['integrate_menu_buttons']);
-		$this->assertCount(1, $haystack);
+		$this->assertCount(1, $haystack, sprintf($txt['assert_count'], 1));
 		$this->assertArrayNotHasKey('um_button_2', $haystack);
 		um_load_menu($haystack);
 		$this->assertEquals('my_func,um_load_menu', $modSettings['integrate_menu_buttons']);
-		$this->assertCount(2, $haystack);
+		$this->assertCount(2, $haystack, sprintf($txt['assert_count'], 2));
 		$this->assertArrayHasKey('um_button_2', $haystack);
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
 		remove_integration_function('integrate_menu_buttons', 'my_func');
@@ -291,7 +291,7 @@ final class Test extends TestCase
 
 	public function testMenu(): void
 	{
-		global $modSettings;
+		global $modSettings, $txt;
 
 		$modSettings['um_count'] = 2;
 		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
@@ -299,9 +299,9 @@ final class Test extends TestCase
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 		um_load_menu($haystack);
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
-		$this->assertCount(2, $haystack);
+		$this->assertCount(2, $haystack, sprintf($txt['assert_count'], 2));
 		$this->assertArrayHasKey('um_button_2', $haystack);
-		$this->assertCount(4, $haystack['um_button_2']);
+		$this->assertCount(4, $haystack['um_button_2'], sprintf($txt['assert_count'], 4));
 		$this->assertArrayHasKey('title', $haystack['um_button_2']);
 		$this->assertArrayHasKey('href', $haystack['um_button_2']);
 		$this->assertEquals('Test', $haystack['um_button_2']['title']);
@@ -311,14 +311,14 @@ final class Test extends TestCase
 
 	public function testListButtons(): void
 	{
-		global $modSettings;
+		global $modSettings, $txt;
 
 		$modSettings['um_count'] = 2;
 		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 		$haystack = (new UltimateMenu)->getButtonNames();
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
-		$this->assertCount(2, $haystack['um_button_2']);
+		$this->assertCount(2, $haystack['um_button_2'], sprintf($txt['assert_count'], 2));
 		$this->assertSame([0, 'Test'], $haystack['um_button_2']);
 		$this->assertArrayHasKey('admin', $haystack);
 		$this->assertArrayHasKey('signup', $haystack);
