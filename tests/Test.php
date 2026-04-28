@@ -271,7 +271,7 @@ final class Test extends TestCase
 		global $modSettings;
 
 		$modSettings['um_count'] = 2;
-		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup"}';
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
 		$haystack = ['signup' => 'l'];
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 		add_integration_function('integrate_menu_buttons', 'my_func');
@@ -294,7 +294,7 @@ final class Test extends TestCase
 		global $modSettings;
 
 		$modSettings['um_count'] = 2;
-		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup"}';
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
 		$haystack = ['signup' => 'l'];
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 		um_load_menu($haystack);
@@ -314,7 +314,7 @@ final class Test extends TestCase
 		global $modSettings;
 
 		$modSettings['um_count'] = 2;
-		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup"}';
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 		$haystack = (new UltimateMenu)->getButtonNames();
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
@@ -330,7 +330,7 @@ final class Test extends TestCase
 		global $context, $modSettings;
 
 		$modSettings['um_count'] = 2;
-		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[0],"parent":"search"}';
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[0],"parent":"search","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 		setupMenuContext();
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');

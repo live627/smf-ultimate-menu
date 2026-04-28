@@ -46,6 +46,7 @@ $settings = [
 	'default_theme_dir' => './src/Themes/default',
 	'theme_url' => dirname(__DIR__) . '/Themes/default',
 	'default_theme_url' => dirname(__DIR__) . '/Themes/default',
+	'images_url' => dirname(__DIR__) . '/Themes/default/images',
 ];
 
 $scripturl = dirname(__DIR__);
