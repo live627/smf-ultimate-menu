@@ -2,10 +2,13 @@
 
 declare(strict_types=1);
 
-require_once './src/ManageUltimateMenu.php';
-require_once './src/Subs-UltimateMenu.php';
-require_once './src/Class-UltimateMenu.php';
-require_once './src/ManageUltimateMenu.english.php';
+$sourcePath = is_dir('./src/Sources') ? './src/Sources' : './src';
+$langPath = is_dir('./src/languages') ? './src/languages' : './src';
+
+require_once $sourcePath . '/ManageUltimateMenu.php';
+require_once $sourcePath . '/Subs-UltimateMenu.php';
+require_once $sourcePath . '/Class-UltimateMenu.php';
+require_once $langPath . '/ManageUltimateMenu.english.php';
 require_once './vendor/autoload.php';
 
 // What are you doing here, SMF?
