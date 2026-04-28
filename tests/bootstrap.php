@@ -52,7 +52,8 @@ $settings = [
 $scripturl = dirname(__DIR__);
 $sourcedir = './vendor/simplemachines/smf/Sources';
 $boarddir = './vendor/simplemachines/smf';
-$txt['assert_count'] = 'Test Array does not contains %d elements'; 
+$txt['assert_count'] = 'Test Array does not contain %d elements';
+$txt['admin_menu_um_title'] = 'Menu Settings';
 
 $smcFunc['db_query'] = function($name, $query, $args)
 {
