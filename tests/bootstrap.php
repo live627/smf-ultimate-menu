@@ -65,35 +65,36 @@ $sourcedir = './vendor/simplemachines/smf/Sources';
 $boarddir = './vendor/simplemachines/smf';
 $txt['assert_count'] = 'Test array does not contain %d elements';
 
-$smcFunc['db_query'] = function($name, $query, $args)
-{
+$smcFunc['db_query'] = function($name, $query, $args) {
 	global $current_item, $modSettings;
 
 	$current_item = 0;
 
-	if (isset($args['variable']) && $args['variable'] == 'integrate_menu_buttons')
+	if (isset($args['variable']) && $args['variable'] == 'integrate_menu_buttons') {
 		return [[$modSettings[$args['variable']] ?? null]];
+	}
 
 	return [['']];
 };
-$smcFunc['db_fetch_assoc'] = function($request)
-{
+
+$smcFunc['db_fetch_assoc'] = function($request) {
 	global $current_item;
 
 	return $request[$current_item++] ?? null;
 };
-$smcFunc['db_fetch_row'] = function($request)
-{
+
+$smcFunc['db_fetch_row'] = function($request) {
 	global $current_item;
 
 	return $request[$current_item++] ?? null;
 };
-$smcFunc['db_free_result'] = function(): void
-{
+
+$smcFunc['db_free_result'] = function(): void {
 };
-$smcFunc['db_insert'] = function(): void
-{
+
+$smcFunc['db_insert'] = function(): void {
 };
+
 $smcFunc['htmltrim'] = fn(string $string): string => trim($string);
 $smcFunc['htmlspecialchars'] = fn(string $string): string => htmlspecialchars($string, ENT_QUOTES);
 
