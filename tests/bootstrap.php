@@ -52,6 +52,7 @@ $settings = [
 $scripturl = dirname(__DIR__);
 $sourcedir = './vendor/simplemachines/smf/Sources';
 $boarddir = './vendor/simplemachines/smf';
+$txt['assert_count'] = 'Test Array does not contain %d elements';
 
 $smcFunc['db_query'] = function($name, $query, $args)
 {
@@ -89,4 +90,5 @@ $smcFunc['htmlspecialchars'] = fn(string $string): string => htmlspecialchars($s
 require_once './vendor/simplemachines/smf/Sources/Load.php';
 require_once './vendor/simplemachines/smf/Sources/Security.php';
 require_once './vendor/simplemachines/smf/Sources/Subs.php';
+require_once './vendor/simplemachines/smf/Sources/Errors.php';
 require_once './vendor/simplemachines/smf/Themes/default/languages/index.english.php';
