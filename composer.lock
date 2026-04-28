@@ -92,7 +92,7 @@
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1 || ^8.1"
+                "php": "^7.1 || ^8.0"
             },
             "conflict": {
                 "doctrine/collections": "<1.6.8",
@@ -215,7 +215,7 @@
                 "ext-phar": "*",
                 "ext-xmlwriter": "*",
                 "phar-io/version": "^3.0.1",
-                "php": "^7.2 || ^8.1"
+                "php": "^7.2 || ^8.0"
             },
             "type": "library",
             "extra": {
@@ -277,7 +277,7 @@
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2 || ^8.1"
+                "php": "^7.2 || ^8.0"
             },
             "type": "library",
             "autoload": {
@@ -1796,7 +1796,7 @@
                 "ext-dom": "*",
                 "ext-tokenizer": "*",
                 "ext-xmlwriter": "*",
-                "php": "^7.2 || ^8.1"
+                "php": "^7.2 || ^8.0"
             },
             "type": "library",
             "autoload": {
