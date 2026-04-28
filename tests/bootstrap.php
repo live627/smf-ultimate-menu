@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 global $scripturl, $settings, $sourcedir, $boarddir, $context, $txt, $umButtonObject;
 
@@ -11,7 +11,7 @@ $langPath = is_dir('./src/languages') ? './src/languages' : './src';
 $umButtonObject = is_dir('./src/Sources') ? [
 	'button_key_count' => 5,
 	'button_data1' => '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup","icon":"um--4_b9c4f9a81de.png","sprite":"1"}',
-	'button_data2' => '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[0],"parent":"search","icon":"um--4_b9c4f9a81de.png","sprite":"1"}'	
+	'button_data2' => '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[0],"parent":"search","icon":"um--4_b9c4f9a81de.png","sprite":"1"}'
 ] : [
 	'button_key_count' => 4,
 	'button_data1' => '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup"}',
@@ -65,7 +65,7 @@ $sourcedir = './vendor/simplemachines/smf/Sources';
 $boarddir = './vendor/simplemachines/smf';
 $txt['assert_count'] = 'Test array does not contain %d elements';
 
-$smcFunc['db_query'] = function ($name, $query, $args)
+$smcFunc['db_query'] = function($name, $query, $args)
 {
 	global $current_item, $modSettings;
 
@@ -76,22 +76,22 @@ $smcFunc['db_query'] = function ($name, $query, $args)
 
 	return [['']];
 };
-$smcFunc['db_fetch_assoc'] = function ($request)
+$smcFunc['db_fetch_assoc'] = function($request)
 {
 	global $current_item;
 
 	return $request[$current_item++] ?? null;
 };
-$smcFunc['db_fetch_row'] = function ($request)
+$smcFunc['db_fetch_row'] = function($request)
 {
 	global $current_item;
 
 	return $request[$current_item++] ?? null;
 };
-$smcFunc['db_free_result'] = function (): void
+$smcFunc['db_free_result'] = function(): void
 {
 };
-$smcFunc['db_insert'] = function (): void
+$smcFunc['db_insert'] = function(): void
 {
 };
 $smcFunc['htmltrim'] = fn(string $string): string => trim($string);
