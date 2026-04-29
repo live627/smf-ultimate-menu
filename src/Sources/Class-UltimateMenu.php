@@ -1042,7 +1042,7 @@ class UltimateMenu
 			file_put_contents($settings['default_theme_dir'] . '/css/ultimate-menu-buttons.min.css', '/* Ultimate-menu minified CSS */' . PHP_EOL);
 
 			foreach ($coordinates as $key => $xVal) {
-				$content = '.main_icons.' . $key . '::before, .um_icon_pseudo.' . $key . ' {' . PHP_EOL . "\t" . sprintf($css, (!$xVal ? -1 : -$xVal)) . "\n\twidth: 16px;\n\theight: 16px;\n}\n";
+				$content = '.main_icons.' . $key . '::before, .um_icon_pseudo.' . $key . ' {' . PHP_EOL . "\t" . sprintf($css, (!$xVal ? 0 : -$xVal)) . "\n\twidth: 16px;\n\theight: 16px;\n}\n";
 				file_put_contents($settings['default_theme_dir'] . '/css/ultimate-menu-buttons.css', $content, FILE_APPEND | LOCK_EX);
 				file_put_contents($settings['default_theme_dir'] . '/css/ultimate-menu-buttons.min.css', $this->um_minify_css($content), FILE_APPEND | LOCK_EX);
 			}
