@@ -16,17 +16,16 @@ $(document).ready(function() {
 	}), $um_nofile = $("select#um_icon_select option:first").text() ?? "",
 		$um_selected = $("select#um_icon_select option:selected").text() ?? "";
 	if ($("#group_perms")) {
-		var $um_permText = $("#group_perms").children(":first").text();
-		$("#group_perms").children(":first").text("");
 		var $umel = $("<span />", {
 			class: "toggle_down",
 			id: "um_toggle",
-			text: $um_permText
+			text: $("#group_perms").children(":first").text()
 		});
 		$umel.on("click", function(umToggle) {
 			$("#group_perms").toggle("slow");
 			$(this).toggleClass(["toggle_up", "toggle_down"]);
 		});
+		$("#group_perms").children(":first").text("");
 		$("#group_perms").hide().parent().prepend($umel);
 		$("#group_perms").find("input:not([name])").on("click", function() {
 			$('input[name="permissions\\[\\]"]').prop("checked", $(this).prop("checked"));
