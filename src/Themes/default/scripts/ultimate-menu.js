@@ -14,31 +14,20 @@ $(document).ready(function() {
 		class: "um_icons",
 		id: "um_list"
 	}), $um_nofile = $("select#um_icon_select option:first").text() ?? "",
-		$um_selected = $("select#um_icon_select option:selected").text() ?? "";
+		$um_selected = $("select#um_icon_select option:selected").text() ?? "",
+		$um_permText = $("#group_perms").children(":first").text();
+	$("#group_perms").children(":first").text("");
 	if ($("#group_perms")) {
-		var $umel = $("<a />", {
+		var $umel = $("<span />", {
 			class: "toggle_down",
-			href: "#",
-			text: $("#group_perms").children(":first").text(),
-			css: {"display":"inline"}
-		}), $umlink = $("<a />", {
-			class: "toggle_up",
-			href: "#",
-			text: $("#group_perms").children(":first").text(),
-			css: {"display":"inline"}
+			id: "um_toggle",
+			text: $um_permText
 		});
-		$umel.on("click", function() {
-			$("#group_perms").removeClass("hidden")
-			$(this).css("display", "none");
-			return false;
+		$umel.on("click", function(toggle) {
+			$("#group_perms").toggle("slow");
+			$(this).toggleClass(["toggle_up", "toggle_down"]);
 		});
-		$umlink.on("click", function() {
-			$("#group_perms").addClass("hidden");
-			$umel.css("display", "inline");
-			return false;
-		});
-		$("#group_perms").addClass("hidden").parent().append($umel);
-		$("#group_perms").children(":first").text("").append($umlink);
+		$("#group_perms").hide().parent().prepend($umel);
 		$("#group_perms").find("input:not([name])").on("click", function() {
 			$('input[name="permissions\\[\\]"]').prop("checked", $(this).prop("checked"));
 		});

@@ -207,7 +207,7 @@ span.um_icon_container {
 div.um_admin_message::before {
   content: "\200B";
   display: inline-block;
-}	
+}
 .um_message_hide {
 	display: none;
 }
@@ -215,8 +215,16 @@ div.um_admin_message::before {
 	display: inline-flex;
 	animation: um_fadeOut 4s ease-in forwards;
 	width: 100%;
-	justify-content: center;	
+	justify-content: center;
 	font-size: larger;
+}
+span.um_toggle {
+	display: inline-block;
+	white-space: nowrap;
+	padding-bottom: 0.15rem;
+}
+fieldset#group_perms {
+	margin-top: 0.25rem;
 }
 @keyframes um_fadeOut {
   0% {opacity: 1;}
