@@ -39,8 +39,8 @@ $(document).ready(function() {
 		});
 		$("#group_perms").addClass("hidden").parent().append($umel);
 		$("#group_perms").children(":first").text("").append($umlink);
-		$("#group_perms").children(":last").children(":first").on("click", function() {
-			invertAll($(this), $(this).form(), "permissions[]");
+		$("#group_perms").find("input:not([name])").on("click", function() {
+			$('input[name="permissions\\[\\]"]').prop("checked", $(this).prop("checked"));
 		});
 	}
 	$("#advum_icons").css("display","flex").addClass("advum_icons");
