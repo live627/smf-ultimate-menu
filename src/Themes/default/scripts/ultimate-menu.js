@@ -1,35 +1,4 @@
 /* Ultimate-menu JavaScript */
-var	umel = document.createElement("a"), umdiv = document.getElementById("group_perms");
-if (umdiv) {
-	let	uml = umdiv.firstElementChild, a = document.createElement("a");
-	umel.textContent = uml.textContent;
-	umel.className = "toggle_down";
-	umel.href = "#";
-	umel.style.display = "";
-	umel.addEventListener("click", function(event) {
-		umdiv.classList.remove("hidden");
-		this.style.display = "none";
-		event.stopPropagation();
-		event.preventDefault();
-	});
-	umdiv.classList.add("hidden");
-	umdiv.parentNode.appendChild(umel);
-	a.className = "toggle_up";
-	a.textContent = uml.textContent;
-	a.href = "#";
-	a.style.display = "";
-	a.addEventListener("click", function(event) {
-		umdiv.classList.add("hidden");
-		umel.style.display = "";
-		event.stopPropagation();
-		event.preventDefault();
-	});
-	uml.textContent = "";
-	uml.appendChild(a);
-	umdiv.lastElementChild.firstElementChild.addEventListener("click", function() {
-		invertAll(this, this.form, "permissions[]");
-	});
-}
 $(document).ready(function() {
 	var $umInput = $("<input>", {
 		id: "um_icon",
@@ -46,6 +15,34 @@ $(document).ready(function() {
 		id: "um_list"
 	}), $um_nofile = $("select#um_icon_select option:first").text() ?? "",
 		$um_selected = $("select#um_icon_select option:selected").text() ?? "";
+	if ($("#group_perms")) {
+		var $umel = $("<a />", {
+			class: "toggle_down",
+			href: "#",
+			text: $("#group_perms").children(":first").text(),
+			css: {"display":"inline"}
+		}), $umlink = $("<a />", {
+			class: "toggle_up",
+			href: "#",
+			text: $("#group_perms").children(":first").text(),
+			css: {"display":"inline"}
+		});
+		$umel.on("click", function() {
+			$("#group_perms").removeClass("hidden")
+			$(this).css("display", "none");
+			return false;
+		});
+		$umlink.on("click", function() {
+			$("#group_perms").addClass("hidden");
+			$umel.css("display", "inline");
+			return false;
+		});
+		$("#group_perms").addClass("hidden").parent().append($umel);
+		$("#group_perms").children(":first").text("").append($umlink);
+		$("#group_perms").children(":last").children(":first").on("click", function() {
+			invertAll($(this), $(this).form(), "permissions[]");
+		});
+	}
 	$("#advum_icons").css("display","flex").addClass("advum_icons");
 	$("#um_file").on("change", function(e) {
 		if (!um_secureCode) {
@@ -67,7 +64,7 @@ $(document).ready(function() {
 			success: function(response) {
 				$("#um_file").val("");
 				if (response.file) {
-					console.log("Upload successful: " + JSON.stringify(response.file, null, 2));					
+					console.log("Upload successful: " + JSON.stringify(response.file, null, 2));
 					$("span.um_icon_container").css("background-image", "url('" + smf_default_theme_url + "/images/um_icons/" + $.trim(response.file) + "')");
 					$(".ultimateMenu_drop>ul li").removeClass("um_icon_selected").addClass("um_icon");
 					$("<li />", {
