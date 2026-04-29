@@ -14,9 +14,9 @@ $(document).ready(function() {
 		class: "um_icons",
 		id: "um_list"
 	}), $um_nofile = $("select#um_icon_select option:first").text() ?? "",
-		$um_selected = $("select#um_icon_select option:selected").text() ?? "",
-		$um_permText = $("#group_perms").children(":first").text();
+		$um_selected = $("select#um_icon_select option:selected").text() ?? "";
 	if ($("#group_perms")) {
+		var $um_permText = $("#group_perms").children(":first").text();
 		$("#group_perms").children(":first").text("");
 		var $umel = $("<span />", {
 			class: "toggle_down",
