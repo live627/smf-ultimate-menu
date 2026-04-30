@@ -15,7 +15,7 @@ function um_load_menu(&$menu_buttons): void
 	global $context, $modSettings, $smcFunc, $user_info, $scripturl;
 
 	// Make damn sure we ALWAYS load last. Priority: 100!
-	if (!isset($context['um_replaying_menu']) && substr($modSettings['integrate_menu_buttons'], -12) !== 'um_load_menu')
+	if (substr($modSettings['integrate_menu_buttons'], -12) !== 'um_load_menu')
 	{
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
@@ -39,13 +39,6 @@ function um_load_menu(&$menu_buttons): void
 
 		recursive_button($temp_menu, $menu_buttons, $row['parent'], $row['position'], $key);
 	}
-}
-
-function um_replay_menu(&$menu_buttons)
-{
-	global $context;
-
-	$context['replayed_menu_buttons'] = $menu_buttons;
 }
 
 function recursive_button(array $needle, array &$haystack, $insertion_point, $where, $key): void
