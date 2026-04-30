@@ -385,12 +385,12 @@ class UltimateMenu
 	public function getButtonNames(): array
 	{
 		global $context;
-		
+
 		// It's expected to be present.
-		$context['user']['unread_messages'] = 0;		
+		$context['user']['unread_messages'] = 0;
 
 		// Load SMF's default menu context.
-		setupMenuContext();		
+		setupMenuContext();
 
 		return $this->flatten($context['menu_buttons']);
 	}
@@ -399,7 +399,7 @@ class UltimateMenu
 	{
 		global $context;
 
-		$result = [];
+		list($result, $buttonName) = [[], $context['button_data']['name'] ?? ''];
 		foreach ($array as $key => $value)
 		{
 			$value['title'] = !empty($buttonName) && $buttonName == $value['title'] ? '<span class="um_current">&ensp;&#10146;&nbsp;' . $value['title'] . '</span>' : $value['title'];
