@@ -385,32 +385,24 @@ class UltimateMenu
 	public function getButtonNames(): array
 	{
 		global $context;
-
-		// Start an instant replay.
-		add_integration_function('integrate_menu_buttons', 'um_replay_menu', false);
-
+		
 		// It's expected to be present.
-		$context['user']['unread_messages'] = 0;
-
-		// Shuffle-me-not
-		$context['um_replaying_menu'] = true;
+		$context['user']['unread_messages'] = 0;		
 
 		// Load SMF's default menu context.
-		setupMenuContext();
+		setupMenuContext();		
 
-		// We are in the endgame now.
-		remove_integration_function('integrate_menu_buttons', 'um_replay_menu', false);
-
-		unset($context['um_replaying_menu']);
-
-		return $this->flatten($context['replayed_menu_buttons']);
+		return $this->flatten($context['menu_buttons']);
 	}
 
 	private function flatten(array $array, int $i = 0): array
 	{
-		$result = array();
+		global $context;
+
+		$result = [];
 		foreach ($array as $key => $value)
 		{
+			$value['title'] = !empty($buttonName) && $buttonName == $value['title'] ? '<span class="um_current">&ensp;&#10146;&nbsp;' . $value['title'] . '</span>' : $value['title'];
 			$result[$key] = [$i, $value['title']];
 			if (!empty($value['sub_buttons']))
 				$result += $this->flatten($value['sub_buttons'], $i + 1);
