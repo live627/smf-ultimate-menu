@@ -384,12 +384,13 @@ class UltimateMenu
 	 */
 	public function getButtonNames(): array
 	{
-		global $context;
+		global $context, $user_info;
 
 		// It's expected to be present.
 		$context['user']['unread_messages'] = 0;
 
-		// Load SMF's default menu context.
+		// Nullify the menu_buttons cache and then load SMF's default menu context.
+		cache_put_data('menu_buttons-' . implode('_', $user_info['groups']) . '-' . $user_info['language'], null, 90);
 		setupMenuContext();
 
 		return $this->flatten($context['menu_buttons']);

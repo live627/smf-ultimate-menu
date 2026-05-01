@@ -11,7 +11,7 @@ require_once './vendor/autoload.php';
 // What are you doing here, SMF?
 define('SMF', 1);
 
-global $context;
+global $context, $settings, $scripturl;
 $user_info = ['is_admin' => true, 'is_guest' => false, 'language' => '', 'groups' => [0], 'permissions' => []];
 $context = [
 	'user' => ['can_mod' => true, 'is_guest' => false, 'id' => 1],
@@ -23,9 +23,8 @@ $context = [
 	'admin_menu_name' => '',
 ];
 $modSettings = ['lastActive' => 0, 'settings_updated' => 0, 'postmod_active' => false];
-
-global $scripturl; 
 $scripturl = dirname(__DIR__);
+$settings['login_main_menu'] = true;
 
 $smcFunc['db_query'] = function ($name, $query, $args)
 {
