@@ -384,14 +384,20 @@ class UltimateMenu
 	 */
 	public function getButtonNames(): array
 	{
-		global $context, $user_info;
+		global $context, $settings, $user_info;
 
 		// It's expected to be present.
 		$context['user']['unread_messages'] = 0;
 
+		// Temporarily enable the login and register buttons
+		$login_main_menu = !empty($settings['login_main_menu']) ? $settings['login_main_menu'] : false;
+		$settings['login_main_menu'] = true;
+
 		// Nullify the menu_buttons cache and then load SMF's default menu context.
 		cache_put_data('menu_buttons-' . implode('_', $user_info['groups']) . '-' . $user_info['language'], null, 90);
 		setupMenuContext();
+
+		$settings['login_main_menu'] = $login_main_menu;
 
 		return $this->flatten($context['menu_buttons']);
 	}
