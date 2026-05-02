@@ -384,11 +384,12 @@ class UltimateMenu
 	 */
 	public function getButtonNames(): array
 	{
-		global $context, $modSettings;
+		global $context;
 
-		add_integration_function('integrate_menu_buttons', 'um_backup_menu', false);
-		setupMenuContext();
-		remove_integration_function('integrate_menu_buttons', 'um_backup_menu', false);
+		if (empty($context['um_all_buttons'])) {
+			$context['user']['unread_messages'] = $context['user']['unread_messages'] ?? 0;
+			setupMenuContext();
+		}
 
 		return $this->flatten($context['um_all_buttons']);
 	}
