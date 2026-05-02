@@ -48,6 +48,13 @@ function um_load_menu(&$menu_buttons): void
 	}
 }
 
+function um_backup_menu(&$menu_buttons): void
+{
+	global $context;
+
+	$context['um_all_buttons'] = $menu_buttons;
+}
+
 function recursive_button(array $needle, array &$haystack, $insertion_point, $where, $key): void
 {
 	foreach ($haystack as $area => &$info)

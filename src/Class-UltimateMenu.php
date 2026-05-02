@@ -388,9 +388,9 @@ class UltimateMenu
 
 		// This should only occur during testing
 		if (empty($context['um_all_buttons'])) {
-			list($settings['login_main_menu'], $user_info['is_guest']) = [true, true];
+			add_integration_function('integrate_menu_buttons', 'um_backup_menu', false);
 			setupMenuContext();
-			$context['um_all_buttons'] = $context['menu_buttons'];
+			remove_integration_function('integrate_menu_buttons', 'um_backup_menu', false);
 		}
 
 		return $this->flatten($context['um_all_buttons']);
