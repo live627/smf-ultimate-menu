@@ -38,6 +38,7 @@ function um_load_menu(&$menu_buttons): void
 		];
 
 		recursive_button($temp_menu, $menu_buttons, $row['parent'], $row['position'], $key);
+		$context['um_all_buttons'] = $menu_buttons;
 	}
 }
 
