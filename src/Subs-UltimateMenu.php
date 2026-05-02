@@ -19,6 +19,7 @@ function um_load_menu(&$menu_buttons): void
 	{
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
+		$context['um_all_buttons'] = $menu_buttons;
 
 		return;
 	}
@@ -38,7 +39,7 @@ function um_load_menu(&$menu_buttons): void
 		];
 
 		recursive_button($temp_menu, $menu_buttons, $row['parent'], $row['position'], $key);
-		$context['um_all_buttons'] = $context['um_all_buttons'] ?? $menu_buttons;
+		$context['um_all_buttons'] = $menu_buttons;
 	}
 }
 
