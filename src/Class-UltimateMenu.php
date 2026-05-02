@@ -384,7 +384,7 @@ class UltimateMenu
 	 */
 	public function getButtonNames(): array
 	{
-		global $context, $modSettings;
+		global $context, $user_info;
 
 		// Load SMF's default menu context.
 		cache_put_data('menu_buttons-' . implode('_', $user_info['groups']) . '-' . $user_info['language'], null, 90);
