@@ -384,7 +384,14 @@ class UltimateMenu
 	 */
 	public function getButtonNames(): array
 	{
-		global $context;
+		global $context, $user_info, $settings;
+
+		// This should only occur during testing
+		if (empty($context['um_all_buttons'])) {
+			list($settings['login_main_menu'], $user_info['is_guest']) = [true, true];
+			setupMenuContext();
+			$context['um_all_buttons'] = $context['menu_buttons'];
+		}
 
 		return $this->flatten($context['um_all_buttons']);
 	}

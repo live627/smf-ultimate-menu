@@ -311,7 +311,7 @@ final class Test extends TestCase
 
 	public function testListButtons(): void
 	{
-		global $context, $modSettings;
+		global $modSettings;
 
 		$modSettings['um_count'] = 2;
 		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup"}';
