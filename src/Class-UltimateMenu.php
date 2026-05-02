@@ -384,14 +384,10 @@ class UltimateMenu
 	 */
 	public function getButtonNames(): array
 	{
-		global $context, $user_info, $settings;
-
-		// This should only occur during testing
-		if (empty($context['um_all_buttons'])) {
-			add_integration_function('integrate_menu_buttons', 'um_backup_menu', false);
-			setupMenuContext();
-			remove_integration_function('integrate_menu_buttons', 'um_backup_menu', false);
-		}
+		global $context;
+		
+		add_integration_function('integrate_menu_buttons', 'um_backup_menu', false);
+		setupMenuContext();			
 
 		return $this->flatten($context['um_all_buttons']);
 	}
