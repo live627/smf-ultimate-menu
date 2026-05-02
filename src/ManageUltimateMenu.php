@@ -351,7 +351,7 @@ class ManageUltimateMenu
 
 	public function EditButton(): void
 	{
-		global $context, $txt;
+		global $smcFunc, $context, $txt;
 
 		$row = isset($_GET['in']) ? $this->um->fetchButton($_GET['in']) : [];
 		if (empty($row))
@@ -359,7 +359,7 @@ class ManageUltimateMenu
 
 		$context['button_data'] = [
 			'id' => $row['id'],
-			'name' => $row['name'],
+			'name' => $smcFunc['htmlspecialchars']($row['name']),
 			'target' => $row['target'],
 			'type' => $row['type'],
 			'position' => $row['position'],

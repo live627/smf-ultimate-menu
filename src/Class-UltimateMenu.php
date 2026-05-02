@@ -397,10 +397,10 @@ class UltimateMenu
 	{
 		global $context;
 
-		list($result, $buttonName) = [[], $context['button_data']['name'] ?? ''];
+		$result = [];
 		foreach ($array as $key => $value)
 		{
-			$value['title'] = !empty($buttonName) && $buttonName == $value['title'] ? '<span class="um_current">&ensp;&#10146;&nbsp;' . $value['title'] . '</span>' : $value['title'];
+			$value['title'] = !empty($context['button_data']['name']) && $context['button_data']['name'] == $value['title'] ? '<span class="um_current">&ensp;&#10146;&nbsp;' . $value['title'] . '</span>' : $value['title'];
 			$value['title'] = in_array($key, ['login', 'logout', 'signup']) ? '<span class="um_login">&ensp;&#8608;&nbsp;' . $value['title'] . '</span>' : $value['title'];
 			$result[$key] = [$i, $value['title']];
 			if (!empty($value['sub_buttons']))
