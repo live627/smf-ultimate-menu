@@ -403,7 +403,7 @@ class UltimateMenu
 		list($result, $buttonName) = [[], $context['button_data']['name'] ?? ''];
 		foreach ($array as $key => $value)
 		{
-			$value['title'] = !empty($buttonName) && $buttonName == $value['title'] ? '<span class="um_current">&ensp;&#10146;&nbsp;' . $value['title'] . '</span>' : $value['title'];
+			$value['title'] = !empty($value['title']) && !empty($buttonName) && $buttonName == $value['title'] ? '<span class="um_current">&ensp;&#10146;&nbsp;' . $value['title'] . '</span>' : ($value['title'] ?? '');
 			$result[$key] = [$i, $value['title']];
 			if (!empty($value['sub_buttons']))
 				$result += $this->flatten($value['sub_buttons'], $i + 1);
