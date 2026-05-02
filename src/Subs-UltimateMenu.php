@@ -19,7 +19,12 @@ function um_load_menu(&$menu_buttons): void
 	{
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
-		$context['um_all_buttons'] = $menu_buttons;
+		$integrate_menu_buttons = explode(',', $modSettings['integrate_menu_buttons']);
+		if (($key = array_search('um_load_menu', $integrate_menu_buttons)) !== false) {
+			unset($integrate_menu_buttons[$key]);
+			$integrate_menu_buttons[] = 'um_load_menu';
+			$modSettings['integrate_menu_buttons'] = implode(',', $integrate_menu_buttons);
+		}
 
 		return;
 	}
