@@ -395,7 +395,7 @@ class UltimateMenu
 
 	private function flatten(array $array, int $i = 0): array
 	{
-		global $context;
+		global $settings, $context;
 
 		$result = [];
 		foreach ($array as $key => $value) {
