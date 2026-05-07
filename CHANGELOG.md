@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.4](https://github.com/live627/smf-ultimate-menu/compare/v2.0.3...v2.0.4) (2026-05-07)
+
+
+### Bug Fixes
+
+* Do a better job of encoding HTML special characters ([330aaee](https://github.com/live627/smf-ultimate-menu/commit/330aaeef9d8b8908c45f31d1751272db6ccf9296))
+* Undo the code change from version 2.0.2 ([088c23e](https://github.com/live627/smf-ultimate-menu/commit/088c23e9efb10bd927405e0ae6f7aa82aca5af4d))
+
 ## [2.0.3](https://github.com/live627/smf-ultimate-menu/compare/v2.0.2...v2.0.3) (2026-04-27)
 
 
