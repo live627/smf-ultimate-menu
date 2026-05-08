@@ -7,6 +7,9 @@ define('SMF', 1);
 
 global $context, $modSettings, $smcFunc, $settings, $txt, $user_info, $scripturl, $sourcedir, $boarddir;
 
+$sourcePath = is_dir('./src/Sources') ? './src/Sources' : './src';
+$langPath = is_dir('./src/languages') ? './src/languages' : './src';
+
 // Set up necessary global variables
 $context = [
 	'user' => ['can_mod' => true, 'is_guest' => false, 'id' => 1],
