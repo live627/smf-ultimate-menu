@@ -34,7 +34,9 @@ array_walk($allUmModSettings, function($value, $key) use (&$where) {
 		unset($modSettings[$value]);
 	}
 });
-array_walk($umButtons, fn($value, $key) => unset($modSettings[$key]));
+array_walk($umButtons, function($value, $key) use ($modSettings) {
+	unset($modSettings[$key]));
+});
 
 $smcFunc['db_query']('', '
 	DELETE FROM {db_prefix}settings
