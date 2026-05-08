@@ -35,7 +35,7 @@ array_walk($allUmModSettings, function($value, $key) use (&$where) {
 	}
 });
 array_walk($umButtons, function($value, $key) use ($modSettings) {
-	unset($modSettings[$key]));
+	unset($modSettings[$key]);
 });
 
 $smcFunc['db_query']('', '
