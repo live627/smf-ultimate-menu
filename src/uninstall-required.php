@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @package Ultimate Menu mod
- * @version   2.0.4
+ * @version   2.0.5
  * @author John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2026, John Rayes
  * @license http://opensource.org/licenses/MIT MIT
@@ -22,3 +22,5 @@ elseif (!defined('SMF')) {
 remove_integration_function('integrate_pre_include', '$sourcedir/Subs-UltimateMenu.php');
 remove_integration_function('integrate_menu_buttons', 'um_load_menu');
 remove_integration_function('integrate_admin_areas', 'um_admin_areas');
+remove_integration_function('integrate_load_theme', 'um_linking');
+remove_integration_function('integrate_pre_load', 'um_get_settings');

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @package Ultimate Menu mod
- * @version   2.0.4
+ * @version   2.0.5
  * @author John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2026, John Rayes
  * @license http://opensource.org/licenses/MIT MIT
@@ -75,11 +75,13 @@ $txt['um_menu_standardize_all_confirm'] = 'Are you sure that you want to standar
 $txt['um_menu_delete_selected_confirm'] = 'Are you sure you want to delete the selected icon files?';
 $txt['um_menu_delete_unassigned_confirm'] = 'Are you sure you want to delete all unassigned icon files?';
 $txt['um_menu_delete_all_confirm'] = 'Are you sure you want to delete all of the icon files?';
-$txt['um_menu_icons_uninstall'] = 'Remove all Ultimate Menu icons from the "um_icons" path';
+$txt['um_menu_icons_uninstall'] = 'Remove all Ultimate Menu icons from the "um_icons" path|Delete the Ultimate Menu sprite and its CSS files';
 $txt['um_menu_icons_none'] = 'None';
 $txt['um_menu_icon_unassigned'] = '&#11160; Unassigned';
 $txt['um_menu_icon_assigned_button'] = '&#8658; %s';
 $txt['um_menu_icon_unstandardized'] = '&#11079; Non-standardized';
+$txt['um_menu_button_dimension'] = 'Pixels';
+$txt['um_menu_button_dimension_confirm'] = 'Current dimensions: #cwpx x #chpx\nNew dimensions: #nwpx x #nhpx\n\nThis will alter the default icon storage size.\nThe sprite, their CSS and all icons will be deleted.\nEvery UM button will be void of icons so that you can upload new ones.\n\nAre you sure you want to continue with this action?';
 
 $txt['um_menu_button_sprite_generate'] = 'Generate';
 $txt['um_menu_button_sprite_generate_confirm'] = 'This will generate a fresh sprite containing all current Ultimate Menu button icons.\n\nIf the checkbox is selected, it will auto adjust each button that has an icon set to use the sprite.\n\nAre you sure you want to do this?';

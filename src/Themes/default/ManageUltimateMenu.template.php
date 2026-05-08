@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @package   Ultimate Menu mod
- * @version   2.0.4
+ * @version   2.0.5
  * @author    John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2026, John Rayes
  * @license   http://opensource.org/licenses/MIT MIT
@@ -15,7 +15,7 @@ function template_form_above(): void
 	global $context, $scripturl;
 
 	echo '
-		<form action="', $scripturl, '?action=admin;area=umen;sa=savebutton" enctype="multipart/form-data" method="post" accept-charset="', $context['character_set'], '" name="postmodify" id="postmodify">
+		<form action="', $scripturl, '?action=admin;area=umen;sa=savebutton" enctype="multipart/form-data" method="post" accept-charset="', $context['character_set'], '" name="postmodify" id="postmodify" autocomplete="off">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					', $context['page_title'], '
@@ -88,7 +88,7 @@ function template_main(): void
 			'
 								<option value="%s"%s>%s</option>',
 			$idx,
-			$sel($context['button_data']['parent'] == $idx, 'selected'),
+			strpos($title[1], '<span class="um_current">') !== false ? 'disabled' : $sel($context['button_data']['parent'] == $idx, 'selected'),
 			str_repeat('&emsp;', $title[0] * 2) . $title[1]
 		);
 	}
@@ -185,7 +185,7 @@ function template_main(): void
 						</dt>
 						<dd class="um_dd_file">
 							<span class="um_file_button">
-								<input id="um_file" type="file" name="attachment" accept="image/png, image/jpeg, .png, .jpg, .jpeg" value="', $context['button_data']['icon'], '" style="width: 100%;">
+								<input class="button um_button um_uploadFiles" id="um_file" type="file" name="attachment[]" accept="image/png, image/jpeg, .png, .jpg, .jpeg" value="', $context['button_data']['icon'], '" style="width: 100%;">
 							</span>
 							<span class="um_file_loading">
 								<span id="um_loader"></span>

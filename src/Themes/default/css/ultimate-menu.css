@@ -114,6 +114,12 @@
 	display: inline-flex;
 	height: 42px;
 }
+#um_file, #um_file_submit {
+	max-height: 1.5rem;
+}
+.um_file_submit {
+	display: none;
+}
 .um_strong {
 	font-weight: 800;
 }
@@ -196,6 +202,16 @@ span.um_icon_container {
 	margin: 0;
 	right: 0;
 }
+select.um_icon_dimension optgroup {
+	text-align: center;
+}
+select.um_icon_dimension {
+	display: grid;
+	justify-items: center;
+	text-align-last: center;
+    margin: 0 auto;
+	padding: 0rem;
+}
 .um_admin_message {
 	display: flex;
 	min-height: 1em;
@@ -219,9 +235,9 @@ div.um_admin_message::before {
 	font-size: larger;
 }
 span.um_toggle {
-	display: inline-block;
+	display: inline-flex;
 	white-space: nowrap;
-	padding-bottom: 0.15rem;
+	align-items: center;
 }
 fieldset#group_perms {
 	margin-top: 0.25rem;
@@ -243,4 +259,52 @@ input.um_pending {
   input.um_pending {
     animation: none;
   }
+}
+.um_dimension {
+	display: inline-flex;
+	justify-content: center;
+	flex: 29%;
+	box-sizing: border-box;
+	min-width: 29%;
+	max-width: 29%;
+}
+/* Responsive structure for the UM admin buttons */
+@media only screen and (max-width: 767px) {
+	* > .um_lefttext, * > .um_righttext
+	.um_lefttext, .um_righttext {
+		min-width: 40%;
+		flex-wrap: wrap;
+	}
+	.um_lefttext *, .um_righttext * {
+		flex: 1 0 50%;
+		min-width: 0;
+		font-size: 0.50rem;
+		transform: scale(0.95);
+		flex-direction: column;
+	}
+	.um_lefttext input, .um_righttext input {
+		flex: 100%;
+		justify-content: center;
+		box-sizing: border-box;
+		min-width: 100%;
+	}
+	.um_dimension {
+		margin: 0 auto;
+		justify-content: center;
+		flex: 60%;
+		box-sizing: border-box;
+		min-width: 60%;
+		max-width: 60%;
+	}
+}
+* .pagesection:nth-last-child(3) {
+	display: none;
+}
+input#um_file::file-selector-button {
+  border: dashed 0.1rem;
+  padding: 0.1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  mix-blend-mode: darken;
+  transition: 0.3s;
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @package Ultimate Menu mod
- * @version   2.0.4
+ * @version   2.0.5
  * @author John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2026, John Rayes
  * @license http://opensource.org/licenses/MIT MIT
@@ -75,11 +75,13 @@ $txt['um_menu_standardize_all_confirm'] = 'Вы уверены, что хотите стандартизиров
 $txt['um_menu_delete_selected_confirm'] = 'Вы уверены, что хотите удалить выбранные файлы значков?';
 $txt['um_menu_delete_unassigned_confirm'] = 'Вы уверены, что хотите удалить все неназначенные файлы значков?';
 $txt['um_menu_delete_all_confirm'] = 'Вы уверены, что хотите удалить все файлы значков?';
-$txt['um_menu_icons_uninstall'] = 'Удалить все значки Ultimate Menu из пути "um_icons"';
+$txt['um_menu_icons_uninstall'] = 'Удалить все значки Ultimate Menu из пути "um_icons"|Удалите спрайт Ultimate Menu и его CSS-файлы';
 $txt['um_menu_icons_none'] = 'ничего';
 $txt['um_menu_icon_unassigned'] = '&#11160; неназначенный';
 $txt['um_menu_icon_assigned_button'] = '&#8658; %s';
 $txt['um_menu_icon_unstandardized'] = '&#11079; Нестандартизированный';
+$txt['um_menu_button_dimension'] = 'Пиксели';
+$txt['um_menu_button_dimension_confirm'] = 'Текущие размеры: #cwpx x #chpx\nНовые размеры: #nwpx x #nhpx\n\nЭтот параметр выберет размер хранилища значков по умолчанию.\nСпрайт, его CSS и все значки будут удалены.\nКаждая кнопка UM будет лишена значков, чтобы вы могли загрузить новые.\n\nВы уверены, что хотите продолжить это действие?';
 
 $txt['um_menu_button_sprite_generate'] = 'Сгенерировать';
 $txt['um_menu_button_sprite_generate_confirm'] = 'Это сгенерирует новый спрайт, содержащий все текущие значки кнопок Ultimate Menu.\n\nЕсли флажок установлен, он автоматически настроит каждую кнопку, для которой установлен значок, на использование этого спрайта.\n\nВы уверены, что хотите это сделать?';

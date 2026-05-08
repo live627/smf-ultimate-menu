@@ -3,7 +3,7 @@
 declare(strict_types=1);
 /**
  * @package   Ultimate Menu mod
- * @version   2.0.4
+ * @version   2.0.5
  * @author    John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2026, John Rayes
  * @license   http://opensource.org/licenses/MIT MIT
@@ -14,14 +14,10 @@ class ManageUltimateMenu
 
 	public function __construct(string $sa)
 	{
-		global $settings, $modSettings, $context, $txt;
+		global $settings, $context, $txt;
 
 		isAllowedTo('admin_forum');
 		$this->um = new UltimateMenu();
-
-		$context['html_headers'] .= '
-		<link rel="stylesheet" href="' . $settings['default_theme_url'] . '/css/ultimate-menu.css?v=' . $this->um->um_cache_fingerprint('get') . '">
-		<script src="' . $settings['default_theme_url'] . '/scripts/ultimate-menu.js?v=' . $this->um->um_cache_fingerprint('get') . '" defer></script>';
 
 		$context['page_title'] = $txt['admin_menu_um_title'];
 		$context[$context['admin_menu_name']]['tab_data'] = [
@@ -82,6 +78,11 @@ class ManageUltimateMenu
 			redirectexit('action=admin;area=umen');
 		} elseif (isset($_POST['save'])) {
 			checkSession();
+			if (isset($_POST['um_icon_dimension'])) {
+				$this->um->um_updateSettings(['um_icon_dimension' => (in_array((int)$_POST['um_icon_dimension'], [16, 32, 48]) ? (int)$_POST['um_icon_dimension'] : 32)]);
+				$generateMsg = $this->um->um_generate_sprite(0, true) ? 'success' : 'failure';
+				$this->um->deleteIcons('all', []);
+			}
 			$this->um->updateButton($_POST);
 			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen');
@@ -89,7 +90,14 @@ class ManageUltimateMenu
 			redirectexit('action=admin;area=umen;sa=addbutton');
 		} elseif (isset($_POST['generate'])) {
 			checkSession();
-			$generateMsg = $this->um->um_generate_sprite($_POST['sprite_all'] ?? 0) ? 'success' : 'failure';
+			$generateMsg = $this->um->um_generate_sprite(($_POST['sprite_all'] ?? 0), false) ? 'success' : 'failure';
+			$this->um->rebuildMenu();
+			redirectexit('action=admin;area=umen;generate=' . $generateMsg);
+		} elseif (isset($_POST['um_icon_dimension'])) {
+			checkSession();
+			$this->um->um_updateSettings(['um_icon_dimension' => (in_array([0, 1, 2], (int)$_POST['um_icon_dimension']) ? (((int)$_POST['um_icon_dimension'] + 1) * 16) : 32)]);
+			$generateMsg = $this->um->um_generate_sprite(0, true) ? 'success' : 'failure';
+			$this->um->deleteIcons('all', []);
 			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen;generate=' . $generateMsg);
 		}
@@ -119,6 +127,12 @@ class ManageUltimateMenu
 			$this->um->deleteIcons('selected', array_filter($_POST['remove']));
 			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen;sa=fileslist');
+		} elseif (isset($_POST['uploadFiles'])) {
+			if (isset($_FILES['attachment']) && isset($_POST['um_jq'])) {
+				unset($_FILES['attachment']);
+			} elseif (isset($_FILES['attachment'])) {
+				$this->UmUploadIcon(true);
+			}
 		}
 
 		$this->listFiles();
@@ -126,9 +140,15 @@ class ManageUltimateMenu
 
 	private function listButtons(): void
 	{
-		global $context, $txt, $scripturl, $sourcedir;
+		global $context, $txt, $scripturl, $sourcedir, $umSettings;
 
 		$button_names = $this->um->getButtonNames();
+		list($options, $dimOutput) = [[16, 32, 48], ''];
+		array_walk($options, function($value, $key) use (&$dimOutput, $umSettings) {
+			$dimOutput .= '
+					<option value="' . $value. '"' . ($umSettings['um_icon_dimension'] == $value ? ' selected' : '') . '>' . $value. '</option>';
+		});
+		addJavaScriptVar('um_dim_warning', stripcslashes(str_replace(["\\t", "\\n", "\\r", "\\s", "\\'"], ["\t", "\n", "\n", "\s", "\'"], addcslashes($txt['um_menu_button_dimension_confirm'], '\\'))), true);
 		$listOptions = [
 			'id' => 'menu_list',
 			'items_per_page' => 20,
@@ -250,9 +270,12 @@ class ManageUltimateMenu
 				[
 					'position' => 'below_table_data',
 					'value' => sprintf(
-						'
-						<input type="submit" name="generate" onclick="return confirm(\'%s\');" value="%s" class="button' . ($this->um->um_sprite_pending() ? ' um_pending' : '') . '">
-						<input type="checkbox" id="sprite_all" name="sprite_all" value="1">',
+				'<select name="um_icon_dimension" id="um_dimension" class="button um_dimension">
+					<optgroup label="%s">' . $dimOutput . '
+				</select>
+				<input type="submit" name="generate" onclick="return confirm(\'%s\');" value="%s" class="button' . ($this->um->um_sprite_pending() ? ' um_pending' : '') . '">
+				<input type="checkbox" id="sprite_all" name="sprite_all" value="1">',
+						$txt['um_menu_button_dimension'],
 						$txt['um_menu_button_sprite_generate_confirm'],
 						$txt['um_menu_button_sprite_generate'],
 					),
@@ -261,8 +284,7 @@ class ManageUltimateMenu
 				[
 					'position' => 'below_table_data',
 					'value' => sprintf(
-						'
-						<input type="submit" name="removeButtons" value="%s" onclick="return confirm(\'%s\');" class="button">
+						'<input type="submit" name="removeButtons" value="%s" onclick="return confirm(\'%s\');" class="button">
 						<input type="submit" name="removeAll" value="%s" onclick="return confirm(\'%s\');" class="button">
 						<input type="submit" name="new" value="%s" class="button um_button">
 						<input type="submit" name="save" value="%s" class="button um_button">',
@@ -286,6 +308,12 @@ class ManageUltimateMenu
 	private function listFiles(): void
 	{
 		global $context, $txt, $scripturl, $sourcedir, $settings;
+
+		$codeValue = strval(bin2hex(random_bytes(10)));
+		$this->um->um_updateSettings([
+			'um_secureCode' => $codeValue
+		]);
+		addJavaScriptVar('um_secureCode', '"' . $codeValue . '"', false);
 
 		$listOptions = [
 			'id' => 'files_list',
@@ -342,16 +370,24 @@ class ManageUltimateMenu
 				],
 			],
 			'form' => [
-				'href' => $scripturl . '?action=admin;area=umen;sa=fileslist',
+				'href' => $scripturl . '?action=admin;area=umen;sa=fileslist'
 			],
+			'javascript' => '$(function() {
+			$("form").last().attr("enctype", "multipart/form-data");
+			$("form").last().attr("id", "um_file_form");
+		});',
 			'additional_rows' => [
 				[
 					'position' => 'below_table_data',
 					'value' => sprintf(
 						'
-						<input type="submit" name="standardizeAll" value="%s" onclick="return confirm(\'%s\');" class="button um_button">',
+						<input type="submit" name="standardizeAll" value="%s" onclick="return confirm(\'%s\');" class="button um_button">
+						<input type="submit" id="um_file_submit" name="uploadFiles" value="%s" class="button um_button">
+						<input id="um_file" class="button um_button um_uploadFiles" type="file" name="attachment[]" accept="image/png, image/jpeg, .png, .jpg, .jpeg" multiple>
+						<input type="hidden" name="um_checkcode" value="' . $codeValue . '">',
 						$txt['um_menu_standardize_all'],
 						$txt['um_menu_standardize_all_confirm'],
+						$txt['um_menu_button_upload']
 					),
 					'class' => 'um_lefttext',
 				],
@@ -464,7 +500,7 @@ class ManageUltimateMenu
 
 	public function SaveButton(): void
 	{
-		global $context, $txt, $settings, $modSettings;
+		global $context, $txt, $settings;
 
 		if (isset($_POST['submit'])) {
 			$menu_entry = array_replace(
@@ -542,22 +578,22 @@ class ManageUltimateMenu
 
 	public function EditButton(): void
 	{
-		global $settings, $modSettings, $context, $txt;
+		global $smcFunc, $umSettings, $context, $txt;
 
 		$row = isset($_GET['in']) ? $this->um->fetchButton($_GET['in']) : [];
 		if (empty($row)) {
 			fatal_lang_error('no_access', false);
 		}
 
-		$bytes = random_bytes(10);
-		$codeValue = strval(bin2hex($bytes));
-		updateSettings([
+		$codeValue = strval(bin2hex(random_bytes(10)));
+		$this->um->um_updateSettings([
 			'um_secureCode' => $codeValue
 		]);
-		$modSettings['um_secureCode'] = $codeValue;
+		addJavaScriptVar('um_secureCode', '"' . $codeValue . '"', false);
+
 		$context['button_data'] = [
 			'id' => $row['id'],
-			'name' => $row['name'],
+			'name' => $smcFunc['htmlspecialchars']($row['name']),
 			'target' => $row['target'],
 			'type' => $row['type'],
 			'position' => $row['position'],
@@ -581,22 +617,17 @@ class ManageUltimateMenu
 		$context['template_layers'][] = 'form';
 		$context['um_button_icons'] = ['______', ...$this->um->getIconPathContents(true)];
 		$context['um_sprite_detected'] = $this->um->um_detect_sprite_css('um_button_' . strval((int) $context['button_data']['id']));
-		$context['html_headers'] .= '
-		<script>
-			let um_secureCode = "' . $codeValue . '";
-		</script>';
 	}
 
 	public function AddButton(): void
 	{
-		global $settings, $modSettings, $context, $txt;
+		global $settings, $umSettings, $context, $txt;
 
-		$bytes = random_bytes(10);
-		$codeValue = strval(bin2hex($bytes));
-		updateSettings([
+		$codeValue = strval(bin2hex(random_bytes(10)));
+		$this->um->um_updateSettings([
 			'um_secureCode' => $codeValue
 		]);
-		$modSettings['um_secureCode'] = $codeValue;
+		addJavaScriptVar('um_secureCode', '"' . $codeValue . '"', false);
 
 		$context['button_data'] = [
 			'name' => '',
@@ -619,53 +650,51 @@ class ManageUltimateMenu
 		$context['template_layers'][] = 'form';
 		$context['um_button_icons'] = ['______', ...$this->um->getIconPathContents(true)];
 		$context['um_sprite_detected'] = false;
-		$context['html_headers'] .= '
-		<script>
-			let um_secureCode = "' . $codeValue . '";
-		</script>';
 	}
 
 	public function UmUploadIcon($noscript = false): ?array
 	{
-		global $txt, $settings, $modSettings, $sourcedir;
+		global $txt, $settings, $umSettings, $sourcedir;
 		checkSession('post');
-		list($types, $json_msg) = [['jpeg', 'jpg', 'png'], ['error' => $txt['um_menu_filename_illegal'], 'file' => '']];
-		$postVar = !empty($_FILES['attachment']) ? $_FILES['attachment'] : '';
-		$umCode = !empty($modSettings['um_secureCode']) ? $modSettings['um_secureCode'] : '';
+		list($types, $json_msg, $postGlobal, $umCode) = [['jpeg', 'jpg', 'png'], ['error' => $txt['um_menu_filename_illegal'], 'file' => ''], ($_FILES ?? []), ($umSettings['um_secureCode'] ?? '')];
 		$checkCode = isset($_POST['um_checkcode']) ? $_POST['um_checkcode'] : (empty($noscript) ? '' : $umCode);
 		if (!empty($checkCode) && !empty($umCode) && $checkCode == $umCode) {
 			clearstatcache();
-			if (!empty($postVar) && !empty($postVar['name'])) {
-				$newname = $postVar['name'] = $this->um->sanitizeFilename(basename($postVar['name']));
-				$target = $this->um->unixDirSeparator($settings['default_theme_dir'] . '/images/um_icons');
-				$tmp_name = $postVar['tmp_name'];
-				$ext = mb_strtolower(pathinfo($newname, PATHINFO_EXTENSION), 'UTF-8');
-				$filename = pathinfo($newname, PATHINFO_FILENAME);
-				$file = $this->um->hexadecimal_string(true) . '.' . $ext;
-				if (!in_array($ext, $types)) {
-					$json_msg['error'] = $txt['um_menu_filename_illegal'];
-				} elseif ($com = fopen($target . '/' . $newname, "wb")) {
-					$in = fopen($tmp_name, "rb");
-					if ($in) {
-						stream_copy_to_stream($in, $com);
-						fclose($in);
-					}
-					fclose($com);
-					clearstatcache();
-					if (!empty($newname) && file_exists($target . '/' . $newname)) {
-						$renamed = $this->um->imageResize($target . '/' . $newname, $target . '/' . $file, $ext, 16, 16, false);
-						if (!empty($renamed) && $renamed != $newname) {
-							$newname = $renamed;
-							$json_msg = ['error' => '', 'file' => $newname];
-						} elseif (!empty($renamed)) {
-							$json_msg = ['error' => $txt['um_menu_filename_compress'], 'file' => $newname];
-						} else {
-							$json_msg['error'] = $txt['um_menu_filename_unknown'];
+			if (!empty($postGlobal) && !empty($postGlobal['attachment'])) {
+				$postVars = $this->um->um_flatten_files($postGlobal);
+				foreach ($postVars as $postVar) {
+					$newname = $postVar['name'] = $this->um->sanitizeFilename(basename($postVar['name']));
+					$target = $this->um->unixDirSeparator($settings['default_theme_dir'] . '/images/um_icons');
+					$tmp_name = $postVar['tmp_name'];
+					$ext = mb_strtolower(pathinfo($newname, PATHINFO_EXTENSION), 'UTF-8');
+					$filename = pathinfo($newname, PATHINFO_FILENAME);
+					$file = $this->um->hexadecimal_string(true) . '.' . $ext;
+					if (!in_array($ext, $types)) {
+						$json_msg['error'] = $txt['um_menu_filename_illegal'];
+					} elseif ($com = fopen($target . '/' . $newname, "wb")) {
+						$in = fopen($tmp_name, "rb");
+						if ($in) {
+							stream_copy_to_stream($in, $com);
+							fclose($in);
 						}
-					} else {
-						$json_msg['error'] = $txt['um_menu_filename_exists'];
+						fclose($com);
+						clearstatcache();
+						if (!empty($newname) && file_exists($target . '/' . $newname)) {
+							$renamed = $this->um->imageResize($target . '/' . $newname, $target . '/' . $file, $ext, $umSettings['um_icon_dimension'], $umSettings['um_icon_dimension'], false);
+							if (!empty($renamed) && $renamed != $newname) {
+								$newname = $renamed;
+								$json_msg = ['error' => '', 'file' => $newname];
+							} elseif (!empty($renamed)) {
+								$json_msg = ['error' => $txt['um_menu_filename_compress'], 'file' => $newname];
+							} else {
+								$json_msg['error'] = $txt['um_menu_filename_unknown'];
+							}
+						} else {
+							$json_msg['error'] = $txt['um_menu_filename_exists'];
+						}
 					}
 				}
+
 				unset($_FILES['attachment']);
 			}
 		}

@@ -3,7 +3,7 @@
 <package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
 	<id>live627:ultimate_menu</id>
 	<name>Ultimate Menu</name>
-	<version>2.0.4</version>
+	<version>2.0.5</version>
 	<type>modification</type>
 
 	<install for="2.0.99 - 2.1.98">
@@ -39,8 +39,7 @@
 		<remove-file name="$themes_dir/default/images/admin/big/umen.png" />
 		<remove-file name="$themes_dir/default/scripts/ultimate-menu.js" />
 		<remove-file name="$themes_dir/default/css/ultimate-menu.css" />
-		<remove-file name="$themes_dir/default/css/ultimate-menu-buttons.css" />
-		<remove-file name="$themes_dir/default/css/ultimate-menu-buttons.min.css" />
+		<remove-file name="$themes_dir/default/css/ultimate-menu-icons.css" />
 		<remove-file name="$languagedir/ManageUltimateMenu.english.php" />
 		<remove-file name="$languagedir/ManageUltimateMenu.turkish.php" />
 		<remove-file name="$languagedir/ManageUltimateMenu.spanish_latin.php" />

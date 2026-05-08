@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @package Ultimate Menu mod
- * @version   2.0.4
+ * @version   2.0.5
  * @author John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2026, John Rayes
  * @license http://opensource.org/licenses/MIT MIT
@@ -75,11 +75,13 @@ $txt['um_menu_standardize_all_confirm'] = '¿Está seguro de que desea estandari
 $txt['um_menu_delete_selected_confirm'] = '¿Está seguro de que desea eliminar los archivos de iconos seleccionados?';
 $txt['um_menu_delete_unassigned_confirm'] = '¿Está seguro de que desea eliminar todos los archivos de iconos no asignados?';
 $txt['um_menu_delete_all_confirm'] = '¿Está seguro de que desea eliminar todos los archivos de iconos?';
-$txt['um_menu_icons_uninstall'] = 'Eliminar todos los iconos de Ultimate Menu de la ruta "um_icons"';
+$txt['um_menu_icons_uninstall'] = 'Eliminar todos los iconos de Ultimate Menu de la ruta "um_icons"|Elimina el sprite del menú definitivo y sus archivos CSS';
 $txt['um_menu_icons_none'] = 'Nada';
 $txt['um_menu_icon_unassigned'] = '&#11160; No asignado';
 $txt['um_menu_icon_assigned_button'] = '&#8658; %s';
 $txt['um_menu_icon_unstandardized'] = '&#11079; No estandarizado';
+$txt['um_menu_button_dimension'] = 'Píxeles';
+$txt['um_menu_button_dimension_confirm'] = 'Dimensiones actuales: #cwpx x #chpx\nNuevas dimensiones: #nwpx x #nhpx\n\nEsto seleccionará el tamaño de almacenamiento de iconos predeterminado.\nSe eliminarán el sprite, su CSS y todos los iconos.\nCada botón de UM quedará sin iconos para que pueda cargar otros nuevos.\n\n¿Está seguro de que desea continuar con esta acción?';
 
 $txt['um_menu_button_sprite_generate'] = 'Générer';
 $txt['um_menu_button_sprite_generate_confirm'] = 'Cette action générera un nouveau sprite contenant toutes les icônes actuelles des boutons du menu Ultimate.\n\nSi la case est cochée, chaque bouton possédant une icône sera automatiquement ajusté pour utiliser ce sprite.\n\nÊtes-vous sûr de vouloir continuer ?';

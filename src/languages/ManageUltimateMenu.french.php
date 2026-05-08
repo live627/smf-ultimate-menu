@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @package Ultimate Menu mod
- * @version   2.0.4
+ * @version   2.0.5
  * @author John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2026, John Rayes
  * @license http://opensource.org/licenses/MIT MIT
@@ -75,11 +75,13 @@ $txt['um_menu_standardize_all_confirm'] = 'Êtes-vous sûr de vouloir standardis
 $txt['um_menu_delete_selected_confirm'] = 'Êtes-vous sûr de vouloir supprimer les fichiers d\'icônes sélectionnés ?';
 $txt['um_menu_delete_unassigned_confirm'] = 'Êtes-vous sûr de vouloir supprimer tous les fichiers d\'icônes non attribués ?';
 $txt['um_menu_delete_all_confirm'] = 'Êtes-vous sûr de vouloir supprimer tous les fichiers d\'icônes ?';
-$txt['um_menu_icons_uninstall'] = 'Supprimer toutes les icônes Ultimate Menu du dossier "um_icons"';
+$txt['um_menu_icons_uninstall'] = 'Supprimer toutes les icônes Ultimate Menu du dossier "um_icons"|Supprimez le sprite du menu ultime et ses fichiers CSS';
 $txt['um_menu_icons_none'] = 'Rien';
 $txt['um_menu_icon_unassigned'] = '&#11160; Non attribué';
 $txt['um_menu_icon_assigned_button'] = '&#8658; %s';
 $txt['um_menu_icon_unstandardized'] = '&#11079; Non standardisé';
+$txt['um_menu_button_dimension'] = 'Pixels';
+$txt['um_menu_button_dimension_confirm'] = 'Dimensions actuelles : #cwpx x #chpx\nNouvelles dimensions : #nwpx x #nhpx\n\nCeci sélectionnera la taille de stockage par défaut des icônes.\nLe sprite, son CSS et toutes les icônes seront supprimés.\nChaque bouton UM sera dépourvu d\'icônes afin que vous puissiez en télécharger de nouvelles.\n\nÊtes-vous sûr de vouloir continuer cette action ?';
 
 $txt['um_menu_button_sprite_generate'] = 'Générer';
 $txt['um_menu_button_sprite_generate_confirm'] = 'Cette action générera un nouveau sprite contenant toutes les icônes actuelles des boutons du menu Ultimate.\n\nSi la case est cochée, chaque bouton possédant une icône sera automatiquement ajusté pour utiliser ce sprite.\n\nÊtes-vous sûr de vouloir continuer ?';

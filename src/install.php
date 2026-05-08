@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @package Ultimate Menu mod
- * @version   2.0.4
+ * @version   2.0.5
  * @author John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2026, John Rayes
  * @license http://opensource.org/licenses/MIT MIT
@@ -191,8 +191,17 @@ if (!empty($buttons)) {
 }
 
 // Now presenting... *drumroll*
-updateSettings(['um_fingerprint' => mb_strtolower(strval(bin2hex(random_bytes(5))), 'UTF-8')]);
+global $modSettings;
+$umSettings = !empty($modSettings['um_settings']) ? json_decode($modSettings['um_settings'], true) : [];
+$um_settings = [
+	'um_fingerprint' => mb_strtolower(strval(bin2hex(random_bytes(5))), 'UTF-8'),
+	'um_icon_dimension' => $umSettings['um_icon_dimension'] ?? 32,
+	'um_secureCode' =>  strval(bin2hex(random_bytes(10)))
+];
+updateSettings(['um_settings' =>  json_encode($um_settings)]);
 add_integration_function('integrate_pre_include', '$sourcedir/Subs-UltimateMenu.php');
+add_integration_function('integrate_load_theme', 'um_linking');
+add_integration_function('integrate_pre_load', 'um_get_settings');
 add_integration_function('integrate_menu_buttons', 'um_load_menu');
 add_integration_function('integrate_admin_areas', 'um_admin_areas');
 

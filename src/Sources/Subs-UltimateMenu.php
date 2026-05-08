@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @package   Ultimate Menu mod
- * @version   2.0.4
+ * @version   2.0.5
  * @author    John Rayes <live627@gmail.com>
  * @copyright Copyright (c) 2026, John Rayes
  * @license   http://opensource.org/licenses/MIT MIT
@@ -13,17 +13,6 @@ declare(strict_types=1);
 function um_load_menu(&$menu_buttons): void
 {
 	global $context, $modSettings, $smcFunc, $user_info, $scripturl, $settings;
-
-	// Make damn sure we ALWAYS load last. Priority: 100!
-	if (!isset($context['um_replaying_menu']) && substr($modSettings['integrate_menu_buttons'], -12) !== 'um_load_menu') {
-		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
-		add_integration_function('integrate_menu_buttons', 'um_load_menu');
-
-		return;
-	}
-
-	$context['html_headers'] .= '
-		<link rel="stylesheet" href="' . $settings['default_theme_url'] . '/css/ultimate-menu-buttons' . (!empty($modSettings['minimize_files']) ? '.min' : '') . '.css?v=' . um_cache_busting(false) . '">';
 
 	for ($i = 1; $i <= ($modSettings['um_count'] ?? 0); $i++) {
 		$key = 'um_button_' . $i;
@@ -41,13 +30,42 @@ function um_load_menu(&$menu_buttons): void
 
 		recursive_button($temp_menu, $menu_buttons, $row['parent'], $row['position'], $key);
 	}
+
+	$context['um_all_buttons'] = $menu_buttons;
 }
 
-function um_replay_menu(&$menu_buttons)
+function um_get_settings(): void
 {
-	global $context;
+	global $modSettings, $umSettings;
 
-	$context['replayed_menu_buttons'] = $menu_buttons;
+	if (substr($modSettings['integrate_menu_buttons'], -12) !== 'um_load_menu') {
+		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
+		add_integration_function('integrate_menu_buttons', 'um_load_menu');
+	}
+
+	if (!empty($modSettings['um_settings'])) {
+		$umSettings = json_decode($modSettings['um_settings'], true);
+		$umSettings['um_icon_dimension'] = (int)$umSettings['um_icon_dimension'];
+	} else {
+		$umSettings = [
+			'um_fingerprint' => mb_strtolower(strval(bin2hex(random_bytes(5))), 'UTF-8'),
+			'um_icon_dimension' => 32,
+			'um_secureCode' =>  strval(bin2hex(random_bytes(10)))
+		];
+	}
+}
+
+function um_linking(): void
+{
+	global $modSettings, $context, $umSettings;
+
+	loadCSSFile('ultimate-menu-buttons' . (!empty($modSettings['minimize_files']) ? '.min' : '') . '.css?v=' . um_cache_busting(false), ['default_theme' => true, 'minimize' => false, 'order_pos' => 901], 'um_buttons');
+	loadCSSFile('ultimate-menu-icons.css?v=' . um_cache_busting(false), ['default_theme' => true, 'minimize' => false, 'order_pos' => 900], 'um_icons');
+
+	if (um_admin_queryString(['action' => 'admin', 'area' => 'umen'])) {
+		loadCSSFile('ultimate-menu.css?v=' . um_cache_busting(false), ['default_theme' => true, 'minimize' => false, 'order_pos' => 902], 'um_admin');
+		loadJavaScriptFile('ultimate-menu.js?v=' . um_cache_busting(false), ['default_theme' => true, 'minimize' => false, 'defer' => true], 'um_admin');
+	}
 }
 
 function recursive_button(array $needle, array &$haystack, $insertion_point, $where, $key): void
@@ -89,14 +107,19 @@ function insert_button(array $needle, array &$haystack, $insertion_point, $where
 
 function um_cache_busting($force = false): string
 {
-	global $modSettings;
+	global $umSettings;
 
-	list($count, $requestPairs) = [0, ['action' => 'admin', 'area' => 'umen']];
-	array_walk_recursive($requestPairs, function($value, $request) use (&$count) {
-		$count = isset($_REQUEST[$request]) && stripos($_REQUEST[$request], $value) !== false ? $count + 1 : $count;
-	}, $count);
+	return !empty($umSettings['um_fingerprint']) && !um_admin_queryString(['action' => 'admin', 'area' => 'umen']) && empty($force) ? $umSettings['um_fingerprint'] : mb_strtolower(strval(bin2hex(random_bytes(5))), 'UTF-8');
+}
 
-	return !empty($modSettings['um_fingerprint']) && $count < 2 && empty($force) ? $modSettings['um_fingerprint'] : mb_strtolower(strval(bin2hex(random_bytes(5))), 'UTF-8');
+function um_admin_queryString($parameters = []): bool
+{
+	global $smcFunc;
+
+	$count = 0;
+	return array_walk_recursive($parameters, function($value, $request) use (&$count, $smcFunc) {
+		$count = isset($_GET[$request]) && stripos($smcFunc['htmlspecialchars']($_GET[$request]), $value) !== false ? $count + 1 : $count;
+	}, $count) == (count($parameters) ?: -1);
 }
 
 function um_admin_areas(&$admin_areas): void
@@ -124,16 +147,11 @@ function um_admin_areas(&$admin_areas): void
 	];
 
 	// Additional messages for "Remove all data associated with this modification."
-	list($count, $requestPairs) = [0, ['action' => 'admin', 'area' => 'packages', 'sa' => 'uninstall', 'package' => 'ultimate-menu']];
-	array_walk_recursive($requestPairs, function($value, $request) use (&$count) {
-		$count = isset($_REQUEST[$request]) && stripos($_REQUEST[$request], $value) !== false ? $count + 1 : $count;
-	}, $count);
-
-	if ($count > 3) {
+	if (um_admin_queryString(['action' => 'admin', 'area' => 'packages', 'sa' => 'uninstall', 'package' => 'ultimate-menu'])) {
 		$context['html_headers'] .= '
 		<script>
 			$(document).ready(function(){
-				$("#db_changes_div > ul").append(\'<li>' . $txt['um_menu_icons_uninstall'] . '</li>\');
+				' . implode('', array_map(fn($val) => '$("<li>", {text: \'' . preg_replace("/(?<!\\\\)'/", "\\'", $val) . '\'}).appendTo($("#db_changes_div > ul"));', explode('|', $txt['um_menu_icons_uninstall']))) . '
 			});
 		</script>';
 	}

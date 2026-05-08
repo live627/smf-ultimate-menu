@@ -14,7 +14,8 @@ $(document).ready(function() {
 		class: "um_icons",
 		id: "um_list"
 	}), $um_nofile = $("select#um_icon_select option:first").text() ?? "",
-		$um_selected = $("select#um_icon_select option:selected").text() ?? "";
+		$um_selected = $("select#um_icon_select option:selected").text() ?? "",
+		$um_dimensionSelect = $("select#um_dimension");
 	if ($("#group_perms")) {
 		var $umel = $("<span />", {
 			class: "toggle_down",
@@ -32,12 +33,16 @@ $(document).ready(function() {
 		});
 	}
 	$("#advum_icons").css("display","flex").addClass("advum_icons");
+	$("#um_file_submit").addClass("um_file_submit");
 	$("#um_file").on("change", function(e) {
 		if (!um_secureCode) {
 			return false;
 		}
-		var fileData = $("#um_file").prop("files")[0], fileName = e.target.files[0].name, formData = new FormData();
+		var fileData = $("#um_file")[0].files, fileName = e.target.files[0].name, formData = new FormData();
 		formData.append("attachment", fileData);
+		for (var i = 0; i < fileData.length; i++) {
+			formData.append('attachment[]', fileData[i]);
+		}
 		formData.append(smf_session_var, smf_session_id);
 		formData.append("um_checkcode", um_secureCode);
 		$("#um_loader").css("display", "inline-flex");
@@ -63,6 +68,7 @@ $(document).ready(function() {
 					$(".um_hideSelect").text(response.file);
 					$("input#um_icon").val($.trim(response.file));
 					$("#um_sprite_inactive").trigger("click");
+					$("form#um_file_form").submit();
 				}
 				else if (response.error) {
 					console.log(response.error);
@@ -119,6 +125,28 @@ $(document).ready(function() {
 		} else {
 			$("span.um_icon_pseudo").hide().css("visibility", "hidden");
 			$("span.um_icon_container").show().css("visibility", "visible");
+		}
+	});
+	$um_dimensionSelect.on("focus", function() {
+        $(this).data("um_previous", $(this).val());
+    });
+	$um_dimensionSelect.on("change", function() {
+		var $dimText = (um_dim_warning ?? ""),
+			um_replacements = {
+			"#cw": $(this).data("um_previous"),
+			"#ch": $(this).data("um_previous"),
+			"#nw": $(this).val(),
+			"#nh": $(this).val()
+		};
+		$.each(um_replacements, function(original, replacement) {
+			var regex = new RegExp(original);
+			$dimText = $dimText.replace(regex, replacement);
+		});
+
+		if (!confirm($dimText)) {
+			$(this).val($(this).data("um_previous"));
+		} else {
+			$(this).data("um_previous", $(this).val());
 		}
 	});
 });
