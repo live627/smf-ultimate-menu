@@ -228,7 +228,7 @@ final class Test extends TestCase
 	}
 
 	#[\PHPUnit\Framework\Attributes\DataProvider('childButtonProvider')]
-    public function testInsertChildButton(string $insertion_point, array $expected): void
+	public function testInsertChildButton(string $insertion_point, array $expected): void
 	{
 		foreach (['before', 'after', 'child_of'] as $where)
 		{

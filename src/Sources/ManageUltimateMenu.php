@@ -77,9 +77,9 @@ class ManageUltimateMenu
 			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen');
 		} elseif (isset($_POST['save'])) {
-			checkSession();			
+			checkSession();
 			if (isset($_POST['um_icon_dimension'])) {
-				$this->um->um_updateSettings(['um_icon_dimension' => (in_array((int)$_POST['um_icon_dimension'], [16, 32, 48]) ? (int)$_POST['um_icon_dimension'] : 32)]);
+				$this->um->um_updateSettings(['um_icon_dimension' => (in_array((int) $_POST['um_icon_dimension'], [16, 32, 48]) ? (int) $_POST['um_icon_dimension'] : 32)]);
 				$generateMsg = $this->um->um_generate_sprite(0, true) ? 'success' : 'failure';
 				$this->um->deleteIcons('all', []);
 			}
@@ -95,7 +95,7 @@ class ManageUltimateMenu
 			redirectexit('action=admin;area=umen;generate=' . $generateMsg);
 		} elseif (isset($_POST['um_icon_dimension'])) {
 			checkSession();
-			$this->um->um_updateSettings(['um_icon_dimension' => (in_array([0, 1, 2], (int)$_POST['um_icon_dimension']) ? (((int)$_POST['um_icon_dimension'] + 1) * 16) : 32)]);
+			$this->um->um_updateSettings(['um_icon_dimension' => (in_array([0, 1, 2], (int) $_POST['um_icon_dimension']) ? (((int) $_POST['um_icon_dimension'] + 1) * 16) : 32)]);
 			$generateMsg = $this->um->um_generate_sprite(0, true) ? 'success' : 'failure';
 			$this->um->deleteIcons('all', []);
 			$this->um->rebuildMenu();
@@ -146,7 +146,7 @@ class ManageUltimateMenu
 		list($options, $dimOutput) = [[16, 32, 48], ''];
 		array_walk($options, function($value, $key) use (&$dimOutput, $umSettings) {
 			$dimOutput .= '
-					<option value="' . $value. '"' . ($umSettings['um_icon_dimension'] == $value ? ' selected' : '') . '>' . $value. '</option>';
+					<option value="' . $value . '"' . ($umSettings['um_icon_dimension'] == $value ? ' selected' : '') . '>' . $value . '</option>';
 		});
 		addJavaScriptVar('um_dim_warning', stripcslashes(str_replace(["\\t", "\\n", "\\r", "\\s", "\\'"], ["\t", "\n", "\n", "\s", "\'"], addcslashes($txt['um_menu_button_dimension_confirm'], '\\'))), true);
 		$listOptions = [

@@ -517,7 +517,7 @@ class UltimateMenu
 	{
 		global $txt;
 
-		list($filesList, $start, $files, $allUmButtons)  = [[], intval($_REQUEST['start']) ?? 0, $this->getIconPathContents(), $this->total_getMenu()];
+		list($filesList, $start, $files, $allUmButtons) = [[], intval($_REQUEST['start']) ?? 0, $this->getIconPathContents(), $this->total_getMenu()];
 		foreach ($files as $index => $file) {
 			$assignedIndex = array_search($file, array_column($allUmButtons, 'icon'));
 			$filesList[] = [
@@ -915,9 +915,9 @@ class UltimateMenu
 	 */
 	public function um_flatten_files($files = []): array
 	{
-		foreach($files['attachment'] as $key => $file){
+		foreach ($files['attachment'] as $key => $file){
 			$file = is_array($file) ? $file : [$file];
-			foreach($file as $newkey => $val){
+			foreach ($file as $newkey => $val){
 				$flatFiles[$newkey][$key] = $val;
 			}
 		}

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 // What are you doing here, SMF?
 define('SMF', 1);
@@ -46,7 +46,7 @@ $txt = [
 $user_info = ['is_admin' => true, 'is_guest' => false, 'language' => '', 'id' => 1, 'name' => 'Test User', 'groups' => [0], 'permissions' => []];
 $modSettings = ['lastActive' => 0, 'settings_updated' => 0, 'postmod_active' => false];
 
-$smcFunc['db_query'] = function ($name, $query, $args)
+$smcFunc['db_query'] = function($name, $query, $args)
 {
 	global $current_item, $modSettings;
 
@@ -57,22 +57,22 @@ $smcFunc['db_query'] = function ($name, $query, $args)
 
 	return [['']];
 };
-$smcFunc['db_fetch_assoc'] = function ($request)
+$smcFunc['db_fetch_assoc'] = function($request)
 {
 	global $current_item;
 
 	return $request[$current_item++] ?? null;
 };
-$smcFunc['db_fetch_row'] = function ($request)
+$smcFunc['db_fetch_row'] = function($request)
 {
 	global $current_item;
 
 	return $request[$current_item++] ?? null;
 };
-$smcFunc['db_free_result'] = function (): void
+$smcFunc['db_free_result'] = function(): void
 {
 };
-$smcFunc['db_insert'] = function (): void
+$smcFunc['db_insert'] = function(): void
 {
 };
 $smcFunc['htmltrim'] = fn(string $string): string => trim($string);
