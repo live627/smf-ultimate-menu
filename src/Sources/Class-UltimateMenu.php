@@ -460,7 +460,7 @@ class UltimateMenu
 							$buttonIcons[] = basename($file);
 						}
 					}
-					if (!empty($buttonIds)) {
+					if (!empty($buttonIcons)) {
 						$smcFunc['db_query']('', '
 							UPDATE {db_prefix}um_menu
 							SET	sprite = {int:sprite}, icon = {string:icon}
@@ -915,7 +915,6 @@ class UltimateMenu
 	 */
 	public function um_flatten_files($files = []): array
 	{
-		error_log(print_r($files, true));
 		foreach($files['attachment'] as $key => $file){
 			$file = is_array($file) ? $file : [$file];
 			foreach($file as $newkey => $val){

@@ -77,7 +77,7 @@ class ManageUltimateMenu
 			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen');
 		} elseif (isset($_POST['save'])) {
-			checkSession();
+			checkSession();			
 			if (isset($_POST['um_icon_dimension'])) {
 				$this->um->um_updateSettings(['um_icon_dimension' => (in_array((int)$_POST['um_icon_dimension'], [16, 32, 48]) ? (int)$_POST['um_icon_dimension'] : 32)]);
 				$generateMsg = $this->um->um_generate_sprite(0, true) ? 'success' : 'failure';
@@ -85,7 +85,7 @@ class ManageUltimateMenu
 			}
 			$this->um->updateButton($_POST);
 			$this->um->rebuildMenu();
-			redirectexit('action=admin;area=umen');
+			redirectexit('action=admin;area=umen;generate=' . ($generateMsg ?? ''));
 		} elseif (isset($_POST['new'])) {
 			redirectexit('action=admin;area=umen;sa=addbutton');
 		} elseif (isset($_POST['generate'])) {
