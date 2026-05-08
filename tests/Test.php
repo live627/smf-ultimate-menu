@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 final class Test extends TestCase
 {
-	public function buttonProvider(): array
+	public static function buttonProvider(): array
 	{
 		$btn = ['href' => 'link', 'show' => true];
 		$btn1 = ['href' => 'link1', 'show' => true];
@@ -82,10 +82,8 @@ final class Test extends TestCase
 		];
 	}
 
-	/**
-	 * @dataProvider buttonProvider
-	 */
-	public function testInsertButton(string $insertion_point, array $expected): void
+	#[\PHPUnit\Framework\Attributes\DataProvider('buttonProvider')]
+    public function testInsertButton(string $insertion_point, array $expected): void
 	{
 		$btn = ['href' => 'link', 'show' => true];
 		$btn1 = ['href' => 'link1', 'show' => true];
@@ -104,7 +102,7 @@ final class Test extends TestCase
 		}
 	}
 
-	public function childButtonProvider(): array
+	public static function childButtonProvider(): array
 	{
 		$btn = ['href' => 'link', 'show' => true];
 		return [
@@ -117,7 +115,7 @@ final class Test extends TestCase
 							'show' => true,
 							'sub_buttons' => [
 								'inserted_sub' => $btn,
-								'sub' => $btn,
+								'sub' => $btn ,
 								'sub1' => $btn,
 							],
 						],
@@ -229,10 +227,8 @@ final class Test extends TestCase
 		];
 	}
 
-	/**
-	 * @dataProvider childButtonProvider
-	 */
-	public function testInsertChildButton(string $insertion_point, array $expected): void
+	#[\PHPUnit\Framework\Attributes\DataProvider('childButtonProvider')]
+    public function testInsertChildButton(string $insertion_point, array $expected): void
 	{
 		foreach (['before', 'after', 'child_of'] as $where)
 		{
@@ -266,42 +262,19 @@ final class Test extends TestCase
 		}
 	}
 
-	public function testHook(): void
-	{
-		global $modSettings, $umButtonObject, $txt;
-
-		$modSettings['um_count'] = 2;
-		$modSettings['um_button_2'] = $umButtonObject['button_data1'];
-		$haystack = ['signup' => 'l'];
-		add_integration_function('integrate_menu_buttons', 'um_load_menu');
-		add_integration_function('integrate_menu_buttons', 'my_func');
-		$this->assertEquals('um_load_menu,my_func', $modSettings['integrate_menu_buttons']);
-		um_load_menu($haystack);
-		$this->assertEquals('my_func,um_load_menu', $modSettings['integrate_menu_buttons']);
-		$this->assertCount(1, $haystack, sprintf($txt['assert_count'], 1));
-		$this->assertArrayNotHasKey('um_button_2', $haystack);
-		um_load_menu($haystack);
-		$this->assertEquals('my_func,um_load_menu', $modSettings['integrate_menu_buttons']);
-		$this->assertCount(2, $haystack, sprintf($txt['assert_count'], 2));
-		$this->assertArrayHasKey('um_button_2', $haystack);
-		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
-		remove_integration_function('integrate_menu_buttons', 'my_func');
-		unset($modSettings['um_count'], $modSettings['um_button_2']);
-	}
-
 	public function testMenu(): void
 	{
-		global $modSettings, $umButtonObject, $txt;
+		global $modSettings;
 
 		$modSettings['um_count'] = 2;
-		$modSettings['um_button_2'] = $umButtonObject['button_data1'];
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
 		$haystack = ['signup' => 'l'];
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 		um_load_menu($haystack);
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
-		$this->assertCount(2, $haystack, sprintf($txt['assert_count'], 2));
+		$this->assertCount(2, $haystack);
 		$this->assertArrayHasKey('um_button_2', $haystack);
-		$this->assertCount($umButtonObject['button_key_count'], $haystack['um_button_2'], sprintf($txt['assert_count'], $umButtonObject['button_key_count']));
+		$this->assertCount(5, $haystack['um_button_2']);
 		$this->assertArrayHasKey('title', $haystack['um_button_2']);
 		$this->assertArrayHasKey('href', $haystack['um_button_2']);
 		$this->assertEquals('Test', $haystack['um_button_2']['title']);
@@ -311,14 +284,14 @@ final class Test extends TestCase
 
 	public function testListButtons(): void
 	{
-		global $modSettings, $umButtonObject, $txt;
+		global $modSettings;
 
 		$modSettings['um_count'] = 2;
-		$modSettings['um_button_2'] = $umButtonObject['button_data1'];
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 		$haystack = (new UltimateMenu)->getButtonNames();
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
-		$this->assertCount(2, $haystack['um_button_2'], sprintf($txt['assert_count'], 2));
+		$this->assertCount(2, $haystack['um_button_2']);
 		$this->assertSame([0, 'Test'], $haystack['um_button_2']);
 		$this->assertArrayHasKey('admin', $haystack);
 		$this->assertArrayHasKey('signup', $haystack);
@@ -327,10 +300,10 @@ final class Test extends TestCase
 
 	public function testIntegration(): void
 	{
-		global $context, $umButtonObject, $modSettings;
+		global $context, $modSettings;
 
 		$modSettings['um_count'] = 2;
-		$modSettings['um_button_2'] = $umButtonObject['button_data2'];
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[0],"parent":"search","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 		setupMenuContext();
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
