@@ -1,0 +1,118 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * @package Ultimate Menu mod
+ * @version   2.0.5
+ * @author John Rayes <live627@gmail.com>
+ * @copyright Copyright (c) 2026, John Rayes
+ * @license http://opensource.org/licenses/MIT MIT
+ */
+
+$txt['um_admin_menu_um'] = 'Ultimate Menu';
+$txt['um_admin_add_button'] = 'Ajouter un bouton';
+$txt['um_admin_manage_menu'] = 'Gérer le menu';
+$txt['um_admin_menu_um_opt_file'] = 'Choisir l\'icône';
+$txt['um_admin_manage_icons'] = 'Gérer les fichiers';
+
+$txt['admin_menu_um'] = 'Menu';
+$txt['admin_menu_um_title'] = 'Réglages menu';
+$txt['admin_menu_um_desc'] = 'Cette page autorise l\'ajout et modification les boutons du menu personnalisé.';
+
+$txt['admin_manage_um_submit'] = 'Soumettre';
+$txt['admin_manage_um_desc'] = 'Gérer vos boutons de Menu créés';
+$txt['admin_menu_um_add_button_desc'] = 'Ajouter des nouveaux boutons au Menu';
+$txt['admin_manage_um_icons_desc'] = 'Gérez vos icônes Ultimate Menu téléchargées';
+
+$txt['um_menu_external_link'] = 'Lien externe';
+$txt['um_menu_forum_link'] = 'Lien du forum';
+$txt['um_menu_active'] = 'Actif';
+$txt['um_menu_inactive'] = 'Inactif';
+$txt['um_menu_no_buttons'] = 'Il n\'y a pas encore de boutons...';
+$txt['um_menu_button_id'] = 'ID du bouton';
+$txt['um_menu_button_name'] = 'Nom du bouton';
+$txt['um_menu_button_upload'] = 'Téléchargement d\'images';
+$txt['um_menu_button_type'] = 'Type de bouton';
+$txt['um_menu_button_position'] = 'Position du bouton';
+$txt['um_menu_button_link'] = 'Lien du bouton';
+$txt['um_menu_actions'] = 'Actions';
+$txt['um_menu_modify'] = 'Modification';
+$txt['um_menu_before'] = 'Avant';
+$txt['um_menu_child_of'] = 'Descendant de';
+$txt['um_menu_after'] = 'Après';
+$txt['um_menu_remove_selected'] = 'Supprimer les boutons sélectionnés';
+$txt['um_menu_remove_all'] = 'Supprimer tous les boutons';
+$txt['um_menu_remove_confirm'] = 'Etes-vous sûr de vouloir supprimer tous les boutons sélectionnés ?';
+$txt['um_menu_remove_all_confirm'] = 'Êtes-vous sûr de vouloir supprimer tous les boutons ?';
+$txt['um_menu_add_title'] = 'Ajouter un bouton';
+$txt['um_menu_edit_title'] = 'Modifier un bouton';
+$txt['um_menu_button_name'] = 'Nom du bouton';
+$txt['um_menu_button_type'] = 'Type de bouton';
+$txt['um_menu_external'] = 'Lien externe';
+$txt['um_menu_forum'] = 'Lien du forum';
+$txt['um_menu_button_link_desc'] = 'Pour le lien de forum vous pouvez juste mettre les choses après "index.php?" dans le lien de votre forum.';
+$txt['um_menu_button_link'] = 'Lien du bouton';
+$txt['um_menu_button_perms'] = 'Autoriser groupes';
+$txt['um_menu_button_guest'] = 'Invités';
+$txt['um_menu_button_position'] = 'Position du bouton';
+$txt['um_menu_button_status'] = 'Statut du bouton';
+$txt['um_menu_button_active'] = 'Actif';
+$txt['um_menu_button_inactive'] = 'Inactif';
+$txt['um_menu_link_type'] = 'Type de lien';
+$txt['um_menu_same_window'] = 'Même fenêtre';
+$txt['um_menu_new_tab'] = 'Nouvel onglet';
+
+$txt['um_menu_button_icon'] = 'Icône de bouton';
+$txt['um_menu_no_icons'] = 'Aucune icône Ultimate Menu';
+$txt['um_menu_icon_name'] = 'Nom du fichier';
+$txt['um_menu_icon_assigned'] = 'Bouton attribué';
+$txt['um_menu_delete_selected'] = 'Supprimer les fichiers d\'icônes sélectionnés';
+$txt['um_menu_delete_unassigned'] = 'Supprimer les fichiers d\'icônes non attribués';
+$txt['um_menu_delete_all'] = 'Supprimer tous les fichiers d\'icônes';
+$txt['um_menu_standardize_all'] = 'Standardiser les fichiers';
+$txt['um_menu_standardize_all_confirm'] = 'Êtes-vous sûr de vouloir standardiser tous les noms de fichiers et les dimensions des images ?';
+$txt['um_menu_delete_selected_confirm'] = 'Êtes-vous sûr de vouloir supprimer les fichiers d\'icônes sélectionnés ?';
+$txt['um_menu_delete_unassigned_confirm'] = 'Êtes-vous sûr de vouloir supprimer tous les fichiers d\'icônes non attribués ?';
+$txt['um_menu_delete_all_confirm'] = 'Êtes-vous sûr de vouloir supprimer tous les fichiers d\'icônes ?';
+$txt['um_menu_icons_uninstall'] = 'Supprimer toutes les icônes Ultimate Menu du dossier "um_icons"|Supprimez le sprite du menu ultime et ses fichiers CSS';
+$txt['um_menu_icons_none'] = 'Rien';
+$txt['um_menu_icon_unassigned'] = '&#11160; Non attribué';
+$txt['um_menu_icon_assigned_button'] = '&#8658; %s';
+$txt['um_menu_icon_unstandardized'] = '&#11079; Non standardisé';
+$txt['um_menu_button_dimension'] = 'Pixels';
+$txt['um_menu_button_dimension_confirm'] = 'Dimensions actuelles : #cwpx x #chpx\nNouvelles dimensions : #nwpx x #nhpx\n\nCeci sélectionnera la taille de stockage par défaut des icônes.\nLe sprite, son CSS et toutes les icônes seront supprimés.\nChaque bouton UM sera dépourvu d\'icônes afin que vous puissiez en télécharger de nouvelles.\n\nÊtes-vous sûr de vouloir continuer cette action ?';
+
+$txt['um_menu_button_sprite_generate'] = 'Générer';
+$txt['um_menu_button_sprite_generate_confirm'] = 'Cette action générera un nouveau sprite contenant toutes les icônes actuelles des boutons du menu Ultimate.\n\nSi la case est cochée, chaque bouton possédant une icône sera automatiquement ajusté pour utiliser ce sprite.\n\nÊtes-vous sûr de vouloir continuer ?';
+$txt['um_menu_button_sprite_info'] = 'Les sprites réduisent le nombre de requêtes HTTP, ce qui accélère le chargement des pages.';
+$txt['um_menu_button_sprite_detected'] = 'Sprite disponible';
+$txt['um_menu_button_sprite_undetected'] = 'Sprite indisponible';
+$txt['um_menu_sprite_active'] = 'Sprite';
+$txt['um_menu_sprite_inactive'] = 'Icône';
+$txt['um_menu_button_sprite_generated'] = 'Le sprite a été généré avec succès !';
+
+// Submission errors
+$txt['um_menu_session_verify_fail'] = 'Session verification failed. Please then try again.';
+$txt['um_menu_not_found'] = 'Le bouton que vous essayez de modifier n\'existe pas !';
+$txt['um_menu_errors_create'] = 'L\'erreur ou les erreurs suivantes se sont produites lors de l\'ajout de votre bouton:';
+$txt['um_menu_errors_modify'] = 'L\'erreur ou les erreurs suivantes sont survenues lors de la modification de votre bouton:';
+$txt['um_menu_numeric_desc'] = 'Le nom du bouton que vous avez choisi est entièrement numérique. Vous devez utiliser un nom qui contient au moins un caractère non numérique.<br />1e5 est considéré numérique (notation scientifique) 1.5 est considéré numérique (nombre décimal)';
+$txt['um_menu_empty_name'] = 'Le nom a été laissé vide.';
+$txt['um_menu_empty_link'] = 'Le lien a été laissé vide.';
+$txt['um_menu_empty_parent'] = 'Le parent a été laissé vide.';
+$txt['um_menu_depend_desc'] = 'Vous devez déplacer ou supprimer tous les boutons enfant et/ou petit-enfant de ce bouton avant de le modifier.';
+$txt['um_menu_before_child_title'] = 'Créer un bouton enfant';
+$txt['um_menu_before_child_desc'] = 'Utilisez Child Of pour faire des boutons les descendants d\'un autre bouton !';
+$txt['um_menu_mysql'] = 'Le nom du bouton que vous avez choisi est déjà utilisé!';
+$txt['um_menu_filename_illegal'] = 'Le nom de fichier saisi contient des caractères non autorisés.';
+$txt['um_menu_filename_exists'] = 'Le nom de fichier saisi n\'existe pas dans le chemin d\'accès aux icônes du menu Ultimate.';
+$txt['um_menu_filename_compress'] = 'Le fichier peut être utilisé mais ne peut pas être compressé.';
+$txt['um_menu_filename_unknown'] = 'Une erreur inconnue s\'est produite avec le fichier image.';
+
+$txt['um_menu_sprite_create'] = 'Impossible de créer une image sprite vide.';
+$txt['um_menu_sprite_sourcepath'] = 'Le chemin source n\'existe pas : %s';
+$txt['um_menu_sprite_savepath'] = 'Le chemin d\'enregistrement n\'existe pas : %s';
+$txt['um_menu_sprite_csspath'] = 'Le chemin CSS n\'existe pas : %s';
+$txt['um_menu_button_sprite_error'] = 'Une erreur s\'est produite lors de la génération du sprite.\nVeuillez vérifier les permissions du fichier et réessayer.';
+$txt['um_menu_button_sprite_drivel'] = 'Le message prévu est incohérent !';
