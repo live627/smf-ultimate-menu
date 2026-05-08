@@ -41,7 +41,7 @@ array_walk($umButtons, function($value, $key) use (&$modSettings) {
 $smcFunc['db_query']('', '
 	DELETE FROM {db_prefix}settings
 	WHERE' . $where,
-	$allUmSettings
+	$allUmModSettings
 );
 
 um_deleteIconsPath($settings['default_theme_dir'] . '/images/um_icons');
