@@ -83,7 +83,7 @@ final class Test extends TestCase
 	}
 
 	#[\PHPUnit\Framework\Attributes\DataProvider('buttonProvider')]
-    public function testInsertButton(string $insertion_point, array $expected): void
+	public function testInsertButton(string $insertion_point, array $expected): void
 	{
 		$btn = ['href' => 'link', 'show' => true];
 		$btn1 = ['href' => 'link1', 'show' => true];

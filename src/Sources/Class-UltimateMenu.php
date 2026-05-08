@@ -915,9 +915,9 @@ class UltimateMenu
 	 */
 	public function um_flatten_files($files = []): array
 	{
-		foreach ($files['attachment'] as $key => $file){
+		foreach ($files['attachment'] as $key => $file) {
 			$file = is_array($file) ? $file : [$file];
-			foreach ($file as $newkey => $val){
+			foreach ($file as $newkey => $val) {
 				$flatFiles[$newkey][$key] = $val;
 			}
 		}
