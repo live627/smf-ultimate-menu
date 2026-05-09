@@ -10,30 +10,6 @@ declare(strict_types=1);
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-function um_load_menu(&$menu_buttons): void
-{
-	global $context, $modSettings, $smcFunc, $user_info, $scripturl, $settings;
-
-	for ($i = 1; $i <= ($modSettings['um_count'] ?? 0); $i++) {
-		$key = 'um_button_' . $i;
-		if (!isset($modSettings[$key])) {
-			continue;
-		}
-		$row = json_decode($modSettings[$key], true);
-		$temp_menu = [
-			'title' => $row['name'],
-			'href' => ($row['type'] == 'forum' ? $scripturl . '?' : '') . $row['link'],
-			'target' => $row['target'],
-			'icon' => !empty($row['icon']) && empty($row['sprite']) ? 'um_icons/' . $row['icon'] : (!empty($row['sprite']) ? null : 'um_icons/blank.png'),
-			'show' => (allowedTo('admin_forum') || array_intersect($user_info['groups'], $row['groups']) != []) && $row['active'],
-		];
-
-		recursive_button($temp_menu, $menu_buttons, $row['parent'], $row['position'], $key);
-	}
-
-	$context['um_all_buttons'] = $menu_buttons;
-}
-
 function um_get_settings(): void
 {
 	global $modSettings, $umSettings;
@@ -68,41 +44,145 @@ function um_linking(): void
 	}
 }
 
-function recursive_button(array $needle, array &$haystack, $insertion_point, $where, $key): void
-{
-	foreach ($haystack as $area => &$info) {
-		if ($area == $insertion_point) {
-			switch ($where) {
-				case 'before':
-				case 'after':
-					insert_button([$key => $needle], $haystack, $insertion_point, $where);
-					break 2;
 
-				case 'child_of':
-					$info['sub_buttons'][$key] = $needle;
-					break 2;
+function um_load_menu(array &$menu_buttons): void
+{
+	global $context, $modSettings, $user_info, $scripturl;
+
+	if (!isset($modSettings['um_keys']))
+		return;
+
+	$is_admin = allowedTo('admin_forum');
+	$forum_prefix = $scripturl . '?';
+	$group_map = array_flip($user_info['groups']);
+	$um_keys = explode(',', $modSettings['um_keys']);
+
+	// Build flat indexes
+	$nodes = $menu_buttons;
+	$root_order = array_keys($menu_buttons);
+
+	// Build lists of deferred operations
+	$before = [];
+	$after = [];
+	$children = [];
+
+	foreach ($um_keys as $key)
+	{
+		if (!isset($modSettings[$key]))
+			continue;
+
+		$row = json_decode($modSettings[$key], true);
+
+		$show = $is_admin;
+
+		if (!$show)
+		{
+			foreach ($row['groups'] as $group)
+			{
+				if (isset($group_map[$group]))
+				{
+					$show = true;
+					break;
+				}
 			}
-		} elseif (!empty($info['sub_buttons'])) {
-			recursive_button($needle, $info['sub_buttons'], $insertion_point, $where, $key);
+		}
+
+		$show = $show && !empty($row['active']);
+
+		$nodes[$key] = [
+			'title' => $row['name'],
+			'href' => ($row['type'] === 'forum' ? $forum_prefix : '' ) . $row['link'],
+			'target' => $row['target'],
+			'icon' => !empty($row['icon']) && empty($row['sprite']) ? 'um_icons/' . $row['icon'] : (!empty($row['sprite']) ? null : 'um_icons/blank.png'),
+			'show' => $show,
+		];
+
+		switch ($row['position'])
+		{
+			case 'before':
+				$before[$row['parent']][] = $key;
+				break;
+
+			case 'after':
+				$after[$row['parent']][] = $key;
+				break;
+
+			case 'child_of':
+				$children[$row['parent']][] = $key;
+				break;
 		}
 	}
+
+	$menu_buttons = [];
+
+	foreach ($root_order as $key)
+	{
+		emit_node(
+			$key,
+			$nodes,
+			$children,
+			$before,
+			$after,
+			$menu_buttons
+		);
+	}
+
+	$context['um_all_buttons'] = $menu_buttons;
 }
 
-function insert_button(array $needle, array &$haystack, $insertion_point, $where = 'after'): void
+function emit_node(
+	string $key,
+	array $nodes,
+	array $children,
+	array $before,
+	array $after,
+	array &$result
+): void
 {
-	$offset = 0;
-
-	foreach ($haystack as $area => $dummy) {
-		if (++$offset && $area == $insertion_point) {
-			break;
+	if (isset($before[$key]))
+	{
+		foreach ($before[$key] as $before_key)
+		{
+			emit_node(
+				$before_key,
+				$nodes,
+				$children,
+				$before,
+				$after,
+				$result
+			);
 		}
 	}
 
-	if ($where == 'before') {
-		$offset--;
+	$item = $nodes[$key];
+
+	if (isset($children[$key]))
+	{
+		$child_result = [];
+
+		foreach ($children[$key] as $child_key)
+		{
+			emit_node(
+				$child_key,
+				$nodes,
+				$children,
+				$before,
+				$after,
+				$child_result
+			);
+		}
+
+		$item['sub_buttons'] = $child_result;
 	}
 
-	$haystack = array_slice($haystack, 0, $offset, true) + $needle + array_slice($haystack, $offset, null, true);
+	$result[$key] = $item;
+
+	if (isset($after[$key]))
+	{
+		for ( $i = count($after[$key]) - 1; $i >= 0; $i-- ) {
+			emit_node( $after[$key][$i], $nodes, $children, $before, $after, $result );
+		}
+	}
 }
 
 function um_cache_busting($force = false): string
