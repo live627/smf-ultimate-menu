@@ -82,6 +82,7 @@ $txt['um_menu_icon_assigned_button'] = '&#8658; %s';
 $txt['um_menu_icon_unstandardized'] = '&#11079; Non-standardized';
 $txt['um_menu_button_dimension'] = 'Pixels';
 $txt['um_menu_button_dimension_confirm'] = 'Current dimensions: #cwpx x #chpx\nNew dimensions: #nwpx x #nhpx\n\nThis will alter the default icon storage size.\nThe sprite, their CSS and all icons will be deleted.\nEvery UM button will be void of icons so that you can upload new ones.\n\nAre you sure you want to continue with this action?';
+$txt['um_menu_dimchange'] = 'Stored icon dimensions have been changed.\tThe old sprite and icons have been deleted.';
 
 $txt['um_menu_button_sprite_generate'] = 'Generate';
 $txt['um_menu_button_sprite_generate_confirm'] = 'This will generate a fresh sprite containing all current Ultimate Menu button icons.\n\nIf the checkbox is selected, it will auto adjust each button that has an icon set to use the sprite.\n\nAre you sure you want to do this?';

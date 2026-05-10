@@ -59,6 +59,9 @@ class ManageUltimateMenu
 			case 'failure':
 				$this->um->um_alert_verbose($txt['um_menu_button_sprite_error'], true);
 				break;
+			case 'dimchange':
+				$this->um->um_alert_verbose($txt['um_menu_dimchange'], true);
+				break;
 			case '':
 				$this->um->um_alert_verbose($txt['admin_menu_um'], false);
 				break;
@@ -66,7 +69,14 @@ class ManageUltimateMenu
 				$this->um->um_alert_verbose($txt['um_menu_button_sprite_drivel'], false);
 		}
 
-		if (isset($_POST['removeAll'])) {
+		if (isset($_POST['um_icon_dimension'])) {
+			checkSession();
+			$this->um->um_updateSettings(['um_icon_dimension' => (in_array((int) $_POST['um_icon_dimension'], [1, 2, 3]) ? (((int) $_POST['um_icon_dimension']) * 16) : 32)]);
+			$generateMsg = $this->um->um_generate_sprite(0, true) ? 'dimchange' : 'dimchange';
+			$this->um->deleteIcons('all', []);
+			$this->um->rebuildMenu();
+			redirectexit('action=admin;area=umen;generate=' . $generateMsg);
+		} elseif (isset($_POST['removeAll'])) {
 			checkSession();
 			$this->um->deleteallButtons();
 			$this->um->rebuildMenu();
@@ -91,13 +101,6 @@ class ManageUltimateMenu
 		} elseif (isset($_POST['generate'])) {
 			checkSession();
 			$generateMsg = $this->um->um_generate_sprite(($_POST['sprite_all'] ?? 0), false) ? 'success' : 'failure';
-			$this->um->rebuildMenu();
-			redirectexit('action=admin;area=umen;generate=' . $generateMsg);
-		} elseif (isset($_POST['um_icon_dimension'])) {
-			checkSession();
-			$this->um->um_updateSettings(['um_icon_dimension' => (in_array([0, 1, 2], (int) $_POST['um_icon_dimension']) ? (((int) $_POST['um_icon_dimension'] + 1) * 16) : 32)]);
-			$generateMsg = $this->um->um_generate_sprite(0, true) ? 'success' : 'failure';
-			$this->um->deleteIcons('all', []);
 			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen;generate=' . $generateMsg);
 		}
@@ -143,10 +146,10 @@ class ManageUltimateMenu
 		global $context, $txt, $scripturl, $sourcedir, $umSettings;
 
 		$button_names = $this->um->getButtonNames();
-		list($options, $dimOutput) = [[16, 32, 48], ''];
+		list($options, $dimOutput) = [[1, 2, 3], ''];
 		array_walk($options, function($value, $key) use (&$dimOutput, $umSettings) {
 			$dimOutput .= '
-					<option value="' . $value . '"' . ($umSettings['um_icon_dimension'] == $value ? ' selected' : '') . '>' . $value . '</option>';
+					<option value="' . $value . '"' . ($umSettings['um_icon_dimension'] == ($value * 16) ? ' selected' : '') . '>' . ($value * 16) . '</option>';
 		});
 		addJavaScriptVar('um_dim_warning', stripcslashes(str_replace(["\\t", "\\n", "\\r", "\\s", "\\'"], ["\t", "\n", "\n", "\s", "\'"], addcslashes($txt['um_menu_button_dimension_confirm'], '\\'))), true);
 		$listOptions = [
@@ -271,7 +274,7 @@ class ManageUltimateMenu
 					'position' => 'below_table_data',
 					'value' => sprintf(
 				'<select name="um_icon_dimension" id="um_dimension" class="button um_dimension">
-					<optgroup label="%s">' . $dimOutput . '
+					<option value="0" disabled selected>%s</option>' . $dimOutput . '
 				</select>
 				<input type="submit" name="generate" onclick="return confirm(\'%s\');" value="%s" class="button' . ($this->um->um_sprite_pending() ? ' um_pending' : '') . '">
 				<input type="checkbox" id="sprite_all" name="sprite_all" value="1">',

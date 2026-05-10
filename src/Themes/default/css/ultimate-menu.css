@@ -260,13 +260,27 @@ input.um_pending {
     animation: none;
   }
 }
-.um_dimension {
+select.um_dimension, select.um_dimension option {
 	display: inline-flex;
 	justify-content: center;
-	flex: 29%;
+	flex: 20%;
 	box-sizing: border-box;
-	min-width: 29%;
-	max-width: 29%;
+	min-width: 20%;
+	max-width: 20%;
+}
+select.um_dimension option:first-of-type {
+	font-weight: 800;
+}
+* .pagesection:nth-last-child(3) {
+	display: none;
+}
+input#um_file::file-selector-button {
+  border: dashed 0.1rem;
+  padding: 0.1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  mix-blend-mode: darken;
+  transition: 0.3s;
 }
 /* Responsive structure for the UM admin buttons */
 @media only screen and (max-width: 767px) {
@@ -296,15 +310,4 @@ input.um_pending {
 		min-width: 60%;
 		max-width: 60%;
 	}
-}
-* .pagesection:nth-last-child(3) {
-	display: none;
-}
-input#um_file::file-selector-button {
-  border: dashed 0.1rem;
-  padding: 0.1rem;
-  border-radius: 5px;
-  cursor: pointer;
-  mix-blend-mode: darken;
-  transition: 0.3s;
 }

@@ -82,6 +82,7 @@ $txt['um_menu_icon_assigned_button'] = '&#8658; %s';
 $txt['um_menu_icon_unstandardized'] = '&#11079; Standartlaştırılmamış';
 $txt['um_menu_button_dimension'] = 'Piksel';
 $txt['um_menu_button_dimension_confirm'] = 'Mevcut boyutlar: #cwpx x #chpx\nYeni boyutlar: #nwpx x #nhpx\n\nBu, varsayılan simge depolama boyutunu seçecektir.\nSprite, CSS ve tüm simgeler silinecektir.\nHer UM düğmesi, yeni simgeler yükleyebilmeniz için simgelerden arındırılacaktır.\n\nBu işleme devam etmek istediğinizden emin misiniz?';
+$txt['um_menu_dimchange'] = 'Kaydedilen simge boyutları değiştirildi.\tEski sprite ve simgeler silindi.';
 
 $txt['um_menu_button_sprite_generate'] = 'Oluştur';
 $txt['um_menu_button_sprite_generate_confirm'] = 'Bu, mevcut tüm Ultimate Menü düğme simgelerini içeren yeni bir sprite oluşturacaktır.\n\nOnay kutusu seçilirse, simge seti olan her düğmeyi sprite kullanacak şekilde otomatik olarak ayarlayacaktır.\n\nBunu yapmak istediğinizden emin misiniz?';
