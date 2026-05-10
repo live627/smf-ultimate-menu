@@ -83,6 +83,7 @@ $txt['um_menu_icon_unstandardized'] = '&#11079; Non standardisé';
 $txt['um_menu_button_dimension'] = 'Pixels';
 $txt['um_menu_button_dimension_confirm'] = 'Dimensions actuelles : #cwpx x #chpx\nNouvelles dimensions : #nwpx x #nhpx\n\nCeci sélectionnera la taille de stockage par défaut des icônes.\nLe sprite, son CSS et toutes les icônes seront supprimés.\nChaque bouton UM sera dépourvu d\'icônes afin que vous puissiez en télécharger de nouvelles.\n\nÊtes-vous sûr de vouloir continuer cette action ?';
 $txt['um_menu_dimchange'] = 'Les dimensions des icônes enregistrées ont été modifiées.\tL\'ancien sprite et les anciennes icônes ont été supprimés.';
+$txt['um_menu_savebutton'] = 'Tous les boutons UM ont été mis à jour.';
 
 $txt['um_menu_button_sprite_generate'] = 'Générer';
 $txt['um_menu_button_sprite_generate_confirm'] = 'Cette action générera un nouveau sprite contenant toutes les icônes actuelles des boutons du menu Ultimate.\n\nSi la case est cochée, chaque bouton possédant une icône sera automatiquement ajusté pour utiliser ce sprite.\n\nÊtes-vous sûr de vouloir continuer ?';

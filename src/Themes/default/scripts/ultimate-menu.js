@@ -133,10 +133,10 @@ $(document).ready(function() {
 	$um_dimensionSelect.on("change", function() {
 		var $dimText = (um_dim_warning ?? ""),
 			um_replacements = {
-			"#cw": $(this).data("um_previous"),
-			"#ch": $(this).data("um_previous"),
-			"#nw": $(this).val(),
-			"#nh": $(this).val()
+			"#cw": parseInt($(this).data("um_previous"), 10) * 16,
+			"#ch": parseInt($(this).data("um_previous"), 10) * 16,
+			"#nw": parseInt($(this).val(), 10) * 16,
+			"#nh": parseInt($(this).val(), 10) * 16
 		};
 		$.each(um_replacements, function(original, replacement) {
 			var regex = new RegExp(original);
@@ -147,6 +147,7 @@ $(document).ready(function() {
 			$(this).val($(this).data("um_previous"));
 		} else {
 			$(this).data("um_previous", $(this).val());
+			$("#um_save").trigger('click');
 		}
 	});
 });

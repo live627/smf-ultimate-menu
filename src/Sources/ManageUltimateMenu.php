@@ -49,10 +49,10 @@ class ManageUltimateMenu
 
 	public function ManageMenu(): void
 	{
-		global $context, $txt;
+		global $umSettings, $context, $txt;
 
-		$generate = isset($_REQUEST['generate']) ? $_REQUEST['generate'] : '';
-		switch ($generate) {
+		$umAdminMsg = $_GET['umadminmsg'] ?? '';
+		switch ((string) $umAdminMsg) {
 			case 'success':
 				$this->um->um_alert_verbose($txt['um_menu_button_sprite_generated'], true);
 				break;
@@ -62,6 +62,9 @@ class ManageUltimateMenu
 			case 'dimchange':
 				$this->um->um_alert_verbose($txt['um_menu_dimchange'], true);
 				break;
+			case 'savebutton':
+				$this->um->um_alert_verbose($txt['um_menu_savebutton'], true);
+				break;
 			case '':
 				$this->um->um_alert_verbose($txt['admin_menu_um'], false);
 				break;
@@ -69,14 +72,7 @@ class ManageUltimateMenu
 				$this->um->um_alert_verbose($txt['um_menu_button_sprite_drivel'], false);
 		}
 
-		if (isset($_POST['um_icon_dimension'])) {
-			checkSession();
-			$this->um->um_updateSettings(['um_icon_dimension' => (in_array((int) $_POST['um_icon_dimension'], [1, 2, 3]) ? (((int) $_POST['um_icon_dimension']) * 16) : 32)]);
-			$generateMsg = $this->um->um_generate_sprite(0, true) ? 'dimchange' : 'dimchange';
-			$this->um->deleteIcons('all', []);
-			$this->um->rebuildMenu();
-			redirectexit('action=admin;area=umen;generate=' . $generateMsg);
-		} elseif (isset($_POST['removeAll'])) {
+		if (isset($_POST['removeAll'])) {
 			checkSession();
 			$this->um->deleteallButtons();
 			$this->um->rebuildMenu();
@@ -88,21 +84,22 @@ class ManageUltimateMenu
 			redirectexit('action=admin;area=umen');
 		} elseif (isset($_POST['save'])) {
 			checkSession();
-			if (isset($_POST['um_icon_dimension'])) {
-				$this->um->um_updateSettings(['um_icon_dimension' => (in_array((int) $_POST['um_icon_dimension'], [16, 32, 48]) ? (int) $_POST['um_icon_dimension'] : 32)]);
-				$generateMsg = $this->um->um_generate_sprite(0, true) ? 'success' : 'failure';
+			$umAdminMsg = 'savebutton';
+			if (isset($_POST['um_icon_dimension']) && ((int) $_POST['um_icon_dimension'] * 16) != (int) $umSettings['um_icon_dimension']) {
+				$this->um->um_updateSettings(['um_icon_dimension' => (in_array((int) $_POST['um_icon_dimension'], [1, 2, 3]) ? (((int) $_POST['um_icon_dimension']) * 16) : 32)]);
+				$umAdminMsg = $this->um->um_generate_sprite(0, true) ? 'dimchange' : 'dimchange';
 				$this->um->deleteIcons('all', []);
 			}
 			$this->um->updateButton($_POST);
 			$this->um->rebuildMenu();
-			redirectexit('action=admin;area=umen;generate=' . ($generateMsg ?? ''));
+			redirectexit('action=admin;area=umen;umadminmsg=' . ($umAdminMsg ?? ''));
 		} elseif (isset($_POST['new'])) {
 			redirectexit('action=admin;area=umen;sa=addbutton');
 		} elseif (isset($_POST['generate'])) {
 			checkSession();
-			$generateMsg = $this->um->um_generate_sprite(($_POST['sprite_all'] ?? 0), false) ? 'success' : 'failure';
+			$umAdminMsg = $this->um->um_generate_sprite(($_POST['sprite_all'] ?? 0), false) ? 'success' : 'failure';
 			$this->um->rebuildMenu();
-			redirectexit('action=admin;area=umen;generate=' . $generateMsg);
+			redirectexit('action=admin;area=umen;umadminmsg=' . $umAdminMsg);
 		}
 
 		$this->listButtons();
@@ -290,7 +287,7 @@ class ManageUltimateMenu
 						'<input type="submit" name="removeButtons" value="%s" onclick="return confirm(\'%s\');" class="button">
 						<input type="submit" name="removeAll" value="%s" onclick="return confirm(\'%s\');" class="button">
 						<input type="submit" name="new" value="%s" class="button um_button">
-						<input type="submit" name="save" value="%s" class="button um_button">',
+						<input type="submit" name="save" value="%s" id="um_save" class="button um_button">',
 						$txt['um_menu_remove_selected'],
 						$txt['um_menu_remove_confirm'],
 						$txt['um_menu_remove_all'],
