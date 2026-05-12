@@ -42,6 +42,8 @@ $txt = [
 	'parent_guests_only' => 'Guests',
 	'parent_members_only' => 'Members',
 	'login' => '',
+	'logout' => '',
+	'signup' => '',
 ];
 $user_info = ['is_admin' => true, 'is_guest' => false, 'language' => '', 'id' => 1, 'name' => 'Test User', 'groups' => [0], 'permissions' => []];
 $modSettings = ['lastActive' => 0, 'settings_updated' => 0, 'postmod_active' => false];
