@@ -277,6 +277,7 @@ final class Test extends TestCase
 		$this->assertCount(5, $haystack['um_button_2']);
 		$this->assertArrayHasKey('title', $haystack['um_button_2']);
 		$this->assertArrayHasKey('href', $haystack['um_button_2']);
+		$this->assertArrayHasKey('icon', $haystack['um_button_2']);
 		$this->assertEquals('Test', $haystack['um_button_2']['title']);
 		$this->assertEquals(dirname(__DIR__) . '?t', $haystack['um_button_2']['href']);
 		unset($modSettings['um_count'], $modSettings['um_button_2']);
@@ -294,6 +295,7 @@ final class Test extends TestCase
 		$this->assertCount(2, $haystack['um_button_2']);
 		$this->assertSame([0, 'Test'], $haystack['um_button_2']);
 		$this->assertArrayHasKey('admin', $haystack);
+		$this->assertArrayHasKey('logout', $haystack);
 		$this->assertArrayHasKey('signup', $haystack);
 		unset($modSettings['um_count'], $modSettings['um_button_2']);
 	}
@@ -310,6 +312,7 @@ final class Test extends TestCase
 		$this->assertArrayHasKey('um_button_2', $context['menu_buttons']);
 		$this->assertArrayHasKey('title', $context['menu_buttons']['um_button_2']);
 		$this->assertArrayHasKey('href', $context['menu_buttons']['um_button_2']);
+		$this->assertArrayHasKey('icon', $context['menu_buttons']['um_button_2']);
 		$this->assertEquals('Test', $context['menu_buttons']['um_button_2']['title']);
 		$this->assertEquals(dirname(__DIR__) . '?t', $context['menu_buttons']['um_button_2']['href']);
 		unset($modSettings['um_count'], $modSettings['um_button_2']);
@@ -318,12 +321,13 @@ final class Test extends TestCase
 	public function testDispatch(): void
 	{
 		$mock = $this->getMockBuilder('ManageUltimateMenu')
-			->onlyMethods(array('ManageMenu'))
+			->onlyMethods(['ManageMenu', 'FilesList'])
 			->disableOriginalConstructor()
 			->getMock();
 
 		$mock->expects($this->once())
-			 ->method('ManageMenu');
+			 ->method('ManageMenu')
+			 ->method('FilesList');
 
 		$mock->__construct('');
 	}
