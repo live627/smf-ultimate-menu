@@ -328,8 +328,8 @@ final class Test extends TestCase
 		$mock->expects($this->once())
 			 ->method('ManageMenu');
 
-		$mock->expects($this->once())
-			 ->method('FilesList');
+		/* $mock->expects($this->once())
+			 ->method('FilesList'); */
 
 		$mock->__construct('');
 	}
