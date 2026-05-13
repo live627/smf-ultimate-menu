@@ -223,7 +223,7 @@ class UltimateMenu
 			[
 				'settings_search' => 'um_button%',
 				'um_settings' => array_keys($umButtons),
-			],
+			]
 		);
 		updateSettings(['um_count' => $max] + $umButtons);
 	}
