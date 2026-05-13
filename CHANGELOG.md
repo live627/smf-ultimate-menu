@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0](https://github.com/live627/smf-ultimate-menu/compare/v2.0.4...v3.0.0) (2026-05-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* Require at least PHP 8.0
+
+### Features
+
+* Add support for icons and sprite ([#37](https://github.com/live627/smf-ultimate-menu/issues/37)) ([b14c39c](https://github.com/live627/smf-ultimate-menu/commit/b14c39c332b10dfe86514641eb2198ea1f30fa3a))
+
 ## [2.0.4](https://github.com/live627/smf-ultimate-menu/compare/v2.0.3...v2.0.4) (2026-05-07)
 
 
