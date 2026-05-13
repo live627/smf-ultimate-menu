@@ -198,7 +198,7 @@ class ManageUltimateMenu
 								$txt['um_menu_' . $rowData['position']],
 								isset($button_names[$rowData['parent']])
 									? $button_names[$rowData['parent']][1]
-									: ucwords($rowData['parent'])
+									: '<tt>' . $rowData['parent'] . '</tt>',
 							),
 					],
 					'sort' => [
