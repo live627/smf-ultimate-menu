@@ -200,11 +200,11 @@ class UltimateMenu
 
 		$smcFunc['db_query']('', '
 			DELETE FROM {db_prefix}settings
-			WHERE variable LIKE {string:settings_search}
-				AND variable NOT IN ({array_string:um_settings})',
+			WHERE variable LIKE {string:settings_search}' . (empty($umButtons) ? '' : '
+				AND variable NOT IN ({array_string:um_settings})'),
 			[
 				'settings_search' => 'um_button%',
-				'um_settings' => array_keys($umButtons ?: ['um_orphan']),
+				'um_settings' => array_keys($umButtons),
 			]
 		);
 		updateSettings(['um_count' => $max] + $umButtons);
