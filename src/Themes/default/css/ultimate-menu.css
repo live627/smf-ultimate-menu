@@ -126,6 +126,9 @@
 .um_italic {
 	font-style: italic;
 }
+.um_monospaced {
+	font-family: "Courier New", Courier, monospace;
+}
 .um_grid_line {
 	position: relative;
 	display: grid;

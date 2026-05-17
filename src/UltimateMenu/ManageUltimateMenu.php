@@ -220,7 +220,7 @@ class ManageUltimateMenu implements ActionInterface
 								$txt['um_menu_' . $rowData['position']],
 								isset($button_names[$rowData['parent']])
 									? $button_names[$rowData['parent']][1]
-									: '<tt>' . $rowData['parent'] . '</tt>',
+									: '<span class="um_monospaced">' . ucwords($rowData['parent']) . '</span>'
 							),
 					],
 					'sort' => [
