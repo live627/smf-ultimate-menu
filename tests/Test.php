@@ -6,280 +6,50 @@ use PHPUnit\Framework\TestCase;
 
 final class Test extends TestCase
 {
-	public static function buttonProvider(): array
+	public static function buttonProvider(): \Generator
 	{
-		$btn = ['href' => 'link', 'show' => true];
-		$btn1 = ['href' => 'link1', 'show' => true];
-
-		return [
-			[
-				'test',
-				[
-					'before' => [
-						'inserted_test' => $btn,
-						'test' => $btn,
-						'test1' => $btn1,
-					],
-					'after' => [
-						'test' => $btn,
-						'inserted_test' => $btn,
-						'test1' => $btn1,
-					],
-					'child_of' => [
-						'test' => [
-							'href' => 'link',
-							'show' => true,
-							'sub_buttons' => [
-								'inserted_test' => $btn,
-							],
-						],
-						'test1' => $btn1,
-					],
-				],
-			],
-			[
-				'test1',
-				[
-					'before' => [
-						'test' => $btn,
-						'inserted_test1' => $btn,
-						'test1' => $btn1,
-					],
-					'after' => [
-						'test' => $btn,
-						'test1' => $btn1,
-						'inserted_test1' => $btn,
-					],
-					'child_of' => [
-						'test' => $btn,
-						'test1' => [
-							'href' => 'link1',
-							'show' => true,
-							'sub_buttons' => [
-								'inserted_test1' => $btn,
-							],
-						],
-					],
-				],
-			],
-			[
-				'dungeon',
-				[
-					'before' => [
-						'test' => $btn,
-						'test1' => $btn1,
-					],
-					'after' => [
-						'test' => $btn,
-						'test1' => $btn1,
-					],
-					'child_of' => [
-						'test' => $btn,
-						'test1' => $btn1,
-					],
-				],
-			],
-		];
+		yield ['um_button_2', 'before', 'test', 'test1'];
+		yield ['test', 'before', 'test1', 'test1'];
+		yield ['test', 'after', 'test', 'test1'];
+		yield ['test', 'after', 'test1', 'um_button_2'];
 	}
 
 	#[\PHPUnit\Framework\Attributes\DataProvider('buttonProvider')]
-	public function testInsertButton(string $insertion_point, array $expected): void
-	{
-		$btn = ['href' => 'link', 'show' => true];
-		$btn1 = ['href' => 'link1', 'show' => true];
-
-		foreach (['before', 'after', 'child_of'] as $where)
-		{
-			$haystack = ['test' => $btn, 'test1' => $btn1];
-			recursive_button(
-				$btn,
-				$haystack,
-				$insertion_point,
-				$where,
-				'inserted_' . $insertion_point
-			);
-			$this->assertSame($expected[$where], $haystack);
-		}
-	}
-
-	public static function childButtonProvider(): array
-	{
-		$btn = ['href' => 'link', 'show' => true];
-		return [
-			[
-				'sub',
-				[
-					'before' => [
-						'test' => [
-							'href' => 'link',
-							'show' => true,
-							'sub_buttons' => [
-								'inserted_sub' => $btn,
-								'sub' => $btn,
-								'sub1' => $btn,
-							],
-						],
-					],
-					'after' => [
-						'test' => [
-							'href' => 'link',
-							'show' => true,
-							'sub_buttons' => [
-								'sub' => $btn,
-								'inserted_sub' => $btn,
-								'sub1' => $btn,
-							],
-						],
-					],
-					'child_of' => [
-						'test' => [
-							'href' => 'link',
-							'show' => true,
-							'sub_buttons' => [
-								'sub' => [
-									'href' => 'link',
-									'show' => true,
-									'sub_buttons' => [
-										'inserted_sub' => $btn,
-									],
-								],
-								'sub1' => $btn,
-							],
-						],
-					],
-				],
-			],
-			[
-				'sub1',
-				[
-					'before' => [
-						'test' => [
-							'href' => 'link',
-							'show' => true,
-							'sub_buttons' => [
-								'sub' => $btn,
-								'inserted_sub1' => $btn,
-								'sub1' => $btn,
-							],
-						],
-					],
-					'after' => [
-						'test' => [
-							'href' => 'link',
-							'show' => true,
-							'sub_buttons' => [
-								'sub' => $btn,
-								'sub1' => $btn,
-								'inserted_sub1' => $btn,
-							],
-						],
-					],
-					'child_of' => [
-						'test' => [
-							'href' => 'link',
-							'show' => true,
-							'sub_buttons' => [
-								'sub' => $btn,
-								'sub1' => [
-									'href' => 'link',
-									'show' => true,
-									'sub_buttons' => [
-										'inserted_sub1' => $btn,
-									],
-								],
-							],
-						],
-					],
-				],
-			],
-			[
-				'dungeon',
-				[
-					'before' => [
-						'test' => [
-							'href' => 'link',
-							'show' => true,
-							'sub_buttons' => [
-								'sub' => $btn, 'sub1' => $btn,
-							],
-						],
-					],
-					'after' => [
-						'test' => [
-							'href' => 'link',
-							'show' => true,
-							'sub_buttons' => [
-								'sub' => $btn, 'sub1' => $btn,
-							],
-						],
-					],
-					'child_of' => [
-						'test' => [
-							'href' => 'link',
-							'show' => true,
-							'sub_buttons' => [
-								'sub' => $btn, 'sub1' => $btn,
-							],
-						],
-					],
-				],
-			],
-		];
-	}
-
-	#[\PHPUnit\Framework\Attributes\DataProvider('childButtonProvider')]
-	public function testInsertChildButton(string $insertion_point, array $expected): void
-	{
-		foreach (['before', 'after', 'child_of'] as $where)
-		{
-			$haystack = [
-				'test' => [
-					'href' => 'link',
-					'show' => true,
-					'sub_buttons' => [
-						'sub' => [
-							'href' => 'link',
-							'show' => true,
-						],
-						'sub1' => [
-							'href' => 'link',
-							'show' => true,
-						],
-					],
-				],
-			];
-			recursive_button(
-				[
-					'href' => 'link',
-					'show' => true,
-				],
-				$haystack,
-				$insertion_point,
-				$where,
-				'inserted_' . $insertion_point
-			);
-			$this->assertSame($expected[$where], $haystack);
-		}
-	}
-
-	public function testMenu(): void
+	public function testInsertButton(string $first_key, string $position, string $parent, string $last_key): void
 	{
 		global $modSettings;
 
 		$modSettings['um_count'] = 2;
-		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
-		$haystack = ['signup' => 'l'];
-		add_integration_function('integrate_menu_buttons', 'um_load_menu');
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"' . $position .  '","link":"t","active":true,"groups":[-1,0,2],"parent":"' . $parent . '","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
+		$haystack = [
+			'test' => [
+				'title' => 'Test',
+				'href' => 'link',
+				'show' => true,
+			],
+			'test1' => [
+				'title' => 'Test1',
+				'href' => 'link1',
+				'show' => true,
+			],
+		];
+
 		um_load_menu($haystack);
-		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
-		$this->assertCount(2, $haystack);
-		$this->assertArrayHasKey('um_button_2', (is_array($haystack) ? $haystack : [$haystack]));
+
+		$this->assertCount(3, $haystack);
+		$this->assertArrayHasKey('um_button_2', $haystack);
+		$this->assertEquals($first_key, array_key_first($haystack));
+		$this->assertEquals($last_key, array_key_last($haystack));
 		$this->assertCount(5, $haystack['um_button_2']);
 		$this->assertArrayHasKey('title', $haystack['um_button_2']);
 		$this->assertArrayHasKey('href', $haystack['um_button_2']);
 		$this->assertArrayHasKey('icon', $haystack['um_button_2']);
 		$this->assertEquals('Test', $haystack['um_button_2']['title']);
 		$this->assertEquals(dirname(__DIR__) . '?t', $haystack['um_button_2']['href']);
+		$this->assertSame('_self', $haystack['um_button_2']['target']);
+		$this->assertNull($haystack['um_button_2']['icon']);
+		$this->assertTrue($haystack['um_button_2']['show']);
+
 		unset($modSettings['um_count'], $modSettings['um_button_2']);
 	}
 
@@ -288,15 +58,17 @@ final class Test extends TestCase
 		global $modSettings;
 
 		$modSettings['um_count'] = 2;
-		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[-1,0,2],"parent":"signup","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"child_of","link":"t","active":true,"groups":[-1,0,2],"parent":"signup","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 		$haystack = (new UltimateMenu)->getButtonNames();
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
-		$this->assertCount(2, $haystack['um_button_2']);
-		$this->assertSame([0, 'Test'], $haystack['um_button_2']);
+
+		$this->assertArrayHasKey('um_button_2', $haystack);
+		$this->assertSame([1, 'Test'], $haystack['um_button_2']);
 		$this->assertArrayHasKey('admin', $haystack);
 		$this->assertArrayHasKey('logout', $haystack);
 		$this->assertArrayHasKey('signup', $haystack);
+
 		unset($modSettings['um_count'], $modSettings['um_button_2']);
 	}
 
@@ -304,32 +76,35 @@ final class Test extends TestCase
 	{
 		global $context, $modSettings;
 
-		$modSettings['um_count'] = 2;
-		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[0],"parent":"search","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
+		$modSettings['um_count'] = 4;
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[0],"parent":"home","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
+		$modSettings['um_button_3'] = '{"name":"Test","type":"forum","target":"_self","position":"child_of","link":"t","active":true,"groups":[0],"parent":"um_button_2","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
+		$modSettings['um_button_4'] = '{"name":"Test","type":"forum","target":"_self","position":"after","link":"t","active":true,"groups":[0],"parent":"signup","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
+
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 		setupMenuContext();
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
+
 		$this->assertArrayHasKey('um_button_2', $context['menu_buttons']);
-		$this->assertArrayHasKey('title', $context['menu_buttons']['um_button_2']);
-		$this->assertArrayHasKey('href', $context['menu_buttons']['um_button_2']);
-		$this->assertArrayHasKey('icon', $context['menu_buttons']['um_button_2']);
-		$this->assertEquals('Test', $context['menu_buttons']['um_button_2']['title']);
-		$this->assertEquals(dirname(__DIR__) . '?t', $context['menu_buttons']['um_button_2']['href']);
-		unset($modSettings['um_count'], $modSettings['um_button_2']);
+		$this->assertArrayHasKey('sub_buttons', $context['menu_buttons']['um_button_2']);
+		$this->assertCount(1, $context['menu_buttons']['um_button_2']['sub_buttons']);
+		$this->assertArrayHasKey('um_button_3', $context['menu_buttons']['um_button_2']['sub_buttons']);
+		$this->assertEquals('um_button_2', array_key_first($context['menu_buttons']));
+		$this->assertEquals('um_button_4', array_key_last($context['menu_buttons']));
+
+		unset($modSettings['um_count'], $modSettings['um_button_2'], $modSettings['um_button_3'], $modSettings['um_button_4'], $context['menu_buttons']);
 	}
 
 	public function testDispatch(): void
 	{
 		$mock = $this->getMockBuilder('ManageUltimateMenu')
-			->onlyMethods(['ManageMenu', 'FilesList'])
+			->onlyMethods(['ManageMenu'])
 			->disableOriginalConstructor()
 			->getMock();
 
+		// Asset that this function is csalled.
 		$mock->expects($this->once())
 			 ->method('ManageMenu');
-
-		/* $mock->expects($this->once())
-			 ->method('FilesList'); */
 
 		$mock->__construct('');
 	}
