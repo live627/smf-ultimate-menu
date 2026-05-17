@@ -20,5 +20,10 @@
         "lint": "php-cs-fixer fix --dry-run --verbose --show-progress=dots",
         "lint-fix": "php-cs-fixer fix --verbose --show-progress=dots"
     },
+    "config": {
+        "platform": {
+			"php": "8.3"
+        }
+    },
     "version": "2.0.4"
 }
