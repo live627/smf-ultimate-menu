@@ -969,6 +969,26 @@ class UltimateMenu
 	}
 
 	/**
+	 * Updates Ultimate Menu JSON encoded settings
+	 */
+	public function um_updateSettings($um_settings = []): void
+	{
+		global $umSettings;
+
+		$umUpdates = [];
+		foreach (['um_fingerprint', 'um_icon_dimension', 'um_secureCode'] as $setting) {
+			$umUpdates[$setting] = $um_settings[$setting] ?? $umSettings[$setting];
+		}
+
+		sort($umSettings);
+		sort($umUpdates);
+		if ($umSettings != $umUpdates) {
+			updateSettings(['um_settings' => json_encode($umUpdates)]);
+			$umSettings = $umUpdates;
+		}
+	}
+
+	/**
 	 * Returns the next Ultimate Menu icon increment
 	 *
 	 * @return int
@@ -1081,22 +1101,6 @@ class UltimateMenu
 				$css
 			)
 		));
-	}
-
-	/**
-	 * Updates Ultimate Menu JSON encoded settings
-	 */
-	public function um_updateSettings($um_settings = []): void
-	{
-		global $umSettings;
-
-		$umUpdates = [];
-		foreach (['um_fingerprint', 'um_icon_dimension', 'um_secureCode'] as $setting) {
-			$umUpdates[$setting] = $um_settings[$setting] ?? $umSettings[$setting];
-		}
-
-		updateSettings(['um_settings' => json_encode($umUpdates)]);
-		$umSettings = $umUpdates;
 	}
 
 	/**
