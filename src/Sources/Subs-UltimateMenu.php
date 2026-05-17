@@ -26,7 +26,7 @@ function um_get_settings(): void
 		$umSettings = [
 			'um_fingerprint' => mb_strtolower(strval(bin2hex(random_bytes(5))), 'UTF-8'),
 			'um_icon_dimension' => 32,
-			'um_secureCode' =>  strval(bin2hex(random_bytes(10)))
+			'um_secureCode' =>  strval(bin2hex(random_bytes(10))),
 		];
 	}
 }
@@ -49,8 +49,9 @@ function um_load_menu(array &$menu_buttons): void
 {
 	global $context, $modSettings, $user_info, $scripturl;
 
-	if (!isset($modSettings['um_keys']))
+	if (!isset($modSettings['um_keys'])) {
 		return;
+	}
 
 	$is_admin = allowedTo('admin_forum');
 	$forum_prefix = $scripturl . '?';
@@ -66,21 +67,18 @@ function um_load_menu(array &$menu_buttons): void
 	$after = [];
 	$children = [];
 
-	foreach ($um_keys as $key)
-	{
-		if (!isset($modSettings[$key]))
+	foreach ($um_keys as $key) {
+		if (!isset($modSettings[$key])) {
 			continue;
+		}
 
 		$row = json_decode($modSettings[$key], true);
 
 		$show = $is_admin;
 
-		if (!$show)
-		{
-			foreach ($row['groups'] as $group)
-			{
-				if (isset($group_map[$group]))
-				{
+		if (!$show) {
+			foreach ($row['groups'] as $group) {
+				if (isset($group_map[$group])) {
 					$show = true;
 					break;
 				}
@@ -91,14 +89,13 @@ function um_load_menu(array &$menu_buttons): void
 
 		$nodes[$key] = [
 			'title' => $row['name'],
-			'href' => ($row['type'] === 'forum' ? $forum_prefix : '' ) . $row['link'],
+			'href' => ($row['type'] === 'forum' ? $forum_prefix : '') . $row['link'],
 			'target' => $row['target'],
 			'icon' => !empty($row['icon']) && empty($row['sprite']) ? 'um_icons/' . $row['icon'] : (!empty($row['sprite']) ? null : 'um_icons/blank.png'),
 			'show' => $show,
 		];
 
-		switch ($row['position'])
-		{
+		switch ($row['position']) {
 			case 'before':
 				$before[$row['parent']][] = $key;
 				break;
@@ -115,15 +112,14 @@ function um_load_menu(array &$menu_buttons): void
 
 	$menu_buttons = [];
 
-	foreach ($root_order as $key)
-	{
+	foreach ($root_order as $key) {
 		emit_node(
 			$key,
 			$nodes,
 			$children,
 			$before,
 			$after,
-			$menu_buttons
+			$menu_buttons,
 		);
 	}
 
@@ -136,39 +132,34 @@ function emit_node(
 	array $children,
 	array $before,
 	array $after,
-	array &$result
-): void
-{
-	if (isset($before[$key]))
-	{
-		foreach ($before[$key] as $before_key)
-		{
+	array &$result,
+): void {
+	if (isset($before[$key])) {
+		foreach ($before[$key] as $before_key) {
 			emit_node(
 				$before_key,
 				$nodes,
 				$children,
 				$before,
 				$after,
-				$result
+				$result,
 			);
 		}
 	}
 
 	$item = $nodes[$key];
 
-	if (isset($children[$key]))
-	{
+	if (isset($children[$key])) {
 		$child_result = [];
 
-		foreach ($children[$key] as $child_key)
-		{
+		foreach ($children[$key] as $child_key) {
 			emit_node(
 				$child_key,
 				$nodes,
 				$children,
 				$before,
 				$after,
-				$child_result
+				$child_result,
 			);
 		}
 
@@ -177,10 +168,9 @@ function emit_node(
 
 	$result[$key] = $item;
 
-	if (isset($after[$key]))
-	{
-		for ( $i = count($after[$key]) - 1; $i >= 0; $i-- ) {
-			emit_node( $after[$key][$i], $nodes, $children, $before, $after, $result );
+	if (isset($after[$key])) {
+		for ($i = count($after[$key]) - 1; $i >= 0; $i--) {
+			emit_node($after[$key][$i], $nodes, $children, $before, $after, $result);
 		}
 	}
 }
@@ -197,7 +187,8 @@ function um_admin_queryString($parameters = []): bool
 	global $smcFunc;
 
 	$count = 0;
-	return array_walk_recursive($parameters, function($value, $request) use (&$count, $smcFunc) {
+
+	return array_walk_recursive($parameters, function ($value, $request) use (&$count, $smcFunc) {
 		$count = isset($_GET[$request]) && stripos($smcFunc['htmlspecialchars']($_GET[$request]), $value) !== false ? $count + 1 : $count;
 	}, $count) == (count($parameters) ?: -1);
 }
@@ -210,11 +201,11 @@ function um_admin_areas(&$admin_areas): void
 	$admin_areas['config']['areas']['umen'] = [
 		'label' => $txt['um_admin_menu_um'],
 		'file' => 'ManageUltimateMenu.php',
-		'function' => function(): void
-		{
+		'function' => function (): void {
 			global $sourcedir;
 
 			loadTemplate('ManageUltimateMenu');
+
 			require_once $sourcedir . '/Class-UltimateMenu.php';
 			(new ManageUltimateMenu($_GET['sa'] ?? ''));
 		},

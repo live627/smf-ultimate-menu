@@ -33,7 +33,7 @@ class BinaryMask
 	public static function toBytes(
 		array $bits,
 		bool $shift = false,
-		int &$shifted = 0
+		int &$shifted = 0,
 	): array {
 		if (!$bits) {
 			$shifted = 0;
@@ -81,7 +81,7 @@ class BinaryMask
 	public static function toBinData(
 		array $bits,
 		bool $shift = false,
-		int &$shifted = 0
+		int &$shifted = 0,
 	): string {
 		$bytes = static::toBytes($bits, $shift, $shifted);
 
@@ -101,7 +101,7 @@ class BinaryMask
 		array $bits,
 		bool $split = false,
 		bool $shift = false,
-		int &$shifted = 0
+		int &$shifted = 0,
 	): string {
 		self::initTables();
 
@@ -131,7 +131,7 @@ class BinaryMask
 		array $bits,
 		bool $split = false,
 		bool $shift = false,
-		int &$shifted = 0
+		int &$shifted = 0,
 	): string {
 		self::initTables();
 
@@ -161,7 +161,7 @@ class BinaryMask
 	 */
 	public static function fromBinData(
 		string $data,
-		int $shifted = 0
+		int $shifted = 0,
 	): array {
 		if ($data === '') {
 			return [];
@@ -213,15 +213,15 @@ class BinaryMask
 	public static function getSqlCondition(
 		string $column,
 		int $bit,
-		?string $shiftColumn = null
+		?string $shiftColumn = null,
 	): string {
 		$bit -= static::$indexOffset;
 
 		if ($shiftColumn === null) {
-			return "ASCII(SUBSTR($column, -CEIL(($bit) / 8), 1)) & (1 << (($bit) % 8))";
+			return "ASCII(SUBSTR({$column}, -CEIL(({$bit}) / 8), 1)) & (1 << (({$bit}) % 8))";
 		}
 
-		return "ASCII(SUBSTR($column, -(CEIL(($bit) / 8) - $shiftColumn), 1)) & (1 << (($bit) % 8))";
+		return "ASCII(SUBSTR({$column}, -(CEIL(({$bit}) / 8) - {$shiftColumn}), 1)) & (1 << (({$bit}) % 8))";
 	}
 }
 

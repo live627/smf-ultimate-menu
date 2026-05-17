@@ -9,8 +9,11 @@ final class Test extends TestCase
 	public static function buttonProvider(): \Generator
 	{
 		yield ['um_button_2', 'before', 'test', 'test1'];
+
 		yield ['test', 'before', 'test1', 'test1'];
+
 		yield ['test', 'after', 'test', 'test1'];
+
 		yield ['test', 'after', 'test1', 'um_button_2'];
 	}
 
@@ -20,7 +23,7 @@ final class Test extends TestCase
 		global $modSettings;
 
 		$modSettings['um_keys'] = 'um_button_1,um_button_2,um_button_3,um_button_4';
-		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"' . $position .  '","link":"t","active":true,"groups":[-1,0,2],"parent":"' . $parent . '","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
+		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"' . $position . '","link":"t","active":true,"groups":[-1,0,2],"parent":"' . $parent . '","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
 		$haystack = [
 			'test' => [
 				'title' => 'Test',
@@ -60,7 +63,7 @@ final class Test extends TestCase
 		$modSettings['um_keys'] = 'um_button_1,um_button_2';
 		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"child_of","link":"t","active":true,"groups":[-1,0,2],"parent":"signup","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
-		$haystack = (new UltimateMenu)->getButtonNames();
+		$haystack = (new UltimateMenu())->getButtonNames();
 		remove_integration_function('integrate_menu_buttons', 'um_load_menu');
 
 		$this->assertArrayHasKey('um_button_2', $haystack);
@@ -104,7 +107,7 @@ final class Test extends TestCase
 
 		// Asset that this function is csalled.
 		$mock->expects($this->once())
-			 ->method('ManageMenu');
+			->method('ManageMenu');
 
 		$mock->__construct('');
 	}

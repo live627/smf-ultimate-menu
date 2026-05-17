@@ -49,12 +49,12 @@ function um_load_menu_original(array &$menu_buttons): void
 {
 	global $context, $modSettings, $smcFunc, $user_info, $scripturl;
 
-	for ($i = 1; $i <= ($modSettings['um_count'] ?? 0); $i++)
-	{
+	for ($i = 1; $i <= ($modSettings['um_count'] ?? 0); $i++) {
 		$key = 'um_button_' . $i;
 
-		if (!isset($modSettings[$key]))
+		if (!isset($modSettings[$key])) {
 			continue;
+		}
 
 		$row = json_decode($modSettings[$key], true);
 
@@ -73,7 +73,7 @@ function um_load_menu_original(array &$menu_buttons): void
 			$menu_buttons,
 			$row['parent'],
 			$row['position'],
-			$key
+			$key,
 		);
 	}
 }
@@ -83,22 +83,18 @@ function recursive_button_original(
 	array &$haystack,
 	$insertion_point,
 	$where,
-	$key
-): void
-{
-	foreach ($haystack as $area => &$info)
-	{
-		if ($area == $insertion_point)
-		{
-			switch ($where)
-			{
+	$key,
+): void {
+	foreach ($haystack as $area => &$info) {
+		if ($area == $insertion_point) {
+			switch ($where) {
 				case 'before':
 				case 'after':
 					insert_button_original(
 						[$key => $needle],
 						$haystack,
 						$insertion_point,
-						$where
+						$where,
 					);
 					break 2;
 
@@ -106,15 +102,13 @@ function recursive_button_original(
 					$info['sub_buttons'][$key] = $needle;
 					break 2;
 			}
-		}
-		elseif (!empty($info['sub_buttons']))
-		{
+		} elseif (!empty($info['sub_buttons'])) {
 			recursive_button_original(
 				$needle,
 				$info['sub_buttons'],
 				$insertion_point,
 				$where,
-				$key
+				$key,
 			);
 		}
 	}
@@ -124,19 +118,19 @@ function insert_button_original(
 	array $needle,
 	array &$haystack,
 	$insertion_point,
-	$where = 'after'
-): void
-{
+	$where = 'after',
+): void {
 	$offset = 0;
 
-	foreach ($haystack as $area => $dummy)
-	{
-		if (++$offset && $area == $insertion_point)
+	foreach ($haystack as $area => $dummy) {
+		if (++$offset && $area == $insertion_point) {
 			break;
+		}
 	}
 
-	if ($where == 'before')
+	if ($where == 'before') {
 		$offset--;
+	}
 
 	$haystack =
 		array_slice($haystack, 0, $offset, true)
@@ -154,8 +148,9 @@ function um_load_menu_optimized(array &$menu_buttons): void
 {
 	global $modSettings, $user_info, $scripturl;
 
-	if (!isset($modSettings['um_keys']))
+	if (!isset($modSettings['um_keys'])) {
 		return;
+	}
 
 	$is_admin = allowedTo('admin_forum');
 	$forum_prefix = $scripturl . '?';
@@ -171,39 +166,36 @@ function um_load_menu_optimized(array &$menu_buttons): void
 	$after = [];
 	$children = [];
 
-	foreach ($um_keys as $key)
-	{
-		if (!isset($modSettings[$key]))
+	foreach ($um_keys as $key) {
+		if (!isset($modSettings[$key])) {
 			continue;
+		}
 
 		$row = json_decode($modSettings[$key], true);
 
 		$show = $is_admin;
 
-		if (!$show)
-		{
-			foreach ($row['groups'] as $group)
-			{
-				if (isset($group_map[$group]))
-				{
+		if (!$show) {
+			foreach ($row['groups'] as $group) {
+				if (isset($group_map[$group])) {
 					$show = true;
 					break;
 				}
 			}
 		}
 
-		if (empty($row['active']))
+		if (empty($row['active'])) {
 			continue;
+		}
 
 		$nodes[$key] = [
 			'title' => $row['name'],
-			'href' => ($row['type'] === 'forum' ? $forum_prefix : '' ) . $row['link'],
+			'href' => ($row['type'] === 'forum' ? $forum_prefix : '') . $row['link'],
 			'target' => $row['target'],
 			'show' => $show,
 		];
 
-		switch ($row['position'])
-		{
+		switch ($row['position']) {
 			case 'before':
 				$before[$row['parent']][] = $key;
 				break;
@@ -220,15 +212,14 @@ function um_load_menu_optimized(array &$menu_buttons): void
 
 	$menu_buttons = [];
 
-	foreach ($root_order as $key)
-	{
+	foreach ($root_order as $key) {
 		emit_node(
 			$key,
 			$nodes,
 			$children,
 			$before,
 			$after,
-			$menu_buttons
+			$menu_buttons,
 		);
 	}
 }
@@ -239,39 +230,34 @@ function emit_node(
 	array $children,
 	array $before,
 	array $after,
-	array &$result
-): void
-{
-	if (isset($before[$key]))
-	{
-		foreach ($before[$key] as $before_key)
-		{
+	array &$result,
+): void {
+	if (isset($before[$key])) {
+		foreach ($before[$key] as $before_key) {
 			emit_node(
 				$before_key,
 				$nodes,
 				$children,
 				$before,
 				$after,
-				$result
+				$result,
 			);
 		}
 	}
 
 	$item = $nodes[$key];
 
-	if (isset($children[$key]))
-	{
+	if (isset($children[$key])) {
 		$child_result = [];
 
-		foreach ($children[$key] as $child_key)
-		{
+		foreach ($children[$key] as $child_key) {
 			emit_node(
 				$child_key,
 				$nodes,
 				$children,
 				$before,
 				$after,
-				$child_result
+				$child_result,
 			);
 		}
 
@@ -280,10 +266,9 @@ function emit_node(
 
 	$result[$key] = $item;
 
-	if (isset($after[$key]))
-	{
-		for ( $i = count($after[$key]) - 1; $i >= 0; $i-- ) {
-			emit_node( $after[$key][$i], $nodes, $children, $before, $after, $result );
+	if (isset($after[$key])) {
+		for ($i = count($after[$key]) - 1; $i >= 0; $i--) {
+			emit_node($after[$key][$i], $nodes, $children, $before, $after, $result);
 		}
 	}
 }
@@ -298,8 +283,7 @@ function generate_base_menu(int $count): array
 {
 	$menu = [];
 
-	for ($i = 1; $i <= $count; $i++)
-	{
+	for ($i = 1; $i <= $count; $i++) {
 		$menu['button_' . $i] = [
 			'title' => 'Button ' . $i,
 			'href' => '#',
@@ -321,21 +305,17 @@ function generate_mod_settings(int $count, bool $deep = false): array
 	$after = [];
 	$children = [];
 
-	for ($i = 1; $i <= $count; $i++)
-	{
+	for ($i = 1; $i <= $count; $i++) {
 		$key = 'um_button_' . $i;
 		$menu[] = $key;
 
-		if ($deep)
-		{
+		if ($deep) {
 			$parent = $i === 1
 				? 'button_1'
 				: 'um_button_' . ($i - 1);
 
 			$position = 'child_of';
-		}
-		else
-		{
+		} else {
 			$parent = 'button_' . (($i % 10) + 1);
 
 			$positions = ['before', 'after', 'child_of'];
@@ -354,8 +334,7 @@ function generate_mod_settings(int $count, bool $deep = false): array
 			'position' => $position,
 		]);
 
-		switch ($position)
-		{
+		switch ($position) {
 			case 'before':
 				$before[$parent][] = $key;
 				break;
@@ -406,13 +385,12 @@ function run_correctness_tests(array $tests): void
 		'Buttons',
 		'Menu',
 		'Deep',
-		'Result'
+		'Result',
 	);
 
 	echo str_repeat('-', 100) . PHP_EOL;
 
-	foreach ($tests as [$label, $buttonCount, $menuSize, $deep])
-	{
+	foreach ($tests as [$label, $buttonCount, $menuSize, $deep]) {
 		$modSettings = generate_mod_settings($buttonCount, $deep);
 
 		$menu_original = generate_base_menu($menuSize);
@@ -423,7 +401,7 @@ function run_correctness_tests(array $tests): void
 
 		$pass = assert_equal(
 			serialize($menu_original),
-			serialize($menu_optimized)
+			serialize($menu_optimized),
 		);
 
 		printf(
@@ -432,11 +410,10 @@ function run_correctness_tests(array $tests): void
 			$buttonCount,
 			$menuSize,
 			$deep ? 'Yes' : 'No',
-			$pass ? 'PASS' : 'FAIL'
+			$pass ? 'PASS' : 'FAIL',
 		);
 
-		if (!$pass)
-		{
+		if (!$pass) {
 			echo PHP_EOL;
 			echo 'Mismatch detected in: ' . $label . PHP_EOL;
 
@@ -482,16 +459,14 @@ final class ArrayDiff
 
 		$keys = array_unique(array_merge(
 			array_keys($left),
-			array_keys($right)
+			array_keys($right),
 		));
 
-		foreach ($keys as $key)
-		{
+		foreach ($keys as $key) {
 			$left_exists = array_key_exists($key, $left);
 			$right_exists = array_key_exists($key, $right);
 
-			if (!$left_exists)
-			{
+			if (!$left_exists) {
 				$result[$key] = [
 					'type' => self::ADDED,
 					'left' => null,
@@ -501,8 +476,7 @@ final class ArrayDiff
 				continue;
 			}
 
-			if (!$right_exists)
-			{
+			if (!$right_exists) {
 				$result[$key] = [
 					'type' => self::REMOVED,
 					'left' => $left[$key],
@@ -521,16 +495,13 @@ final class ArrayDiff
 			|--------------------------------------------------------------------------
 			*/
 
-			if (is_array($left_value) && is_array($right_value))
-			{
+			if (is_array($left_value) && is_array($right_value)) {
 				$children = self::diff($left_value, $right_value);
 
 				$type = self::SAME;
 
-				foreach ($children as $child)
-				{
-					if ($child['type'] !== self::SAME)
-					{
+				foreach ($children as $child) {
+					if ($child['type'] !== self::SAME) {
 						$type = self::CHANGED;
 						break;
 					}
@@ -550,8 +521,7 @@ final class ArrayDiff
 			|--------------------------------------------------------------------------
 			*/
 
-			if ($left_value !== $right_value)
-			{
+			if ($left_value !== $right_value) {
 				$result[$key] = [
 					'type' => self::CHANGED,
 					'left' => $left_value,
@@ -577,20 +547,18 @@ final class ArrayDiff
 	{
 		$indent = str_repeat('    ', $depth);
 
-		foreach ($diff as $key => $node)
-		{
-			switch ($node['type'])
-			{
+		foreach ($diff as $key => $node) {
+			switch ($node['type']) {
 				case self::ADDED:
 					echo $indent . "+ {$key}\n";
-					echo $indent . "  RIGHT: ";
+					echo $indent . '  RIGHT: ';
 					var_export($node['right']);
 					echo "\n";
 					break;
 
 				case self::REMOVED:
 					echo $indent . "- {$key}\n";
-					echo $indent . "  LEFT: ";
+					echo $indent . '  LEFT: ';
 					var_export($node['left']);
 					echo "\n";
 					break;
@@ -598,17 +566,14 @@ final class ArrayDiff
 				case self::CHANGED:
 					echo $indent . "~ {$key}\n";
 
-					if (isset($node['children']))
-					{
+					if (isset($node['children'])) {
 						self::render($node['children'], $depth + 1);
-					}
-					else
-					{
-						echo $indent . "  LEFT : ";
+					} else {
+						echo $indent . '  LEFT : ';
 						var_export($node['left']);
 						echo "\n";
 
-						echo $indent . "  RIGHT: ";
+						echo $indent . '  RIGHT: ';
 						var_export($node['right']);
 						echo "\n";
 					}
@@ -677,7 +642,7 @@ class TablePrinter
 		foreach ($row as $index => $value) {
 			$output .= str_pad(
 				(string) $value,
-				$this->widths[$index] + 2
+				$this->widths[$index] + 2,
 			);
 		}
 
@@ -699,23 +664,25 @@ class TablePrinter
 |--------------------------------------------------------------------------
 */
 
-function formatBytes(int  $bytes): string {
+function formatBytes(int $bytes): string
+{
 	$units = ['B', 'KB', 'MB', 'GB'];
 	$i = 0;
+
 	while ($bytes >= 1024 && $i < count($units) - 1) {
 		$bytes /= 1024;
 		$i++;
 	}
-	return sprintf("%.2f %s", $bytes, $units[$i]);
+
+	return sprintf('%.2f %s', $bytes, $units[$i]);
 }
 
 function benchmark(
 	callable $fn,
 	int $menuSize,
 	int $buttonCount,
-	bool $deep = false
-): array
-{
+	bool $deep = false,
+): array {
 	global $modSettings;
 
 	$modSettings = generate_mod_settings($buttonCount, $deep);
@@ -803,14 +770,14 @@ function run_benchmarks(array $tests): void
 			'um_load_menu_original',
 			$menuSize,
 			$buttonCount,
-			$deep
+			$deep,
 		);
 
 		$optimized = benchmark(
 			'um_load_menu_optimized',
 			$menuSize,
 			$buttonCount,
-			$deep
+			$deep,
 		);
 
 		$improvement = (

@@ -85,10 +85,10 @@ $tables = [
 		'indexes' => [
 			[
 				'type' => 'primary',
-				'columns' => ['id_button']
+				'columns' => ['id_button'],
 			],
-		]
-	]
+		],
+	],
 ];
 
 foreach ($tables as $table) {
@@ -97,7 +97,7 @@ foreach ($tables as $table) {
 		$table['columns'],
 		$table['indexes'],
 		[],
-		'ignore'
+		'ignore',
 	);
 
 	if (isset($table['default'])) {
@@ -106,54 +106,61 @@ foreach ($tables as $table) {
 			'{db_prefix}' . $table['name'],
 			$table['default']['columns'],
 			$table['default']['values'],
-			$table['default']['keys']
+			$table['default']['keys'],
 		);
 	}
 }
 
 if (!checkFieldExistsUMInstaller('um_menu', 'icon')) {
-	$smcFunc['db_add_column']('{db_prefix}um_menu', [
+	$smcFunc['db_add_column'](
+		'{db_prefix}um_menu',
+		[
 			'name' => 'icon',
 			'type' => 'varchar',
 			'size' => 191,
 			'default' => '',
 		],
 		[],
-		false
+		false,
 	);
 }
 
 if (!checkFieldExistsUMInstaller('um_menu', 'sprite')) {
-	$smcFunc['db_add_column']('{db_prefix}um_menu', [
+	$smcFunc['db_add_column'](
+		'{db_prefix}um_menu',
+		[
 			'name' => 'sprite',
 			'type' => 'tinyint',
 			'size' => 1,
 			'default' => 0,
 		],
 		[],
-		false
+		false,
 	);
 }
 
 // update link column to text to facilitate elongated hyperlinks
 if (checkFieldExistsUMInstaller('um_menu', 'link')) {
 	$checkUmTable = $smcFunc['db_list_columns']('{db_prefix}um_menu', true);
+
 	if (!empty($checkUmTable) && !empty($checkUmTable['link']) && $checkUmTable['link']['type'] != 'text') {
-		$adjust = array(
+		$adjust = [
 			'name' => 'link',
 			'type' => 'text',
 			'default' => null,
-		);
+		];
 
 		$smcFunc['db_change_column']('{db_prefix}um_menu', 'link', $adjust);
 	}
 }
 
 $buttons = [];
-$request = $smcFunc['db_query']('', '
+$request = $smcFunc['db_query'](
+	'',
+	'
 	SELECT
 		id_button, name, target, type, position, link, status, permissions, parent, icon, sprite
-	FROM {db_prefix}um_menu'
+	FROM {db_prefix}um_menu',
 );
 
 while ($row = $smcFunc['db_fetch_assoc']($request)) {
@@ -173,21 +180,25 @@ while ($row = $smcFunc['db_fetch_assoc']($request)) {
 $smcFunc['db_free_result']($request);
 
 if (!empty($buttons)) {
-	$request = $smcFunc['db_query']('', '
+	$request = $smcFunc['db_query'](
+		'',
+		'
 		SELECT MAX(id_button)
-		FROM {db_prefix}um_menu'
+		FROM {db_prefix}um_menu',
 	);
 	[$max] = $smcFunc['db_fetch_row']($request);
 	$smcFunc['db_free_result']($request);
 
-	$smcFunc['db_query']('', '
+	$smcFunc['db_query'](
+		'',
+		'
 		DELETE FROM {db_prefix}settings
 		WHERE variable LIKE {string:settings_search}
 			AND variable NOT IN ({array_string:settings})',
 		[
 			'settings_search' => 'um_button%',
 			'settings' => array_keys($buttons),
-		]
+		],
 	);
 	updateSettings(['um_count' => $max] + $buttons);
 }
@@ -198,7 +209,7 @@ $umSettings = !empty($modSettings['um_settings']) ? json_decode($modSettings['um
 $um_settings = [
 	'um_fingerprint' => mb_strtolower(strval(bin2hex(random_bytes(5))), 'UTF-8'),
 	'um_icon_dimension' => $umSettings['um_icon_dimension'] ?? 32,
-	'um_secureCode' =>  strval(bin2hex(random_bytes(10)))
+	'um_secureCode' =>  strval(bin2hex(random_bytes(10))),
 ];
 updateSettings(['um_settings' =>  json_encode($um_settings)]);
 add_integration_function('integrate_pre_include', '$sourcedir/Subs-UltimateMenu.php');
@@ -211,18 +222,16 @@ function check_table_existsUMInstaller($table)
 {
 	global $db_prefix, $smcFunc;
 
-	if ($smcFunc['db_list_tables'](false, $db_prefix . $table)) {
-		return true;
-	}
-
-	return false;
+	return (bool) ($smcFunc['db_list_tables'](false, $db_prefix . $table));
 }
 
 function checkFieldExistsUMInstaller($tableName, $columnName)
 {
 	global $smcFunc;
+
 	if (check_table_existsUMInstaller($tableName)) {
-		$check = $smcFunc['db_list_columns'] ('{db_prefix}' . $tableName, false, []);
+		$check = $smcFunc['db_list_columns']('{db_prefix}' . $tableName, false, []);
+
 		if (in_array($columnName, $check)) {
 			return true;
 		}

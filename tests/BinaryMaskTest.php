@@ -22,11 +22,12 @@ final class BinaryMaskTest extends TestCase
 	}
 
 	#[DataProvider('datasetProvider')]
-	public function testBinaryMaskRoundtrip(array $bits): void {
+	public function testBinaryMaskRoundtrip(array $bits): void
+	{
 		$shifted = 0;
 
 		$bytes = BinaryMask::toBytes($bits, true, $shifted);
-		$data = BinaryMask::toBinData( $bits, true, $shifted );
+		$data = BinaryMask::toBinData($bits, true, $shifted);
 		$decoded = BinaryMask::fromBinData($data, $shifted);
 
 		$expectedData = $bytes ? pack('C*', ...$bytes) : '';
@@ -36,33 +37,36 @@ final class BinaryMaskTest extends TestCase
 	}
 
 	#[DataProvider('datasetProvider')]
-	public function testBinaryMaskHexLength(array $bits): void {
+	public function testBinaryMaskHexLength(array $bits): void
+	{
 		$shifted = 0;
 
-		$bytes = BinaryMask::toBytes( $bits, true, $shifted );
-		$hex = BinaryMask::toHexString( $bits, true, true, $shifted );
+		$bytes = BinaryMask::toBytes($bits, true, $shifted);
+		$hex = BinaryMask::toHexString($bits, true, true, $shifted);
 
 		$this->assertSame(count($bytes) * 3, strlen($hex) + 1);
 	}
 
 	#[DataProvider('datasetProvider')]
-	public function testBinaryMaskBinLength( array $bits ): void {
+	public function testBinaryMaskBinLength(array $bits): void
+	{
 		$shifted = 0;
 
-		$bytes = BinaryMask::toBytes( $bits, true, $shifted );
-		$bin = BinaryMask::toBinString( $bits, true, true, $shifted );
+		$bytes = BinaryMask::toBytes($bits, true, $shifted);
+		$bin = BinaryMask::toBinString($bits, true, true, $shifted);
 
 		$this->assertSame(count($bytes) * 9, strlen($bin) + 1);
 	}
 
 	#[DataProvider('datasetProvider')]
-	public function testBinaryIdsRoundtrip( array $bits ): void {
-		$ids = array_map( static fn (int $bit): int => $bit + 1, $bits );
+	public function testBinaryIdsRoundtrip(array $bits): void
+	{
+		$ids = array_map(static fn(int $bit): int => $bit + 1, $bits);
 
 		$shifted = 0;
 
-		$data = BinaryIds::toBinData( $ids, true, $shifted );
-		$decoded = BinaryIds::fromBinData( $data, $shifted );
+		$data = BinaryIds::toBinData($ids, true, $shifted);
+		$decoded = BinaryIds::fromBinData($data, $shifted);
 
 		$this->assertSame($ids, $decoded);
 	}
@@ -73,16 +77,16 @@ final class BinaryMaskTest extends TestCase
 
 		$shifted = 0;
 
-		BinaryMask::toBytes( [-1], true, $shifted );
+		BinaryMask::toBytes([-1], true, $shifted);
 	}
 
 	public function testEmptyInput(): void
 	{
 		$shifted = 999;
 
-		$this->assertSame( [], BinaryMask::toBytes([], true, $shifted) );
+		$this->assertSame([], BinaryMask::toBytes([], true, $shifted));
 		$this->assertSame(0, $shifted);
-		$this->assertSame( '', BinaryMask::toBinData([]) );
-		$this->assertSame( [], BinaryMask::fromBinData('') );
+		$this->assertSame('', BinaryMask::toBinData([]));
+		$this->assertSame([], BinaryMask::fromBinData(''));
 	}
 }
