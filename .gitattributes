@@ -1,0 +1,30 @@
+# Treat all files as binary unless otherwise stipulated below
+* binary
+
+# Autodetect text files
+* text=auto eol=lf
+
+# Definitively text files
+*.txt text
+*.c text
+*.h text
+*.js text
+*.py text
+*.css text
+*.html text
+*.php text
+*.xml text
+*.json text
+*.yml text
+*.md text
+*.lock text
+.gitignore text
+.git-blame-ignore-revs text
+LICENSE text
+
+# Force LF for files that must have Unix line endings
+*.sh text eol=lf
+
+# Force CRLF for files that must have Windows line endings (e.g., batch files)
+*.bat text eol=crlf
+*.sln text eol=crlf
