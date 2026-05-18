@@ -980,8 +980,8 @@ class UltimateMenu
 			$umUpdates[$setting] = $um_settings[$setting] ?? $umSettings[$setting];
 		}
 
-		sort($umSettings);
-		sort($umUpdates);
+		ksort($umSettings);
+		ksort($umUpdates);
 		if ($umSettings != $umUpdates) {
 			updateSettings(['um_settings' => json_encode($umUpdates)]);
 			$umSettings = $umUpdates;

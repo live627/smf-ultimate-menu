@@ -22,7 +22,8 @@ final class BinaryMaskTest extends TestCase
 	}
 
 	#[DataProvider('datasetProvider')]
-	public function testBinaryMaskRoundtrip(array $bits): void {
+	public function testBinaryMaskRoundtrip(array $bits): void
+	{
 		$shifted = 0;
 
 		$bytes = BinaryMask::toBytes($bits, true, $shifted);
@@ -36,7 +37,8 @@ final class BinaryMaskTest extends TestCase
 	}
 
 	#[DataProvider('datasetProvider')]
-	public function testBinaryMaskHexLength(array $bits): void {
+	public function testBinaryMaskHexLength(array $bits): void
+	{
 		$shifted = 0;
 
 		$bytes = BinaryMask::toBytes($bits, true, $shifted);
@@ -46,7 +48,8 @@ final class BinaryMaskTest extends TestCase
 	}
 
 	#[DataProvider('datasetProvider')]
-	public function testBinaryMaskBinLength(array $bits): void {
+	public function testBinaryMaskBinLength(array $bits): void
+	{
 		$shifted = 0;
 
 		$bytes = BinaryMask::toBytes($bits, true, $shifted);
@@ -56,8 +59,9 @@ final class BinaryMaskTest extends TestCase
 	}
 
 	#[DataProvider('datasetProvider')]
-	public function testBinaryIdsRoundtrip(array $bits): void {
-		$ids = array_map(static fn (int $bit): int => $bit + 1, $bits);
+	public function testBinaryIdsRoundtrip(array $bits): void
+	{
+		$ids = array_map(static fn(int $bit): int => $bit + 1, $bits);
 
 		$shifted = 0;
 
