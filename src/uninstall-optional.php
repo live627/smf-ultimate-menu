@@ -28,14 +28,14 @@ list($where, $umButtons, $allUmModSettings) = [
 		'setting3' => 'um_button%',
 	],
 ];
-array_walk($allUmModSettings, function ($value, $key) use (&$where, &$modSettings) {
+array_walk($allUmModSettings, function($value, $key) use (&$where, &$modSettings) {
 	$where .= (!$where ? ' ' : ' OR ') . 'variable ' . (strpos($value, '%') === false ? '=' : 'LIKE') . ' {string:' . $key . '}';
 
 	if (isset($modSettings[$value]) && strpos($value, '%') === false) {
 		unset($modSettings[$value]);
 	}
 });
-array_walk($umButtons, function ($value, $key) use (&$modSettings) {
+array_walk($umButtons, function($value, $key) use (&$modSettings) {
 	unset($modSettings[$key]);
 });
 

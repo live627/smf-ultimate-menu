@@ -1,0 +1,44 @@
+# Autodetect text files
+* text=auto eol=lf
+
+# Definitively text files
+*.txt text eol=lf
+*.c text eol=lf
+*.h text eol=lf
+*.js text eol=lf
+*.py text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.htm text eol=lf
+*.php text eol=lf
+*.xml text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.md text eol=lf
+*.lock text eol=lf
+.gitignore text eol=lf
+.git-blame-ignore-revs text eol=lf
+LICENSE text eol=lf
+
+# Force LF for files that must have Unix line endings
+*.sh text eol=lf
+
+# Force CRLF for files that must have Windows line endings (e.g., batch files)
+*.bat text eol=crlf
+*.sln text eol=crlf
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.rar bonary
+*.gz binary
+*.tar binary
+*.zip binary
+*.exe binary
+*.dll binary
+*.so binary
+*.exe binary
+*.swf  binary -crlf -diff -merge

@@ -18,7 +18,7 @@ This modification gives the ability to add custom buttons to the main menu withi
 - Setup this mod at Administration Center » Configuration » Ultimate Menu.
 - Should "just work" with all other mods that add their own buttons, such as portals.
 - Dynamic by design -- add menu buttons with unique text and icons -- no special code required.
-
+   - Does not remove the unread PM counter from the "PM" menu item.
 ## Compatibility notes
 *	Only compatible with the SMF 2.1 branch (https://download.simplemachines.org) [SMF 2.0 branch support has been dropped]
 *	PHP should be compiled with the [GD library or Imagick library] to take advantage of automatic image resizing

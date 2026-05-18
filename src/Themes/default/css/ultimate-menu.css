@@ -263,6 +263,10 @@ input.um_pending {
     animation: none;
   }
 }
+select#um_dimension {
+	min-width: fit-content;
+	padding-right: 0.2rem;
+}
 select.um_dimension, select.um_dimension option {
 	display: inline-flex;
 	justify-content: center;
