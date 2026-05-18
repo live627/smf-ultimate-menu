@@ -11,8 +11,7 @@
         "friendsofphp/php-cs-fixer": "^3.95"
     },
     "require": {
-        "php": ">=8.2",
-		"symfony/console": "^7.4.11"
+        "php": ">=8.3"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
