@@ -48,8 +48,7 @@ $txt = [
 $user_info = ['is_admin' => true, 'is_guest' => false, 'language' => '', 'id' => 1, 'name' => 'Test User', 'groups' => [0], 'permissions' => []];
 $modSettings = ['lastActive' => 0, 'settings_updated' => 0, 'postmod_active' => false];
 
-$smcFunc['db_query'] = function($name, $query, $args)
-{
+$smcFunc['db_query'] = function ($name, $query, $args) {
 	global $current_item, $modSettings;
 
 	$current_item = 0;
@@ -60,35 +59,37 @@ $smcFunc['db_query'] = function($name, $query, $args)
 
 	return [['']];
 };
-$smcFunc['db_fetch_assoc'] = function($request)
-{
+$smcFunc['db_fetch_assoc'] = function ($request) {
 	global $current_item;
 
 	return $request[$current_item++] ?? null;
 };
-$smcFunc['db_fetch_row'] = function($request)
-{
+$smcFunc['db_fetch_row'] = function ($request) {
 	global $current_item;
 
 	return $request[$current_item++] ?? null;
 };
-$smcFunc['db_free_result'] = function(): void
-{
-};
-$smcFunc['db_insert'] = function(): void
-{
-};
+$smcFunc['db_free_result'] = function (): void {};
+$smcFunc['db_insert'] = function (): void {};
 $smcFunc['htmltrim'] = fn(string $string): string => trim($string);
 $smcFunc['htmlspecialchars'] = fn(string $string): string => htmlspecialchars($string, ENT_QUOTES);
 
 require_once $sourcePath . '/ManageUltimateMenu.php';
+
 require_once $sourcePath . '/Subs-UltimateMenu.php';
+
 require_once $sourcePath . '/Class-UltimateMenu.php';
+
 require_once $sourcePath . '/BinaryMask.php';
+
 require_once $langPath . '/ManageUltimateMenu.english.php';
+
 require_once './vendor/autoload.php';
 
 require_once './vendor/simplemachines/smf/Sources/Load.php';
+
 require_once './vendor/simplemachines/smf/Sources/Security.php';
+
 require_once './vendor/simplemachines/smf/Sources/Subs.php';
+
 require_once './vendor/simplemachines/smf/Themes/default/languages/index.english.php';
