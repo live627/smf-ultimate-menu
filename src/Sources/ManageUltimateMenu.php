@@ -52,28 +52,22 @@ class ManageUltimateMenu
 		global $umSettings, $context, $txt;
 
 		$umAdminMsg = $_GET['umadminmsg'] ?? '';
-
 		switch ((string) $umAdminMsg) {
 			case 'success':
 				$this->um->um_alert_verbose($txt['um_menu_button_sprite_generated'], true);
 				break;
-
 			case 'failure':
 				$this->um->um_alert_verbose($txt['um_menu_button_sprite_error'], true);
 				break;
-
 			case 'dimchange':
 				$this->um->um_alert_verbose($txt['um_menu_dimchange'], true);
 				break;
-
 			case 'savebutton':
 				$this->um->um_alert_verbose($txt['um_menu_savebutton'], true);
 				break;
-
 			case '':
 				$this->um->um_alert_verbose($txt['admin_menu_um'], false);
 				break;
-
 			default:
 				$this->um->um_alert_verbose($txt['um_menu_button_sprite_drivel'], false);
 		}
@@ -91,7 +85,6 @@ class ManageUltimateMenu
 		} elseif (isset($_POST['save'])) {
 			checkSession();
 			$umAdminMsg = 'savebutton';
-
 			if (isset($_POST['um_icon_dimension']) && ((int) $_POST['um_icon_dimension'] * 16) != (int) $umSettings['um_icon_dimension']) {
 				$this->um->um_updateSettings(['um_icon_dimension' => (in_array((int) $_POST['um_icon_dimension'], [1, 2, 3]) ? (((int) $_POST['um_icon_dimension']) * 16) : 32)]);
 				$umAdminMsg = $this->um->um_generate_sprite(0, true) ? 'dimchange' : 'dimchange';
@@ -135,7 +128,7 @@ class ManageUltimateMenu
 			$this->um->rebuildMenu();
 			redirectexit('action=admin;area=umen;sa=fileslist');
 		} elseif (isset($_POST['uploadFiles'])) {
-			if (isset($_FILES['attachment'], $_POST['um_jq'])) {
+			if (isset($_FILES['attachment']) && isset($_POST['um_jq'])) {
 				unset($_FILES['attachment']);
 			} elseif (isset($_FILES['attachment'])) {
 				$this->UmUploadIcon(true);
@@ -151,11 +144,11 @@ class ManageUltimateMenu
 
 		$button_names = $this->um->getButtonNames();
 		list($options, $dimOutput) = [[1, 2, 3], ''];
-		array_walk($options, function ($value, $key) use (&$dimOutput, $umSettings) {
+		array_walk($options, function($value, $key) use (&$dimOutput, $umSettings) {
 			$dimOutput .= '
 					<option value="' . $value . '"' . ($umSettings['um_icon_dimension'] == ($value * 16) ? ' selected' : '') . '>' . ($value * 16) . '</option>';
 		});
-		addJavaScriptVar('um_dim_warning', stripcslashes(str_replace(['\\t', '\\n', '\\r', '\\s', "\\'"], ["\t", "\n", "\n", "\s", "\'"], addcslashes($txt['um_menu_button_dimension_confirm'], '\\'))), true);
+		addJavaScriptVar('um_dim_warning', stripcslashes(str_replace(["\\t", "\\n", "\\r", "\\s", "\\'"], ["\t", "\n", "\n", "\s", "\'"], addcslashes($txt['um_menu_button_dimension_confirm'], '\\'))), true);
 		$listOptions = [
 			'id' => 'menu_list',
 			'items_per_page' => 20,
@@ -199,7 +192,7 @@ class ManageUltimateMenu
 						'value' => $txt['um_menu_button_position'],
 					],
 					'data' => [
-						'function' => fn(array $rowData): string =>
+						'function' => fn(array $rowData) : string =>
 							sprintf(
 								'%s %s',
 								$txt['um_menu_' . $rowData['position']],
@@ -219,11 +212,11 @@ class ManageUltimateMenu
 						'class' => 'centertext',
 					],
 					'data' => [
-						'function' => fn(array $rowData): string =>
+						'function' => fn(array $rowData) : string =>
 							sprintf(
 								'<input type="checkbox" name="status[%1$s]" id="status_%1$s" value="%1$s"%2$s>',
 								$rowData['id_button'],
-								$rowData['status'] == 'inactive' ? '' : ' checked="checked"',
+								$rowData['status'] == 'inactive' ? '' : ' checked="checked"'
 							),
 						'class' => 'centertext',
 					],
@@ -238,12 +231,12 @@ class ManageUltimateMenu
 						'class' => 'centertext',
 					],
 					'data' => [
-						'function' => fn(array $rowData): string =>
+						'function' => fn(array $rowData) : string =>
 							sprintf(
 								'<a href="%s?action=admin;area=umen;sa=editbutton;in=%d">%s</a>',
 								$scripturl,
 								$rowData['id_button'],
-								$txt['modify'],
+								$txt['modify']
 							),
 						'class' => 'centertext',
 					],
@@ -277,7 +270,7 @@ class ManageUltimateMenu
 				[
 					'position' => 'below_table_data',
 					'value' => sprintf(
-						'<select name="um_icon_dimension" id="um_dimension" class="button um_dimension">
+				'<select name="um_icon_dimension" id="um_dimension" class="button um_dimension">
 					<option value="0" disabled selected>%s</option>' . $dimOutput . '
 				</select>
 				<input type="submit" name="generate" onclick="return confirm(\'%s\');" value="%s" class="button' . ($this->um->um_sprite_pending() ? ' um_pending' : '') . '">
@@ -300,13 +293,12 @@ class ManageUltimateMenu
 						$txt['um_menu_remove_all'],
 						$txt['um_menu_remove_all_confirm'],
 						$txt['um_admin_add_button'],
-						$txt['save'],
+						$txt['save']
 					),
 					'class' => 'um_righttext',
 				],
 			],
 		];
-
 		require_once $sourcedir . '/Subs-List.php';
 		createList($listOptions);
 		$context['sub_template'] = 'show_list';
@@ -319,7 +311,7 @@ class ManageUltimateMenu
 
 		$codeValue = strval(bin2hex(random_bytes(10)));
 		$this->um->um_updateSettings([
-			'um_secureCode' => $codeValue,
+			'um_secureCode' => $codeValue
 		]);
 		addJavaScriptVar('um_secureCode', '"' . $codeValue . '"', false);
 
@@ -378,7 +370,7 @@ class ManageUltimateMenu
 				],
 			],
 			'form' => [
-				'href' => $scripturl . '?action=admin;area=umen;sa=fileslist',
+				'href' => $scripturl . '?action=admin;area=umen;sa=fileslist'
 			],
 			'javascript' => '$(function() {
 			$("form").last().attr("enctype", "multipart/form-data");
@@ -395,7 +387,7 @@ class ManageUltimateMenu
 						<input type="hidden" name="um_checkcode" value="' . $codeValue . '">',
 						$txt['um_menu_standardize_all'],
 						$txt['um_menu_standardize_all_confirm'],
-						$txt['um_menu_button_upload'],
+						$txt['um_menu_button_upload']
 					),
 					'class' => 'um_lefttext',
 				],
@@ -417,7 +409,6 @@ class ManageUltimateMenu
 				],
 			],
 		];
-
 		require_once $sourcedir . '/Subs-List.php';
 		createList($listOptions);
 		$context['sub_template'] = 'show_list';
@@ -524,13 +515,13 @@ class ManageUltimateMenu
 					'sprite' => 0,
 					'image' => '',
 				],
-				$this->getInput(),
+				$this->getInput()
 			);
 			$post_errors = $this->validateInput($menu_entry);
 
 			// I see you made it to the final stage, my young padawan.
 			if (empty($post_errors)) {
-				if (isset($_FILES['attachment'], $_POST['um_jq'])) {
+				if (isset($_FILES['attachment']) && isset($_POST['um_jq'])) {
 					unset($_FILES['attachment']);
 				} elseif (isset($_FILES['attachment'])) {
 					$uploadedFile = $this->UmUploadIcon(true);
@@ -567,14 +558,14 @@ class ManageUltimateMenu
 					'sprite' => (int) $menu_entry['sprite'] ?: 0,
 					'image' => $this->um->iconFilePath($menu_entry['icon'] ?: ''),
 					'permissions' => $this->um->listGroups(
-						array_filter($menu_entry['permissions'], 'strlen'),
+						array_filter($menu_entry['permissions'], 'strlen')
 					),
 					'status' => $menu_entry['status'],
 					'id' => $menu_entry['in'],
 				];
 				$context['all_groups_checked'] = empty(array_diff_key(
 					$context['button_data']['permissions'],
-					array_flip(array_filter($menu_entry['permissions'], 'strlen')),
+					array_flip(array_filter($menu_entry['permissions'], 'strlen'))
 				));
 				$context['template_layers'][] = 'form';
 				$context['template_layers'][] = 'errors';
@@ -590,14 +581,13 @@ class ManageUltimateMenu
 		global $smcFunc, $umSettings, $context, $txt;
 
 		$row = isset($_GET['in']) ? $this->um->fetchButton($_GET['in']) : [];
-
 		if (empty($row)) {
 			fatal_lang_error('no_access', false);
 		}
 
 		$codeValue = strval(bin2hex(random_bytes(10)));
 		$this->um->um_updateSettings([
-			'um_secureCode' => $codeValue,
+			'um_secureCode' => $codeValue
 		]);
 		addJavaScriptVar('um_secureCode', '"' . $codeValue . '"', false);
 
@@ -620,7 +610,7 @@ class ManageUltimateMenu
 
 		$context['all_groups_checked'] = empty(array_diff_key(
 			$context['button_data']['permissions'],
-			array_flip($row['permissions']),
+			array_flip($row['permissions'])
 		));
 		$context['page_title'] = $txt['um_menu_edit_title'];
 		$context['button_names'] = $this->um->getButtonNames();
@@ -635,7 +625,7 @@ class ManageUltimateMenu
 
 		$codeValue = strval(bin2hex(random_bytes(10)));
 		$this->um->um_updateSettings([
-			'um_secureCode' => $codeValue,
+			'um_secureCode' => $codeValue
 		]);
 		addJavaScriptVar('um_secureCode', '"' . $codeValue . '"', false);
 
@@ -667,14 +657,11 @@ class ManageUltimateMenu
 		global $txt, $settings, $umSettings, $sourcedir;
 		checkSession('post');
 		list($types, $json_msg, $postGlobal, $umCode) = [['jpeg', 'jpg', 'png'], ['error' => $txt['um_menu_filename_illegal'], 'file' => ''], ($_FILES ?? []), ($umSettings['um_secureCode'] ?? '')];
-		$checkCode = $_POST['um_checkcode'] ?? (empty($noscript) ? '' : $umCode);
-
+		$checkCode = isset($_POST['um_checkcode']) ? $_POST['um_checkcode'] : (empty($noscript) ? '' : $umCode);
 		if (!empty($checkCode) && !empty($umCode) && $checkCode == $umCode) {
 			clearstatcache();
-
 			if (!empty($postGlobal) && !empty($postGlobal['attachment'])) {
 				$postVars = $this->um->um_flatten_files($postGlobal);
-
 				foreach ($postVars as $postVar) {
 					$newname = $postVar['name'] = $this->um->sanitizeFilename(basename($postVar['name']));
 					$target = $this->um->unixDirSeparator($settings['default_theme_dir'] . '/images/um_icons');
@@ -682,22 +669,18 @@ class ManageUltimateMenu
 					$ext = mb_strtolower(pathinfo($newname, PATHINFO_EXTENSION), 'UTF-8');
 					$filename = pathinfo($newname, PATHINFO_FILENAME);
 					$file = $this->um->hexadecimal_string(true) . '.' . $ext;
-
 					if (!in_array($ext, $types)) {
 						$json_msg['error'] = $txt['um_menu_filename_illegal'];
-					} elseif ($com = fopen($target . '/' . $newname, 'wb')) {
-						$in = fopen($tmp_name, 'rb');
-
+					} elseif ($com = fopen($target . '/' . $newname, "wb")) {
+						$in = fopen($tmp_name, "rb");
 						if ($in) {
 							stream_copy_to_stream($in, $com);
 							fclose($in);
 						}
 						fclose($com);
 						clearstatcache();
-
 						if (!empty($newname) && file_exists($target . '/' . $newname)) {
 							$renamed = $this->um->imageResize($target . '/' . $newname, $target . '/' . $file, $ext, $umSettings['um_icon_dimension'], $umSettings['um_icon_dimension'], false);
-
 							if (!empty($renamed) && $renamed != $newname) {
 								$newname = $renamed;
 								$json_msg = ['error' => '', 'file' => $newname];
@@ -721,7 +704,6 @@ class ManageUltimateMenu
 			header('Cache-Control: no-cache, must-revalidate');
 			header('Expires: Mon, 01 Jan 1990 00:00:00 GMT');
 			echo json_encode($json_msg, JSON_THROW_ON_ERROR);
-
 			exit(0);
 		}
 
