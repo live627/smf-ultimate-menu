@@ -200,7 +200,7 @@ class ManageUltimateMenu
 								$txt['um_menu_' . $rowData['position']],
 								isset($button_names[$rowData['parent']])
 									? $button_names[$rowData['parent']][1]
-									: '<span class="um_monospaced">' . $rowData['parent'] . '</span>',
+									: '<span class="um_monospaced">' . $rowData['parent'] . '</span>'
 							),
 					],
 					'sort' => [
@@ -218,7 +218,7 @@ class ManageUltimateMenu
 							sprintf(
 								'<input type="checkbox" name="status[%1$s]" id="status_%1$s" value="%1$s"%2$s>',
 								$rowData['id_button'],
-								$rowData['status'] == 'inactive' ? '' : ' checked="checked"',
+								$rowData['status'] == 'inactive' ? '' : ' checked="checked"'
 							),
 						'class' => 'centertext',
 					],
@@ -271,8 +271,7 @@ class ManageUltimateMenu
 				],
 				[
 					'position' => 'below_table_data',
-					'value' => sprintf(
-						'<select name="um_icon_dimension" id="um_dimension" class="button um_dimension">
+					'value' => sprintf('<select name="um_icon_dimension" id="um_dimension" class="button um_dimension">
 					<option value="0" disabled selected>%s</option>' . $dimOutput . '
 				</select>
 				<input type="submit" name="generate" onclick="return confirm(\'%s\');" value="%s" class="button' . ($this->um->um_sprite_pending() ? ' um_pending' : '') . '">
@@ -685,9 +684,7 @@ class ManageUltimateMenu
 					if (!in_array($ext, $types)) {
 						$json_msg['error'] = $txt['um_menu_filename_illegal'];
 					} elseif ($com = fopen($target . '/' . $newname, 'wb')) {
-						$in = fopen($tmp_name, 'rb');
-
-						if ($in) {
+						if ($in = fopen($tmp_name, 'rb')) {
 							stream_copy_to_stream($in, $com);
 							fclose($in);
 						}
