@@ -969,7 +969,7 @@ class UltimateMenu
 	}
 
 	/**
-	 * Updates Ultimate Menu JSON encoded settings
+	 * Updates alterations to Ultimate Menu JSON encoded settings
 	 */
 	public function um_updateSettings($um_settings = []): void
 	{
