@@ -45,9 +45,7 @@ function template_errors_above(): void
 	}
 }
 
-function template_errors_below(): void
-{
-}
+function template_errors_below(): void {}
 
 function template_main(): void
 {
@@ -75,7 +73,7 @@ function template_main(): void
 								<option value="%s"%s>%s...</option>',
 			$v,
 			$sel($context['button_data']['position'] == $v, 'selected'),
-			$txt['um_menu_' . $v]
+			$txt['um_menu_' . $v],
 		);
 	}
 
@@ -89,7 +87,7 @@ function template_main(): void
 								<option value="%s"%s>%s</option>',
 			$idx,
 			strpos($title[1], '<span class="um_current">') !== false ? 'disabled' : $sel($context['button_data']['parent'] == $idx, 'selected'),
-			str_repeat('&emsp;', $title[0] * 2) . $title[1]
+			str_repeat('&emsp;', $title[0] * 2) . $title[1],
 		);
 	}
 
@@ -198,6 +196,7 @@ function template_main(): void
 							<span id="um_icon_list">
 								<select id="um_icon_select" name="icon">
 									<optgroup label="' . $txt['um_admin_menu_um_opt_file'] . '">';
+
 	foreach ($context['um_button_icons'] as $filename) {
 		echo '
 									<option value="', (!empty($filename) ? $filename : '______'), '"', ($context['button_data']['icon'] == $filename ? ' selected="selected"' : ''), '>
