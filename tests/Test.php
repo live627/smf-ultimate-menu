@@ -22,7 +22,7 @@ final class Test extends TestCase
 	{
 		global $modSettings;
 
-		$modSettings['um_keys'] = json_encode(['um_button_1', 'um_button_2', 'um_button_3', 'um_button_4']);
+		$modSettings['um_keys'] = 'um_button_1,um_button_2,um_button_3,um_button_4';
 		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"' . $position . '","link":"t","active":true,"groups":[-1,0,2],"parent":"' . $parent . '","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
 		$haystack = [
 			'test' => [
@@ -60,7 +60,7 @@ final class Test extends TestCase
 	{
 		global $modSettings;
 
-		$modSettings['um_keys'] = json_encode(['um_button_1', 'um_button_2']);
+		$modSettings['um_keys'] = 'um_button_1,um_button_2';
 		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"child_of","link":"t","active":true,"groups":[-1,0,2],"parent":"signup","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
 		add_integration_function('integrate_menu_buttons', 'um_load_menu');
 		$haystack = (new UltimateMenu())->getButtonNames();
@@ -79,7 +79,7 @@ final class Test extends TestCase
 	{
 		global $context, $modSettings;
 
-		$modSettings['um_keys'] = json_encode(['um_button_1', 'um_button_2', 'um_button_3', 'um_button_4']);
+		$modSettings['um_keys'] = 'um_button_1,um_button_2,um_button_3,um_button_4';
 		$modSettings['um_button_2'] = '{"name":"Test","type":"forum","target":"_self","position":"before","link":"t","active":true,"groups":[0],"parent":"home","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
 		$modSettings['um_button_3'] = '{"name":"Test","type":"forum","target":"_self","position":"child_of","link":"t","active":true,"groups":[0],"parent":"um_button_2","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
 		$modSettings['um_button_4'] = '{"name":"Test","type":"forum","target":"_self","position":"after","link":"t","active":true,"groups":[0],"parent":"signup","icon":"um--4_b9c4f9a81de.png","sprite":"1"}';
