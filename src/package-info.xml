@@ -21,7 +21,9 @@
 		?>]]></code>
 		<readme parsebbc="true">install.txt</readme>
 		<database>install.php</database>
-		<require-dir name="Sources" destination="$boarddir" />
+		<require-file name="Sources/Class-UltimateMenu.php" destination="$sourcedir" />
+		<require-file name="Sources/Subs-UltimateMenu.php" destination="$sourcedir" />
+		<require-file name="Sources/ManageUltimateMenu.php" destination="$sourcedir" />
 		<require-dir name="Themes" destination="$boarddir" />
 		<require-dir name="languages" destination="$boarddir/Themes/default" />
 		<redirect url="?action=admin;area=umen" />
