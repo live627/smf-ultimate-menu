@@ -169,7 +169,7 @@ class UltimateMenu
 	{
 		global $smcFunc, $settings;
 
-		$umButtons = [];
+		list($umButtons, $umKeys) = [[], []];
 		$request = $smcFunc['db_query']('', '
 			SELECT
 				id_button, name, target, type, position, link, status, permissions, parent, icon, sprite
@@ -189,6 +189,7 @@ class UltimateMenu
 				'icon' => !empty($row['icon']) && file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $row['icon']) ? $row['icon'] : '',
 				'sprite' => !empty($row['sprite']),
 			]);
+			$umKeys[] = 'um_button_' . $row['id_button'];
 		}
 		$smcFunc['db_free_result']($request);
 
@@ -208,7 +209,7 @@ class UltimateMenu
 				'um_settings' => array_keys($umButtons),
 			]
 		);
-		updateSettings(['um_count' => $max] + $umButtons);
+		updateSettings(['um_keys' => json_encode($umKeys)]);
 	}
 
 	/**

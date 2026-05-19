@@ -54,19 +54,8 @@ function um_load_menu(array &$menu_buttons): void
 		return;
 	}
 
-	$is_admin = allowedTo('admin_forum');
-	$forum_prefix = $scripturl . '?';
-	$group_map = array_flip($user_info['groups']);
-	$um_keys = explode(',', $modSettings['um_keys']);
-
-	// Build flat indexes
-	$nodes = $menu_buttons;
-	$root_order = array_keys($menu_buttons);
-
-	// Build lists of deferred operations
-	$before = [];
-	$after = [];
-	$children = [];
+	list($group_map, $um_keys) = [array_flip($user_info['groups']), json_decode($modSettings['um_keys'], true)];
+	list($nodes, $root_order, $before, $after, $children) = [$menu_buttons, array_keys($menu_buttons), [], [], []];
 
 	foreach ($um_keys as $key) {
 		if (!isset($modSettings[$key])) {
@@ -75,7 +64,7 @@ function um_load_menu(array &$menu_buttons): void
 
 		$row = json_decode($modSettings[$key], true);
 
-		$show = $is_admin;
+		$show = allowedTo('admin_forum');
 
 		if (!$show) {
 			foreach ($row['groups'] as $group) {
@@ -90,7 +79,7 @@ function um_load_menu(array &$menu_buttons): void
 
 		$nodes[$key] = [
 			'title' => $row['name'],
-			'href' => ($row['type'] === 'forum' ? $forum_prefix : '') . $row['link'],
+			'href' => ($row['type'] === 'forum' ? $scripturl . '?' : '') . $row['link'],
 			'target' => $row['target'],
 			'icon' => !empty($row['icon']) && empty($row['sprite']) ? 'um_icons/' . $row['icon'] : (!empty($row['sprite']) ? null : 'um_icons/blank.png'),
 			'show' => $show,
