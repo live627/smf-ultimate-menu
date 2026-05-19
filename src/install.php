@@ -155,7 +155,7 @@ if (checkFieldExistsUMInstaller('um_menu', 'link')) {
 }
 
 list($buttons, $umKeys) = [[], []];
-$request = $smcFunc['db_query']('',	'
+$request = $smcFunc['db_query']('', '
 	SELECT
 		id_button, name, target, type, position, link, status, permissions, parent, icon, sprite
 	FROM {db_prefix}um_menu',
