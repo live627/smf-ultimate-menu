@@ -214,7 +214,7 @@ class ManageUltimateMenu
 						'class' => 'centertext',
 					],
 					'data' => [
-						'function' => fn(array $rowData): string =>
+						'function' => fn(array $rowData) : string =>
 							sprintf(
 								'<input type="checkbox" name="status[%1$s]" id="status_%1$s" value="%1$s"%2$s>',
 								$rowData['id_button'],
@@ -233,7 +233,7 @@ class ManageUltimateMenu
 						'class' => 'centertext',
 					],
 					'data' => [
-						'function' => fn(array $rowData): string =>
+						'function' => fn(array $rowData) : string =>
 							sprintf(
 								'<a href="%s?action=admin;area=umen;sa=editbutton;in=%d">%s</a>',
 								$scripturl,
