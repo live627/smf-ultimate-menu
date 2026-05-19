@@ -1,27 +1,29 @@
 name: Tests
-
 on:
   push:
     branches:
       - master
-
+    paths:
+      - '**.php'
   pull_request:
-
 jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
       XDEBUG_MODE: coverage
-
     steps:
     - uses: actions/checkout@v6
-
+      with:
+        # Fetch 10 commits or Scrutinizer will throw ("Failed to retrieve commit parents.
+        # If you use a shallow git checkout, please checkout at least a depth of one.");
+        # see: RepositoryIntrospector at scrutinizer-ci/ocular GitHub repository
+        # 10 commits is an arbitrary value that is more than 1 commit
+        fetch-depth: 10
     - name: Lint PHP files
       run: |
         shopt -s globstar
         php -l src/**/*.php tests/**/*.php
-
     - name: Cache Composer packages
       id: composer-cache
       uses: actions/cache@v5
@@ -30,22 +32,11 @@ jobs:
         key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
         restore-keys: |
           ${{ runner.os }}-php-
-
     - name: Install dependencies
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress
-
     - name: Run test suite with coverage
       run: php vendor/bin/phpunit --coverage-clover coverage.clover.xml --coverage-text
-
-    - name: Upload coverage to Scrutinizer
-      run: |
-        curl \
-          --fail \
-          --silent \
-          --show-error \
-          --request POST \
-          --form "coverage=@coverage.clover.xml" \
-          --form "format=php-clover" \
-          --form "revision=${GITHUB_SHA}" \
-          "https://scrutinizer-ci.com/coverage/upload"
+    - run: composer require --dev uma/ocular:^2
+    - name: Uploading code coverage
+      run: php vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover.xml
