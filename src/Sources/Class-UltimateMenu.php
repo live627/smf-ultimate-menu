@@ -193,13 +193,6 @@ class UltimateMenu
 		}
 		$smcFunc['db_free_result']($request);
 
-		$request = $smcFunc['db_query']('', '
-			SELECT MAX(id_button)
-			FROM {db_prefix}um_menu'
-		);
-		[$max] = $smcFunc['db_fetch_row']($request);
-		$smcFunc['db_free_result']($request);
-
 		$smcFunc['db_query']('', '
 			DELETE FROM {db_prefix}settings
 			WHERE variable LIKE {string:settings_search}' . (empty($umButtons) ? '' : '
@@ -209,7 +202,8 @@ class UltimateMenu
 				'um_settings' => array_keys($umButtons),
 			]
 		);
-		updateSettings(['um_keys' => json_encode($umKeys)]);
+		updateSettings(['um_keys' => implode(',', $umKeys)]);
+		$this->um_cache_fingerprint('new');
 	}
 
 	/**
@@ -997,7 +991,7 @@ class UltimateMenu
 	}
 
 	/**
-	 * Updates Ultimate Menu JSON encoded settings
+	 * Updates Ultimate Menu settings
 	 */
 	public function um_updateSettings($um_settings = []): void
 	{
@@ -1011,7 +1005,7 @@ class UltimateMenu
 		ksort($umSettings);
 		ksort($umUpdates);
 		if ($umSettings != $umUpdates) {
-			updateSettings(['um_settings' => json_encode($umUpdates)]);
+			updateSettings(['um_settings' => serialize($umUpdates)]);
 			$umSettings = $umUpdates;
 		}
 	}

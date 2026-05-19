@@ -20,8 +20,8 @@ function um_get_settings(): void
 	}
 
 	if (!empty($modSettings['um_settings'])) {
-		$umSettings = json_decode($modSettings['um_settings'], true);
-		$umSettings['um_icon_dimension'] = (int) $umSettings['um_icon_dimension'];
+		$umSettings = unserialize($modSettings['um_settings']);
+		$umSettings['um_icon_dimension'] = (int) $umSettings['um_icon_dimension'] ?? 32;
 	} else {
 		$umSettings = [
 			'um_fingerprint' => mb_strtolower(strval(bin2hex(random_bytes(5))), 'UTF-8'),
@@ -54,7 +54,7 @@ function um_load_menu(array &$menu_buttons): void
 		return;
 	}
 
-	list($group_map, $um_keys) = [array_flip($user_info['groups']), json_decode($modSettings['um_keys'], true)];
+	list($group_map, $um_keys) = [array_flip($user_info['groups']), explode(',', $modSettings['um_keys'])];
 	list($nodes, $root_order, $before, $after, $children) = [$menu_buttons, array_keys($menu_buttons), [], [], []];
 
 	foreach ($um_keys as $key) {

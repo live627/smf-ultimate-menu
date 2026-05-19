@@ -154,10 +154,8 @@ if (checkFieldExistsUMInstaller('um_menu', 'link')) {
 	}
 }
 
-$buttons = [];
-$request = $smcFunc['db_query'](
-	'',
-	'
+list($buttons, $umKeys) = [[], []];
+$request = $smcFunc['db_query']('',	'
 	SELECT
 		id_button, name, target, type, position, link, status, permissions, parent, icon, sprite
 	FROM {db_prefix}um_menu',
@@ -176,22 +174,18 @@ while ($row = $smcFunc['db_fetch_assoc']($request)) {
 		'icon' => !empty($row['icon']) ? $row['icon'] : '',
 		'sprite' => !empty($row['sprite']) ? 1 : 0,
 	]);
+	$umKeys[] = 'um_button_' . $row['id_button'];
 }
 $smcFunc['db_free_result']($request);
 
-if (!empty($buttons)) {
-	$request = $smcFunc['db_query'](
-		'',
-		'
-		SELECT MAX(id_button)
-		FROM {db_prefix}um_menu',
-	);
-	[$max] = $smcFunc['db_fetch_row']($request);
-	$smcFunc['db_free_result']($request);
+$smcFunc['db_query']('', '
+		DELETE FROM {db_prefix}settings
+		WHERE variable = {string:umcount}',
+		['umcount' => 'um_count']
+);
 
-	$smcFunc['db_query'](
-		'',
-		'
+if (!empty($buttons)) {
+	$smcFunc['db_query']('', '
 		DELETE FROM {db_prefix}settings
 		WHERE variable LIKE {string:settings_search}
 			AND variable NOT IN ({array_string:settings})',
@@ -200,23 +194,29 @@ if (!empty($buttons)) {
 			'settings' => array_keys($buttons),
 		],
 	);
-	updateSettings(['um_count' => $max] + $buttons);
+	updateSettings(['um_keys' => implode(',', $umKeys)]);
 }
 
 // Now presenting... *drumroll*
 global $modSettings;
-$umSettings = !empty($modSettings['um_settings']) ? json_decode($modSettings['um_settings'], true) : [];
+$umSettings = !empty($modSettings['um_settings']) ? formatUmSettings($modSettings['um_settings']) : [];
 $um_settings = [
 	'um_fingerprint' => mb_strtolower(strval(bin2hex(random_bytes(5))), 'UTF-8'),
 	'um_icon_dimension' => $umSettings['um_icon_dimension'] ?? 32,
 	'um_secureCode' =>  strval(bin2hex(random_bytes(10))),
 ];
-updateSettings(['um_settings' =>  json_encode($um_settings)]);
+updateSettings(['um_settings' =>  serialize($um_settings)]);
 add_integration_function('integrate_pre_include', '$sourcedir/Subs-UltimateMenu.php');
 add_integration_function('integrate_load_theme', 'um_linking');
 add_integration_function('integrate_pre_load', 'um_get_settings');
 add_integration_function('integrate_menu_buttons', 'um_load_menu');
 add_integration_function('integrate_admin_areas', 'um_admin_areas');
+
+function formatUmSettings($um_settings)
+{
+	json_decode($um_settings);
+	return json_last_error() === JSON_ERROR_NONE ? json_decode($um_settings, true) : (@unserialize($um_settings) || []);
+}
 
 function check_table_existsUMInstaller($table)
 {
