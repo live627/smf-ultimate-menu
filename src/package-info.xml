@@ -6,7 +6,7 @@
 	<version>2.0.5</version>
 	<type>modification</type>
 
-	<install for="2.0.99 - 2.1.98">
+	<install for="2.1.*">
 		<code type="inline"><![CDATA[<?php
 			define('REQUIRED_PHP_VERSION', '8.0.0');
 			if (version_compare(PHP_VERSION, REQUIRED_PHP_VERSION, '<'))
@@ -27,7 +27,7 @@
 		<redirect url="?action=admin;area=umen" />
 	</install>
 
-	<uninstall for="2.0.99 - 2.1.98">
+	<uninstall for="2.1.*">
 		<readme parsebbc="true">uninstall.txt</readme>
 		<database>uninstall-optional.php</database>
 		<code>uninstall-required.php</code>
