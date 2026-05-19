@@ -24,8 +24,8 @@ list($where, $umButtons, $allUmModSettings) = [
 	[
 		'setting0' => 'um_menu',
 		'setting1' => 'um_count',
-		'setting1' => 'um_settings',
-		'setting2' => 'um_button%',
+		'setting2' => 'um_settings',
+		'setting3' => 'um_button%',
 	],
 ];
 array_walk($allUmModSettings, function($value, $key) use (&$where, &$modSettings) {
