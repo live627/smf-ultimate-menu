@@ -155,7 +155,9 @@ if (checkFieldExistsUMInstaller('um_menu', 'link')) {
 }
 
 list($buttons, $umKeys) = [[], []];
-$request = $smcFunc['db_query']('', '
+$request = $smcFunc['db_query'](
+	'',
+	'
 	SELECT
 		id_button, name, target, type, position, link, status, permissions, parent, icon, sprite
 	FROM {db_prefix}um_menu',
@@ -178,14 +180,18 @@ while ($row = $smcFunc['db_fetch_assoc']($request)) {
 }
 $smcFunc['db_free_result']($request);
 
-$smcFunc['db_query']('', '
+$smcFunc['db_query'](
+	'',
+	'
 		DELETE FROM {db_prefix}settings
 		WHERE variable = {string:umcount}',
-		['umcount' => 'um_count']
+	['umcount' => 'um_count'],
 );
 
 if (!empty($buttons)) {
-	$smcFunc['db_query']('', '
+	$smcFunc['db_query'](
+		'',
+		'
 		DELETE FROM {db_prefix}settings
 		WHERE variable LIKE {string:settings_search}
 			AND variable NOT IN ({array_string:settings})',
@@ -217,6 +223,7 @@ add_integration_function('integrate_admin_areas', 'um_admin_areas');
 function formatUmSettings($um_settings)
 {
 	json_decode($um_settings);
+
 	return json_last_error() === JSON_ERROR_NONE ? json_decode($um_settings, true) : (@unserialize($um_settings) || []);
 }
 

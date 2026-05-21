@@ -72,18 +72,23 @@ class ManageUltimateMenu implements ActionInterface
 			case 'success':
 				$this->um->um_alert_verbose($txt['um_menu_button_sprite_generated'], true);
 				break;
+
 			case 'failure':
 				$this->um->um_alert_verbose($txt['um_menu_button_sprite_error'], true);
 				break;
+
 			case 'dimchange':
 				$this->um->um_alert_verbose($txt['um_menu_dimchange'], true);
 				break;
+
 			case 'savebutton':
 				$this->um->um_alert_verbose($txt['um_menu_savebutton'], true);
 				break;
+
 			case '':
 				$this->um->um_alert_verbose($txt['admin_menu_um'], false);
 				break;
+
 			default:
 				$this->um->um_alert_verbose($txt['um_menu_button_sprite_drivel'], false);
 		}
@@ -161,7 +166,7 @@ class ManageUltimateMenu implements ActionInterface
 
 		$button_names = $this->um->getButtonNames();
 		list($options, $dimOutput) = [[1, 2, 3], ''];
-		array_walk($options, function($value, $key) use (&$dimOutput, $umSettings) {
+		array_walk($options, function ($value, $key) use (&$dimOutput, $umSettings) {
 			$dimOutput .= '
 					<option value="' . $value . '"' . ($umSettings['um_icon_dimension'] == ($value * 16) ? ' selected' : '') . '>' . ($value * 16) . '</option>';
 		});
@@ -215,7 +220,7 @@ class ManageUltimateMenu implements ActionInterface
 								$txt['um_menu_' . $rowData['position']],
 								isset($button_names[$rowData['parent']])
 									? $button_names[$rowData['parent']][1]
-									: '<span class="um_monospaced">' . $rowData['parent'] . '</span>'
+									: '<span class="um_monospaced">' . $rowData['parent'] . '</span>',
 							),
 					],
 					'sort' => [
@@ -229,11 +234,11 @@ class ManageUltimateMenu implements ActionInterface
 						'class' => 'centertext',
 					],
 					'data' => [
-						'function' => fn(array $rowData) : string =>
+						'function' => fn(array $rowData): string =>
 							sprintf(
 								'<input type="checkbox" name="status[%1$s]" id="status_%1$s" value="%1$s"%2$s>',
 								$rowData['id_button'],
-								$rowData['status'] == 'inactive' ? '' : ' checked="checked"'
+								$rowData['status'] == 'inactive' ? '' : ' checked="checked"',
 							),
 						'class' => 'centertext',
 					],
@@ -248,7 +253,7 @@ class ManageUltimateMenu implements ActionInterface
 						'class' => 'centertext',
 					],
 					'data' => [
-						'function' => fn(array $rowData) : string =>
+						'function' => fn(array $rowData): string =>
 							sprintf(
 								'<a href="%s?action=admin;area=umen;sa=editbutton;in=%d">%s</a>',
 								$scripturl,
@@ -286,7 +291,8 @@ class ManageUltimateMenu implements ActionInterface
 				],
 				[
 					'position' => 'below_table_data',
-					'value' => sprintf('<select name="um_icon_dimension" id="um_dimension" class="button um_dimension">
+					'value' => sprintf(
+						'<select name="um_icon_dimension" id="um_dimension" class="button um_dimension">
 					<option value="0" disabled selected>%s</option>' . $dimOutput . '
 				</select>
 				<input type="submit" name="generate" onclick="return confirm(\'%s\');" value="%s" class="button' . ($this->um->um_sprite_pending() ? ' um_pending' : '') . '">

@@ -49,7 +49,9 @@ class UltimateMenu
 				$where[] = 'min_posts = {int:min_posts}';
 			}
 		}
-		$request = $smcFunc['db_query']('', '
+		$request = $smcFunc['db_query'](
+			'',
+			'
 			SELECT
 				id_group, group_name, min_posts
 			FROM {db_prefix}membergroups
@@ -57,7 +59,7 @@ class UltimateMenu
 			[
 				'not_inherited' => -2,
 				'min_posts' => -1,
-			]
+			],
 		);
 
 		while ([$id, $name, $min_posts] = $smcFunc['db_fetch_row']($request)) {
@@ -81,11 +83,13 @@ class UltimateMenu
 	{
 		global $smcFunc;
 
-		$request = $smcFunc['db_query']('', '
+		$request = $smcFunc['db_query'](
+			'',
+			'
 			SELECT
 				id_button, name, target, type, position, link, status, permissions, parent, icon, sprite
 			FROM {db_prefix}um_menu
-			ORDER BY id_button ASC'
+			ORDER BY id_button ASC',
 		);
 		$allUmButtons = [];
 
@@ -110,7 +114,9 @@ class UltimateMenu
 		global $smcFunc;
 
 		$umButtons = [];
-		$request = $smcFunc['db_query']('', '
+		$request = $smcFunc['db_query'](
+			'',
+			'
 			SELECT
 				id_button, name, target, type, position, link, status, parent, icon, sprite
 			FROM {db_prefix}um_menu
@@ -120,7 +126,7 @@ class UltimateMenu
 				'sort' => $sort,
 				'offset' => $start,
 				'limit' => $items_per_page,
-			]
+			],
 		);
 
 		while ($row = $smcFunc['db_fetch_assoc']($request)) {
@@ -139,9 +145,11 @@ class UltimateMenu
 	{
 		global $smcFunc;
 
-		$request = $smcFunc['db_query']('', '
+		$request = $smcFunc['db_query'](
+			'',
+			'
 			SELECT COUNT(*)
-			FROM {db_prefix}um_menu'
+			FROM {db_prefix}um_menu',
 		);
 		[$numButtons] = $smcFunc['db_fetch_row']($request);
 		$smcFunc['db_free_result']($request);
@@ -173,10 +181,12 @@ class UltimateMenu
 		global $smcFunc, $settings;
 
 		list($umButtons, $umKeys) = [[], []];
-		$request = $smcFunc['db_query']('', '
+		$request = $smcFunc['db_query'](
+			'',
+			'
 			SELECT
 				id_button, name, target, type, position, link, status, permissions, parent, icon, sprite
-			FROM {db_prefix}um_menu'
+			FROM {db_prefix}um_menu',
 		);
 
 		while ($row = $smcFunc['db_fetch_assoc']($request)) {
@@ -196,14 +206,16 @@ class UltimateMenu
 		}
 		$smcFunc['db_free_result']($request);
 
-		$smcFunc['db_query']('', '
+		$smcFunc['db_query'](
+			'',
+			'
 			DELETE FROM {db_prefix}settings
 			WHERE variable LIKE {string:settings_search}' . (empty($umButtons) ? '' : '
 				AND variable NOT IN ({array_string:um_settings})'),
 			[
 				'settings_search' => 'um_button%',
 				'um_settings' => array_keys($umButtons),
-			]
+			],
 		);
 		updateSettings(['um_keys' => implode(',', $umKeys)]);
 		$this->um_cache_fingerprint('new');
@@ -218,12 +230,14 @@ class UltimateMenu
 	{
 		global $smcFunc;
 
-		$smcFunc['db_query']('', '
+		$smcFunc['db_query'](
+			'',
+			'
 			DELETE FROM {db_prefix}um_menu
 			WHERE id_button IN ({array_int:button_list})',
 			[
 				'button_list' => $ids,
-			]
+			],
 		);
 	}
 
@@ -238,14 +252,16 @@ class UltimateMenu
 			$status = !empty($updates['status'][$item['id_button']]) ? 'active' : 'inactive';
 
 			if ($status != $item['status']) {
-				$smcFunc['db_query']('', '
+				$smcFunc['db_query'](
+					'',
+					'
 					UPDATE {db_prefix}um_menu
 					SET status = {string:status}
 					WHERE id_button = {int:item}',
 					[
 						'status' => $status,
 						'item' => $item['id_button'],
-					]
+					],
 				);
 			}
 		}
@@ -263,7 +279,9 @@ class UltimateMenu
 	{
 		global $smcFunc;
 
-		$request = $smcFunc['db_query']('', '
+		$request = $smcFunc['db_query'](
+			'',
+			'
 			SELECT id_button
 			FROM {db_prefix}um_menu
 			WHERE name = {string:name}
@@ -271,7 +289,7 @@ class UltimateMenu
 			[
 				'name' => $name,
 				'id' => $id ?: 0,
-			]
+			],
 		);
 		$check = $smcFunc['db_num_rows']($request);
 		$smcFunc['db_free_result']($request);
@@ -287,7 +305,9 @@ class UltimateMenu
 		global $smcFunc;
 
 		if (!empty($menu_entry['in'])) {
-			$smcFunc['db_query']('', '
+			$smcFunc['db_query'](
+				'',
+				'
 				UPDATE {db_prefix}um_menu
 				SET
 					name = {string:name},
@@ -313,10 +333,12 @@ class UltimateMenu
 					'parent' => $menu_entry['parent'],
 					'icon' => $menu_entry['icon'],
 					'sprite' => (int) $menu_entry['sprite'] ?: 0,
-				]
+				],
 			);
 		} else {
-			$smcFunc['db_insert']('insert', '{db_prefix}um_menu',
+			$smcFunc['db_insert'](
+				'insert',
+				'{db_prefix}um_menu',
 				[
 					'name' => 'string',
 					'type' => 'string',
@@ -341,7 +363,7 @@ class UltimateMenu
 					$menu_entry['icon'],
 					(int) $menu_entry['sprite'],
 				],
-				['id_button']
+				['id_button'],
 			);
 		}
 	}
@@ -357,14 +379,16 @@ class UltimateMenu
 	{
 		global $smcFunc;
 
-		$request = $smcFunc['db_query']('', '
+		$request = $smcFunc['db_query'](
+			'',
+			'
 			SELECT
 				id_button, name, target, type, position, link, status, permissions, parent, icon, sprite
 			FROM {db_prefix}um_menu
 			WHERE id_button = {int:button}',
 			[
 				'button' => $id,
-			]
+			],
 		);
 		$row = $smcFunc['db_fetch_assoc']($request);
 		$smcFunc['db_free_result']($request);
@@ -391,8 +415,10 @@ class UltimateMenu
 	{
 		global $smcFunc;
 
-		$smcFunc['db_query']('', '
-			TRUNCATE {db_prefix}um_menu'
+		$smcFunc['db_query'](
+			'',
+			'
+			TRUNCATE {db_prefix}um_menu',
 		);
 	}
 
@@ -430,16 +456,19 @@ class UltimateMenu
 			switch ($task) {
 				case 'all':
 					unlink($icon);
-					$smcFunc['db_query']('', '
+					$smcFunc['db_query'](
+						'',
+						'
 						UPDATE {db_prefix}um_menu
 						SET	sprite = {int:sprite}, icon = {string:icon}
 						WHERE id_button > 0',
 						[
 							'sprite' => 0,
 							'icon' => '',
-						]
+						],
 					);
 					break;
+
 				case 'unassigned':
 					$assignedIndex = array_search(basename($icon), array_column($allUmButtons, 'icon'));
 
@@ -447,6 +476,7 @@ class UltimateMenu
 						unlink($icon);
 					}
 					break;
+
 				default:
 					foreach ($files as $file) {
 						if (in_array($settings['default_theme_dir'] . '/images/um_icons/' . $file, $icons)) {
@@ -458,7 +488,9 @@ class UltimateMenu
 					}
 
 					if (!empty($buttonIcons)) {
-						$smcFunc['db_query']('', '
+						$smcFunc['db_query'](
+							'',
+							'
 							UPDATE {db_prefix}um_menu
 							SET	sprite = {int:sprite}, icon = {string:icon}
 							WHERE icon IN ({array_int:button_icons})',
@@ -466,7 +498,7 @@ class UltimateMenu
 								'button_icons' => array_filter($buttonIcons),
 								'sprite' => 0,
 								'icon' => '',
-							]
+							],
 						);
 					}
 			}
@@ -489,7 +521,7 @@ class UltimateMenu
 
 		$files = new RecursiveIteratorIterator(
 			new RecursiveDirectoryIterator(realpath($pathName)),
-			RecursiveIteratorIterator::LEAVES_ONLY
+			RecursiveIteratorIterator::LEAVES_ONLY,
 		);
 		$files->setMaxDepth(0);
 
@@ -692,6 +724,7 @@ class UltimateMenu
 						$img = imagecreatefromstring(file_get_contents($src));
 					}
 					break;
+
 				default:
 					if (!$img = imagecreatefromjpeg($src)) {
 						$img = imagecreatefromstring(file_get_contents($src));
@@ -735,6 +768,7 @@ class UltimateMenu
 				case 'png':
 					imagepng($new, $dst, 0);
 					break;
+
 				default:
 					imagejpeg($new, $dst, 99);
 			}
@@ -811,7 +845,7 @@ class UltimateMenu
 	 */
 	public function icon_files_sort($array): array
 	{
-		usort($array, function($a, $b) {
+		usort($array, function ($a, $b) {
 			preg_match('/^um--(\d+)_/', $a, $matchesA);
 			preg_match('/^um--(\d+)_/', $b, $matchesB);
 			$numA = isset($matchesA[0]) ? (int) preg_replace("/^\D+/", '', $matchesA[0]) : 0;
@@ -853,7 +887,7 @@ class UltimateMenu
 		global $sourcedir, $settings, $smcFunc;
 
 		list($allUmButtons, $buttons) = [$this->total_getMenu(), []];
-		array_walk($allUmButtons, function($row) use (&$buttons, $settings) {
+		array_walk($allUmButtons, function ($row) use (&$buttons, $settings) {
 			$buttons['um_button_' . $row['id_button']] = (!empty($row['icon']) && file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $row['icon']) ? $row['icon'] : '');
 		});
 
@@ -875,18 +909,20 @@ class UltimateMenu
 
 		// only adjust buttons to use the sprite if the file was created
 		if ($success && !empty($changeAll)) {
-			array_walk($buttons, function($row, $key) use ($smcFunc) {
+			array_walk($buttons, function ($row, $key) use ($smcFunc) {
 				$number = sscanf($key, 'um_button_%d', $id);
 
 				if (!empty($row) && !empty($number)) {
-					$smcFunc['db_query']('', '
+					$smcFunc['db_query'](
+						'',
+						'
 						UPDATE {db_prefix}um_menu
 						SET	sprite = {int:sprite}
 						WHERE id_button = {int:id}',
 						[
 							'id' => $id,
-							'sprite' => 1
-						]
+							'sprite' => 1,
+						],
 					);
 				}
 			});
@@ -910,7 +946,7 @@ class UltimateMenu
 
 		if (file_exists($css_files[0]) && file_exists($css_files[1])) {
 			list($allUmButtons, $sprite_css, $sprite_min_css) = [$this->total_getMenu(), $this->um_minify_css(file_get_contents($css_files[0])), file_get_contents($css_files[1])];
-			array_walk($allUmButtons, function($row) use (&$buttonIconCount, &$buttonCssCount, $settings, $sprite_css, $sprite_min_css) {
+			array_walk($allUmButtons, function ($row) use (&$buttonIconCount, &$buttonCssCount, $settings, $sprite_css, $sprite_min_css) {
 				if (!empty($row['icon']) && file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $row['icon'])) {
 					$buttonIconCount++;
 					$find = '.main_icons.um_button_' . (int) $row['id_button'] . '::before, .um_icon_pseudo.um_button_' . (int) $row['id_button'];
@@ -963,9 +999,11 @@ class UltimateMenu
 				$vcode = um_cache_busting(true);
 				$this->um_updateSettings(['um_fingerprint' => $vcode]);
 				break;
+
 			case 'temp':
 				$vcode = um_cache_busting(true);
 				break;
+
 			default:
 				$vcode = um_cache_busting(false);
 		}
@@ -1001,12 +1039,14 @@ class UltimateMenu
 		global $umSettings;
 
 		$umUpdates = [];
+
 		foreach (['um_fingerprint', 'um_icon_dimension', 'um_secureCode'] as $setting) {
 			$umUpdates[$setting] = $um_settings[$setting] ?? $umSettings[$setting];
 		}
 
 		ksort($umSettings);
 		ksort($umUpdates);
+
 		if ($umSettings != $umUpdates) {
 			updateSettings(['um_settings' => serialize($umUpdates)]);
 			$umSettings = $umUpdates;
@@ -1023,7 +1063,7 @@ class UltimateMenu
 		global $settings;
 
 		$files = $this->getIconPathContents();
-		usort($files, function($a, $b) {
+		usort($files, function ($a, $b) {
 			list($numberA, $numberB, $matches) = [0, 0, []];
 
 			if (preg_match('/^um--(\\d+)_/u', $a, $matches)) {
@@ -1125,8 +1165,8 @@ class UltimateMenu
 			preg_replace(
 				['/\s*(\w)\s*{\s*/', '/\s*(\S*:)(\s*)([^;]*)(\s|\n)*;(\n|\s)*/', '/\n/', '/\s*}\s*/'],
 				['$1{ ', '$1$3;', '', '} '],
-				$css
-			)
+				$css,
+			),
 		));
 	}
 
@@ -1147,7 +1187,7 @@ class UltimateMenu
 				: (in_array($key, ['login', 'logout', 'signup'])
 				? '<span class="um_login">&#' . (empty($settings['login_main_menu'])
 				? '11089' : '11090') . ';&nbsp;' . $value['title'] . '</span>'
-				: $value['title'])
+				: $value['title']),
 			];
 
 			if (!empty($value['sub_buttons'])) {
