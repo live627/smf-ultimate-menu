@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace UltimateMenu;
+
 class BinaryMask
 {
 	protected static int $indexOffset = 0;
@@ -46,7 +48,7 @@ class BinaryMask
 		$minBit -= $indexOffset;
 
 		if ($minBit < 0) {
-			throw new Exception('Each element in the $bits array should be >=0');
+			throw new \Exception('Each element in the $bits array should be >=0');
 		}
 
 		$maxBit = max($bits);

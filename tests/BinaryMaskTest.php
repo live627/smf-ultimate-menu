@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use UltimateMenu\{BinaryIds, BinaryMask};
 
 final class BinaryMaskTest extends TestCase
 {

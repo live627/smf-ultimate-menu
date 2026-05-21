@@ -9,6 +9,9 @@ declare(strict_types=1);
  * @copyright Copyright (c) 2026, John Rayes
  * @license   http://opensource.org/licenses/MIT MIT
  */
+
+namespace UltimateMenu;
+
 class UltimateMenu
 {
 	/**
@@ -433,13 +436,13 @@ class UltimateMenu
 	 */
 	public function getButtonNames(): array
 	{
-		global $context, $user_info;
+		global $user_info;
 
 		// Load SMF's default menu context.
 		cache_put_data('menu_buttons-' . implode('_', $user_info['groups']) . '-' . $user_info['language'], null, 90);
 		setupMenuContext();
 
-		return $this->um_flatten($context['um_all_buttons'] ?? []);
+		return $this->um_flatten(Menu::$all_buttons);
 	}
 
 	/**

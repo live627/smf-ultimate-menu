@@ -1,4 +1,12 @@
 {
+    "autoload-dev": {
+        "psr-4": {
+            "UltimateMenu\\": "src/UltimateMenu/"
+        },
+        "files": [
+            "src/UltimateMenu/Subs-UltimateMenu.php"
+        ]
+    },
     "require": {
         "php": ">=8.0"
     },
@@ -22,7 +30,7 @@
     },
     "config": {
         "platform": {
-			"php": "8.3"
+            "php": "8.3"
         }
     },
     "version": "2.0.4"

@@ -19,8 +19,10 @@ if (file_exists(__DIR__ . '/SSI.php') && !defined('SMF')) {
 elseif (!defined('SMF')) {
 	die('<b>Error:</b> Cannot uninstall - please verify you put this in the same place as SMF\'s index.php.');
 }
-remove_integration_function('integrate_pre_include', '$sourcedir/Subs-UltimateMenu.php');
-remove_integration_function('integrate_menu_buttons', 'um_load_menu');
+
+remove_integration_function('integrate_pre_include', '$sourcedir/UltimateMenu/Subs-UltimateMenu.php');
+remove_integration_function('integrate_autoload', 'um_autoload');
+remove_integration_function('integrate_menu_buttons', 'UltimateMenu\Menu::main');
 remove_integration_function('integrate_admin_areas', 'um_admin_areas');
 remove_integration_function('integrate_load_theme', 'um_linking');
 remove_integration_function('integrate_pre_load', 'um_get_settings');

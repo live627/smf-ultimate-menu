@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /**
  * @package   Ultimate Menu mod
  * @version   2.0.5
@@ -8,6 +9,9 @@ declare(strict_types=1);
  * @copyright Copyright (c) 2026, John Rayes
  * @license   http://opensource.org/licenses/MIT MIT
  */
+
+namespace UltimateMenu;
+
 class ManageUltimateMenu
 {
 	private UltimateMenu $um;

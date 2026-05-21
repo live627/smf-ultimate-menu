@@ -74,14 +74,6 @@ $smcFunc['db_insert'] = function (): void {};
 $smcFunc['htmltrim'] = fn(string $string): string => trim($string);
 $smcFunc['htmlspecialchars'] = fn(string $string): string => htmlspecialchars($string, ENT_QUOTES);
 
-require_once $sourcePath . '/ManageUltimateMenu.php';
-
-require_once $sourcePath . '/Subs-UltimateMenu.php';
-
-require_once $sourcePath . '/Class-UltimateMenu.php';
-
-require_once $sourcePath . '/BinaryMask.php';
-
 require_once $langPath . '/ManageUltimateMenu.english.php';
 
 require_once './vendor/autoload.php';

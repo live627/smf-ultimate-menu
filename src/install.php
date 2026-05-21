@@ -212,10 +212,12 @@ $um_settings = [
 	'um_secureCode' =>  strval(bin2hex(random_bytes(10))),
 ];
 updateSettings(['um_settings' =>  json_encode($um_settings)]);
-add_integration_function('integrate_pre_include', '$sourcedir/Subs-UltimateMenu.php');
+
+add_integration_function('integrate_pre_include', '$sourcedir/UltimateMenu/Subs-UltimateMenu.php');
+add_integration_function('integrate_autoload', 'um_autoload');
 add_integration_function('integrate_load_theme', 'um_linking');
 add_integration_function('integrate_pre_load', 'um_get_settings');
-add_integration_function('integrate_menu_buttons', 'um_load_menu');
+add_integration_function('integrate_menu_buttons', 'UltimateMenu\Menu::main');
 add_integration_function('integrate_admin_areas', 'um_admin_areas');
 
 function check_table_existsUMInstaller($table)
