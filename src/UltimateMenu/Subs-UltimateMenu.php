@@ -76,7 +76,7 @@ function um_admin_areas(&$admin_areas): void
 
 			loadTemplate('ManageUltimateMenu');
 
-			(new ManageUltimateMenu($_GET['sa'] ?? ''));
+			UltimateMenu\ManageUltimateMenu::call();
 		},
 		'icon' => 'umen.png',
 		'subsections' => [

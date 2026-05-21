@@ -12,11 +12,20 @@ declare(strict_types=1);
 
 namespace UltimateMenu;
 
-class ManageUltimateMenu
+class ManageUltimateMenu implements ActionInterface
 {
+	use ActionTrait;
+
 	private UltimateMenu $um;
 
-	public function __construct(string $sa)
+	/****************
+	 * Public methods
+	 ****************/
+
+	/**
+	 * Dispatcher to whichever sub-action method is necessary.
+	 */
+	public function execute(): void
 	{
 		global $settings, $context, $txt;
 
@@ -40,15 +49,17 @@ class ManageUltimateMenu
 			],
 		];
 
-		$subActions = [
-			'manmenu' => 'ManageMenu',
-			'fileslist' => 'FilesList',
-			'addbutton' => 'AddButton',
+		$call = match ($_GET['sa'] ?? '') {
+			'manmenu'    => 'ManageMenu',
+			'fileslist'  => 'FilesList',
+			'addbutton'  => 'AddButton',
 			'editbutton' => 'EditButton',
 			'savebutton' => 'SaveButton',
 			'uploadicon' => 'UmUploadIcon',
-		];
-		call_user_func([$this, $subActions[$sa] ?? current($subActions)]);
+			default      => 'ManageMenu',
+		};
+
+		call_user_func([$this, $call]);
 	}
 
 	public function ManageMenu(): void
@@ -428,89 +439,6 @@ class ManageUltimateMenu
 		$context['default_list'] = 'files_list';
 	}
 
-	private function getInput(): array
-	{
-		$member_groups = $this->um->listGroups([-3]);
-		$button_names = $this->um->getButtonNames();
-		$args = [
-			'in' => FILTER_VALIDATE_INT,
-			'name' => FILTER_UNSAFE_RAW,
-			'icon' => FILTER_UNSAFE_RAW,
-			'sprite' => FILTER_VALIDATE_INT,
-			'position' => [
-				'filter' => FILTER_CALLBACK,
-				'options' => fn($v) => in_array($v, ['before', 'child_of', 'after']) ? $v : false,
-			],
-			'parent' => [
-				'filter' => FILTER_CALLBACK,
-				'options' => fn($v) => isset($button_names[$v]) ? $v : false,
-			],
-			'type' => [
-				'filter' => FILTER_CALLBACK,
-				'options' => fn($v) => in_array($v, ['forum', 'external']) ? $v : false,
-			],
-			'link' => FILTER_UNSAFE_RAW,
-			'permissions' => [
-				'filter' => FILTER_CALLBACK,
-				'flags' => FILTER_REQUIRE_ARRAY,
-				'options' => fn($v) => isset($member_groups[$v]) ? $v : false,
-			],
-			'status' => [
-				'filter' => FILTER_CALLBACK,
-				'options' => fn($v) => in_array($v, ['active', 'inactive']) ? $v : false,
-			],
-			'target' => [
-				'filter' => FILTER_CALLBACK,
-				'options' => fn($v) => in_array($v, ['_self', '_blank']) ? $v : false,
-			],
-		];
-
-		return filter_input_array(INPUT_POST, $args, false) ?: [];
-	}
-
-	private function validateInput(array $menu_entry): array
-	{
-		global $settings;
-
-		$post_errors = [];
-		$required_fields = [
-			'name',
-			'link',
-			'parent',
-		];
-
-		// If your session timed out, show an error, but do allow to re-submit.
-		if (checkSession('post', '', false) != '') {
-			$post_errors[] = 'um_menu_session_verify_fail';
-		}
-
-		// These fields are required!
-		foreach ($required_fields as $required_field) {
-			if (empty($menu_entry[$required_field])) {
-				$post_errors[$required_field] = 'um_menu_empty_' . $required_field;
-			}
-		}
-
-		// Stop making numeric names!
-		if (is_numeric($menu_entry['name'])) {
-			$post_errors['name'] = 'um_menu_numeric';
-		}
-
-		// Ensure the icon filename is legit
-		if (isset($menu_entry['icon']) && !empty($menu_entry['icon']) && empty($this->um->sanitizeFilename($menu_entry['icon']))) {
-			$post_errors['icon'] = 'um_menu_filename_illegal';
-		} elseif (isset($menu_entry['icon']) && $menu_entry['icon'] != '______' && !file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $menu_entry['icon'])) {
-			$post_errors['icon'] = 'um_menu_filename_exists';
-		}
-
-		// Let's make sure you're not trying to make a name that's already taken.
-		if (!empty($this->um->checkButton($menu_entry['in'], $menu_entry['name']))) {
-			$post_errors['name'] = 'um_menu_mysql';
-		}
-
-		return $post_errors;
-	}
-
 	public function SaveButton(): void
 	{
 		global $context, $txt, $settings;
@@ -730,5 +658,97 @@ class ManageUltimateMenu
 		}
 
 		return $json_msg ?: [];
+	}
+
+	/******************
+	 * Internal methods
+	 ******************/
+
+	/**
+	 * Constructor. Protected to force instantiation via self::load().
+	 */
+	protected function __construct() {}
+
+	private function getInput(): array
+	{
+		$member_groups = $this->um->listGroups([-3]);
+		$button_names = $this->um->getButtonNames();
+		$args = [
+			'in' => FILTER_VALIDATE_INT,
+			'name' => FILTER_UNSAFE_RAW,
+			'icon' => FILTER_UNSAFE_RAW,
+			'sprite' => FILTER_VALIDATE_INT,
+			'position' => [
+				'filter' => FILTER_CALLBACK,
+				'options' => fn($v) => in_array($v, ['before', 'child_of', 'after']) ? $v : false,
+			],
+			'parent' => [
+				'filter' => FILTER_CALLBACK,
+				'options' => fn($v) => isset($button_names[$v]) ? $v : false,
+			],
+			'type' => [
+				'filter' => FILTER_CALLBACK,
+				'options' => fn($v) => in_array($v, ['forum', 'external']) ? $v : false,
+			],
+			'link' => FILTER_UNSAFE_RAW,
+			'permissions' => [
+				'filter' => FILTER_CALLBACK,
+				'flags' => FILTER_REQUIRE_ARRAY,
+				'options' => fn($v) => isset($member_groups[$v]) ? $v : false,
+			],
+			'status' => [
+				'filter' => FILTER_CALLBACK,
+				'options' => fn($v) => in_array($v, ['active', 'inactive']) ? $v : false,
+			],
+			'target' => [
+				'filter' => FILTER_CALLBACK,
+				'options' => fn($v) => in_array($v, ['_self', '_blank']) ? $v : false,
+			],
+		];
+
+		return filter_input_array(INPUT_POST, $args, false) ?: [];
+	}
+
+	private function validateInput(array $menu_entry): array
+	{
+		global $settings;
+
+		$post_errors = [];
+		$required_fields = [
+			'name',
+			'link',
+			'parent',
+		];
+
+		// If your session timed out, show an error, but do allow to re-submit.
+		if (checkSession('post', '', false) != '') {
+			$post_errors[] = 'um_menu_session_verify_fail';
+		}
+
+		// These fields are required!
+		foreach ($required_fields as $required_field) {
+			if (empty($menu_entry[$required_field])) {
+				$post_errors[$required_field] = 'um_menu_empty_' . $required_field;
+			}
+		}
+
+		// Stop making numeric names!
+		if (is_numeric($menu_entry['name'])) {
+			$post_errors['name'] = 'um_menu_numeric';
+		}
+
+		// Ensure the icon filename is legit
+		if (isset($menu_entry['icon']) && !empty($menu_entry['icon']) && empty($this->um->sanitizeFilename($menu_entry['icon']))) {
+			$post_errors['icon'] = 'um_menu_filename_illegal';
+		} elseif (isset($menu_entry['icon']) && $menu_entry['icon'] != '______' && !file_exists($settings['default_theme_dir'] . '/images/um_icons/' . $menu_entry['icon'])) {
+			$post_errors['icon'] = 'um_menu_filename_exists';
+		}
+
+		// Let's make sure you're not trying to make a name that's already taken.
+		if (!empty($this->um->checkButton($menu_entry['in'], $menu_entry['name']))) {
+			$post_errors['name'] = 'um_menu_mysql';
+		}
+
+		return $post_errors;
 	}
 }

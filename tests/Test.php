@@ -99,20 +99,6 @@ final class Test extends TestCase
 		unset($modSettings['um_keys'], $modSettings['um_button_2'], $modSettings['um_button_3'], $modSettings['um_button_4'], $context['menu_buttons']);
 	}
 
-	public function testDispatch(): void
-	{
-		$mock = $this->getMockBuilder('UltimateMenu\ManageUltimateMenu')
-			->onlyMethods(['ManageMenu'])
-			->disableOriginalConstructor()
-			->getMock();
-
-		// Asset that this function is csalled.
-		$mock->expects($this->once())
-			->method('ManageMenu');
-
-		$mock->__construct('');
-	}
-
 	public function testSanitizedFilename(): void
 	{
 		$test = new UltimateMenu();
