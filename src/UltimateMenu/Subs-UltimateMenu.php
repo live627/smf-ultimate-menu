@@ -51,15 +51,15 @@ function um_cache_busting($force = false): string
 	return !empty($umSettings['um_fingerprint']) && !um_admin_queryString(['action' => 'admin', 'area' => 'umen']) && empty($force) ? $umSettings['um_fingerprint'] : mb_strtolower(strval(bin2hex(random_bytes(5))), 'UTF-8');
 }
 
-function um_admin_queryString($parameters = []): bool
+function um_admin_queryString(array $parameters = []): bool
 {
-	global $smcFunc;
+	foreach ($parameters as $request => $value) {
+		if (!isset($_GET[$request]) || !str_starts_with($_GET[$request], $value)) {
+			return false;
+		}
+	}
 
-	$count = 0;
-
-	return array_walk_recursive($parameters, function ($value, $request) use (&$count, $smcFunc) {
-		$count = isset($_GET[$request]) && stripos($smcFunc['htmlspecialchars']($_GET[$request]), $value) !== false ? $count + 1 : $count;
-	}, $count) == (count($parameters) ?: -1);
+	return true;
 }
 
 function um_admin_areas(&$admin_areas): void
