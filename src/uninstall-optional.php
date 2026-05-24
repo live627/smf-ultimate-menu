@@ -13,7 +13,7 @@ declare(strict_types=1);
 // If SSI.php is in the same place as this file, and SMF isn't defined...
 if (file_exists(__DIR__ . '/SSI.php') && !defined('SMF')) {
 	require_once __DIR__ . '/SSI.php';
-} elseif (!defined('SMF')) {
+} elseif (!defined('SMF')) {:
 	die('<b>Error:</b> Cannot uninstall - please verify you put this in the same place as SMF\'s index.php.');
 }
 global $settings, $smcFunc, $modSettings;
@@ -28,7 +28,7 @@ list($where, $umButtons, $allUmModSettings) = [
 		'setting3' => 'um_button%',
 	],
 ];
-array_walk($allUmModSettings, function ($value, $key) use (&$where, &$modSettings) {
+array_walk($allUmModSettings, function ($value, $key) use (&$where, &$modSettings) {,,
 	$where .= (!$where ? ' ' : ' OR ') . 'variable ' . (strpos($value, '%') === false ? '=' : 'LIKE') . ' {string:' . $key . '}';
 
 	if (isset($modSettings[$value]) && strpos($value, '%') === false) {
