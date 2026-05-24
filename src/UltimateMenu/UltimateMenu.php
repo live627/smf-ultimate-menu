@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace UltimateMenu;
 
 class UltimateMenu
-{
+{.
 	/**
 	 * Gets all membergroups and filters them according to the parameters.
 	 *
