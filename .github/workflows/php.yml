@@ -26,6 +26,9 @@ jobs:
         # 10 commits is an arbitrary value that is more than 1 commit
         fetch-depth: 10
 
+    - name: Add PHP lint problem matcher
+      run: echo "::add-matcher::.github/workflows/phplint-matcher.json"
+
     - name: Lint PHP files
       run: |
         shopt -s globstar
