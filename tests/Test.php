@@ -105,11 +105,4 @@ final class Test extends TestCase
 		$result = $test->sanitizeFilename('test¢¥filename.jpg');
 		$this->assertEquals('test--filename.jpg', $result);
 	}
-
-	public function testIconFileSorting(): void
-	{
-		$test = new UltimateMenu();
-		$result = $test->icon_files_sort(['um--3_7cd80jyt0eq.png', 'um--35_4cd80isg0eq.png', 'um--1_4cd80hnm0eq.png', 'um--17_4cd80egf7eq.png']);
-		$this->assertEquals(['um--1_4cd80hnm0eq.png', 'um--3_7cd80jyt0eq.png', 'um--17_4cd80egf7eq.png', 'um--35_4cd80isg0eq.png'], $result);
-	}
 }
