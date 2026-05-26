@@ -55,7 +55,7 @@ jobs:
     - name: Run test suite with coverage
       run: php vendor/bin/phpunit --coverage-clover coverage.clover.xml --coverage-text --log-teamcity teamcity.log
 
-    - run: cat teamccity.log
+    - run: cat teamcity.log
       if: success() || failure()
 
     - run: composer require --dev uma/ocular:^2
