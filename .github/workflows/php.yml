@@ -50,8 +50,12 @@ jobs:
     - name: Run PHP-CS-Fixer
       run: composer lint
 
+    - uses: mheap/phpunit-matcher-action@v1
+
     - name: Run test suite with coverage
-      run: php vendor/bin/phpunit --coverage-clover coverage.clover.xml --coverage-text
+      run: php vendor/bin/phpunit --coverage-clover coverage.clover.xml --coverage-text --log-teamcity teamcity.log
+
+    - run: cat teamccity.log
 
     - run: composer require --dev uma/ocular:^2
 
