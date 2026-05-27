@@ -674,7 +674,11 @@ class ManageUltimateMenu implements ActionInterface
 		$args = [
 			'in' => FILTER_VALIDATE_INT,
 			'name' => FILTER_UNSAFE_RAW,
-			'icon' => FILTER_UNSAFE_RAW,
+			'icon' => [
+				'filter' => FILTER_CALLBACK,
+				'flags' => FILTER_UNSAFE_RAW,
+				'options' => fn($v) => pathinfo($v, PATHINFO_EXTENSION) ? $v : '______',
+			],
 			'sprite' => FILTER_VALIDATE_INT,
 			'position' => [
 				'filter' => FILTER_CALLBACK,
