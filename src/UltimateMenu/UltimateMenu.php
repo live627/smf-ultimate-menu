@@ -11,6 +11,11 @@ declare(strict_types=1);
  */
 
 namespace UltimateMenu;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
+use Imagick;
+use GdImage;
+use finfo;
 
 class UltimateMenu
 {
@@ -455,7 +460,7 @@ class UltimateMenu
 							'
 							UPDATE {db_prefix}um_menu
 							SET	sprite = {int:sprite}, icon = {string:icon}
-							WHERE icon IN ({array_int:button_icons})',
+							WHERE icon IN ({array_string:button_icons})',
 							[
 								'button_icons' => array_filter($buttonIcons),
 								'sprite' => 0,
@@ -514,7 +519,7 @@ class UltimateMenu
 			}
 
 			$images[] = $filename;
-			$sortIndexes[] = $matches[1];
+			$sortIndexes[] = $matches[1] ?? '______';
 		}
 
 		array_multisort($sortIndexes, SORT_ASC, SORT_NUMERIC, $images);
@@ -1013,7 +1018,7 @@ class UltimateMenu
 		ksort($umUpdates);
 
 		if ($umSettings != $umUpdates) {
-			updateSettings(['um_settings' => serialize($umUpdates)]);
+			updateSettings(['um_settings' => json_encode($umUpdates)]);
 			$umSettings = $umUpdates;
 		}
 	}
