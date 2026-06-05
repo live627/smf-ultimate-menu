@@ -11,11 +11,6 @@ declare(strict_types=1);
  */
 
 namespace UltimateMenu;
-use RecursiveIteratorIterator;
-use RecursiveDirectoryIterator;
-use Imagick;
-use GdImage;
-use finfo;
 
 class UltimateMenu
 {
@@ -492,9 +487,9 @@ class UltimateMenu
 		$images = [];
 		$sortIndexes = [];
 
-		$iterator = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator($path),
-			RecursiveIteratorIterator::LEAVES_ONLY,
+		$iterator = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator($path),
+			\RecursiveIteratorIterator::LEAVES_ONLY,
 		);
 
 		$iterator->setMaxDepth(0);
@@ -660,10 +655,10 @@ class UltimateMenu
 
 		clearstatcache();
 
-		if (extension_loaded('imagick')) {
+		if (class_exists('\Imagick')) {
 			try {
 				$icon = new \Imagick($src);
-			} catch (ImagickException $e) {
+			} catch (\ImagickException $e) {
 				$error = true;
 			}
 
@@ -682,9 +677,9 @@ class UltimateMenu
 				$icon->setCompressionQuality(100);
 
 				if (!$crop) {
-					$icon->resizeImage($width, $height, Imagick::FILTER_CATROM, 1);
+					$icon->resizeImage($width, $height, \Imagick::FILTER_CATROM, 1);
 				} else {
-					$icon->resizeImage($resize_width, $resize_height, Imagick::FILTER_LANCZOS, 0.9);
+					$icon->resizeImage($resize_width, $resize_height, \Imagick::FILTER_LANCZOS, 0.9);
 					$icon->cropImage($width, $height, ($resize_width - $width) / 2, ($resize_height - $height) / 2);
 				}
 				clearstatcache();
@@ -1083,7 +1078,7 @@ class UltimateMenu
 		imagefill($sprite, 0, 0, $transparent);
 
 		foreach ($buttons as $key => $imagePath) {
-			$finfo = new finfo(FILEINFO_MIME_TYPE);
+			$finfo = new \finfo(FILEINFO_MIME_TYPE);
 			$mime = $finfo->file($dir . $imagePath);
 			$img = $mime == 'image/jpeg' ? imagecreatefromjpeg($dir . $imagePath) : imagecreatefrompng($dir . $imagePath);
 			$size = getimagesize($dir . $imagePath);
