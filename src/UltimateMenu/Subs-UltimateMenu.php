@@ -69,7 +69,7 @@ function um_admin_areas(&$admin_areas): void
 	loadLanguage('ManageUltimateMenu');
 	$admin_areas['config']['areas']['umen'] = [
 		'label' => $txt['um_admin_menu_um'],
-		'file' => 'ManageUltimateMenu.php',
+		'file' => 'UltimateMenu/ManageUltimateMenu.php',
 		'function' => function (): void {
 			loadCSSFile('ultimate-menu.css', ['default_theme' => true, 'minimize' => false, 'order_pos' => 902], 'um_admin');
 			loadJavaScriptFile('ultimate-menu.js', ['default_theme' => true, 'minimize' => false, 'defer' => true], 'um_admin');
