@@ -538,7 +538,7 @@ class UltimateMenu
 	{
 		global $txt;
 
-		list($sortIndexes, $filesList, $start, $files, $allbuttons) = [[], [], intval($_REQUEST['start']) ?? 0, $this->getIconPathContents(), $this->total_getMenu()];
+		list($sortIndexes, $filesList, $start, $files, $allbuttons, $sortFlag) = [[], [], intval($_REQUEST['start']) ?? 0, $this->getIconPathContents(), $this->total_getMenu(), isset($_GET['desc']) ? SORT_DESC : SORT_ASC];
 		$keyStart = $this->um_file_increment();
 
 		foreach ($files as $index => $file) {
@@ -563,7 +563,7 @@ class UltimateMenu
 			];
 		}
 
-		array_multisort($sortIndexes, SORT_NUMERIC, (isset($_GET['desc']) ? SORT_DESC : SORT_ASC), $filesList);
+		array_multisort($sortIndexes, $sortFlag, SORT_NUMERIC, $filesList);
 
 		return array_slice($filesList, $start, 20);
 	}
