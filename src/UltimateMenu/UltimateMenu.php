@@ -329,8 +329,6 @@ class UltimateMenu
 				],
 			);
 		}
-
-		//updateSettings(['settings_updated' => time()]);
 	}
 
 	/**
@@ -1112,6 +1110,7 @@ class UltimateMenu
 			}
 
 			$um_sprite = imagepng($sprite, $dir . '/um_sprite/ultimate-menu-buttons.png', 0);
+
 			imagedestroy($sprite);
 		}
 
