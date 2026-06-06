@@ -565,7 +565,7 @@ class UltimateMenu
 			&$sortIndexes,
 			isset($_GET['desc']) ? SORT_DESC : SORT_ASC,
 			SORT_NUMERIC,
-			&$filesList
+			&$filesList,
 		]);
 
 		return array_slice($filesList, $start, 20);
