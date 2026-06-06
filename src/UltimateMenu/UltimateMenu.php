@@ -1110,11 +1110,10 @@ class UltimateMenu
 			}
 
 			$um_sprite = imagepng($sprite, $dir . '/um_sprite/ultimate-menu-buttons.png', 0);
-
 			imagedestroy($sprite);
+			clearstatcache();
 		}
 
-		clearstatcache();
 		return !empty($um_sprite) ? $coordinates : [];
 	}
 
