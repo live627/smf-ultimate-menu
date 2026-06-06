@@ -563,7 +563,12 @@ class UltimateMenu
 			];
 		}
 
-		array_multisort($sortIndexes, $sortFlag, SORT_NUMERIC, $filesList);
+		call_user_func_array('array_multisort', [
+			&$sortIndexes,
+			$sortFlag,
+			SORT_NUMERIC,
+			&$filesList
+		]);
 
 		return array_slice($filesList, $start, 20);
 	}
