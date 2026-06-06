@@ -16,7 +16,7 @@ function um_get_settings(): void
 
 	if (!empty($modSettings['um_settings'])) {
 		$umSettings = json_decode($modSettings['um_settings'], true);
-		$umSettings['um_icon_dimension'] = (int) $umSettings['um_icon_dimension'];
+		$umSettings['um_icon_dimension'] = (int) $umSettings['um_icon_dimension'] ?? 32;
 	} else {
 		$umSettings = [
 			'um_fingerprint' => mb_strtolower(strval(bin2hex(random_bytes(5))), 'UTF-8'),

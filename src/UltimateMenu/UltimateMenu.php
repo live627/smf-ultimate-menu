@@ -156,7 +156,7 @@ class UltimateMenu
 	{
 		global $settings;
 
-		$images = glob($settings['default_theme_dir'] . '/images/um_icons/*.{jpg,jpeg,png}', GLOB_BRACE);
+		$images = array_diff(glob($settings['default_theme_dir'] . '/images/um_icons/*.{jpg,jpeg,png}', GLOB_BRACE), [$settings['default_theme_dir'] . '/images/um_icons/blank.png']);
 
 		return count($images);
 	}
@@ -219,6 +219,11 @@ class UltimateMenu
 		updateSettings(
 			['um_keys' => implode(',', array_keys($buttons))],
 		);
+
+		foreach ($buttons as $key => $button) {
+			updateSettings([$key => $button]);
+		}
+
 		$this->um_cache_fingerprint('new');
 	}
 
@@ -324,6 +329,8 @@ class UltimateMenu
 				],
 			);
 		}
+
+		//updateSettings(['settings_updated' => time()]);
 	}
 
 	/**
@@ -531,11 +538,20 @@ class UltimateMenu
 	{
 		global $txt;
 
-		list($filesList, $start, $files, $allbuttons) = [[], intval($_REQUEST['start']) ?? 0, $this->getIconPathContents(), $this->total_getMenu()];
+		list($sortIndexes, $filesList, $start, $files, $allbuttons) = [[], [], intval($_REQUEST['start']) ?? 0, $this->getIconPathContents(), $this->total_getMenu()];
+		$keyStart = $this->um_file_increment();
 
 		foreach ($files as $index => $file) {
+			if (preg_match('/^um--(\\d+)_/u', $file, $matches)) {
+				$key = (float) $matches[1];
+			} else {
+				$key = $keyStart;
+				$keyStart++;
+			}
+
+			$sortIndexes[] = $key;
 			$assignedIndex = array_search($file, array_column($allbuttons, 'icon'));
-			$filesList[] = [
+			$filesList[$key] = [
 				'id_file' => $index,
 				'name' => $file,
 				'assigned' => preg_match('/^um--(\d+)_/', $file, $matches) && is_bool($assignedIndex)
@@ -547,9 +563,9 @@ class UltimateMenu
 			];
 		}
 
-		$list = isset($_GET['desc']) ? array_reverse($filesList) : $filesList;
+		array_multisort($sortIndexes, SORT_NUMERIC, (isset($_GET['desc']) ? SORT_DESC : SORT_ASC), $filesList);
 
-		return array_slice($list, $start, 20);
+		return array_slice($filesList, $start, 20);
 	}
 
 	/**
@@ -1072,27 +1088,29 @@ class UltimateMenu
 			$spriteHeight = max($spriteHeight, $size[1]);
 		}
 
-		$sprite = imagecreatetruecolor($spriteWidth, $spriteHeight);
-		imagesavealpha($sprite, true);
-		$transparent = imagecolorallocatealpha($sprite, 0, 0, 0, 127);
-		imagefill($sprite, 0, 0, $transparent);
+		if ($spriteWidth && $spriteHeight) {
+			$sprite = imagecreatetruecolor($spriteWidth, $spriteHeight);
+			imagesavealpha($sprite, true);
+			$transparent = imagecolorallocatealpha($sprite, 0, 0, 0, 127);
+			imagefill($sprite, 0, 0, $transparent);
 
-		foreach ($buttons as $key => $imagePath) {
-			$finfo = new \finfo(FILEINFO_MIME_TYPE);
-			$mime = $finfo->file($dir . $imagePath);
-			$img = $mime == 'image/jpeg' ? imagecreatefromjpeg($dir . $imagePath) : imagecreatefrompng($dir . $imagePath);
-			$size = getimagesize($dir . $imagePath);
-			imagecopyresampled($sprite, $img, $currentX, 0, 0, 0, $umSettings['um_icon_dimension'], $umSettings['um_icon_dimension'], $size[0], $size[1]);
-			$coordinates[$key] = $currentX;
-			$currentX += $size[0];
-			$currentY += $size[1];
-			imagedestroy($img);
+			foreach ($buttons as $key => $imagePath) {
+				$finfo = new \finfo(FILEINFO_MIME_TYPE);
+				$mime = $finfo->file($dir . $imagePath);
+				$img = $mime == 'image/jpeg' ? imagecreatefromjpeg($dir . $imagePath) : imagecreatefrompng($dir . $imagePath);
+				$size = getimagesize($dir . $imagePath);
+				imagecopyresampled($sprite, $img, $currentX, 0, 0, 0, $umSettings['um_icon_dimension'], $umSettings['um_icon_dimension'], $size[0], $size[1]);
+				$coordinates[$key] = $currentX;
+				$currentX += $size[0];
+				$currentY += $size[1];
+				imagedestroy($img);
+			}
+
+			$um_sprite = imagepng($sprite, $dir . '/um_sprite/ultimate-menu-buttons.png', 0);
+			imagedestroy($sprite);
 		}
 
-		$um_sprite = imagepng($sprite, $dir . '/um_sprite/ultimate-menu-buttons.png', 0);
-		imagedestroy($sprite);
 		clearstatcache();
-
 		return !empty($um_sprite) ? $coordinates : [];
 	}
 
