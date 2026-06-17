@@ -1,64 +1,65 @@
 name: Tests
 
 on:
-  push:
-    branches:
-      - master
-    paths:
-      - '**.php'
-
   pull_request:
+  push:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
-    env:
-      XDEBUG_MODE: coverage
-
     steps:
-    - uses: actions/checkout@v6
-      with:
-        # Fetch 10 commits or Scrutinizer will throw ("Failed to retrieve commit parents.
-        # If you use a shallow git checkout, please checkout at least a depth of one.");
-        # see: RepositoryIntrospector at scrutinizer-ci/ocular GitHub repository
-        # 10 commits is an arbitrary value that is more than 1 commit
-        fetch-depth: 10
+      - uses: actions/checkout@v6
 
-    - name: Add PHP lint problem matcher
-      run: echo "::add-matcher::.github/workflows/phplint-matcher.json"
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          coverage: none
+          tools: cs2pr
 
-    - name: Lint PHP files
-      run: |
-        shopt -s globstar
-        php -l src/**/*.php tests/**/*.php
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
 
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v5
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
+      - name: Cache Composer dependencies
+        uses: actions/cache@v5
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
 
-    - name: Install dependencies
-      if: steps.composer-cache.outputs.cache-hit != 'true'
-      run: composer install --prefer-dist --no-progress
+      - name: Install dependencies
+        run: composer install --no-progress
 
-    - name: Run PHP-CS-Fixer
-      run: composer lint
+      - name: PHP-CS-Fixer (dry-run)
+        run: vendor/bin/php-cs-fixer fix --dry-run --allow-risky=yes --format=checkstyle | cs2pr
 
-    - uses: mheap/phpunit-matcher-action@v1
+      - uses: mheap/phpunit-matcher-action@v1
 
-    - name: Run test suite with coverage
-      run: php vendor/bin/phpunit --coverage-clover coverage.clover.xml --coverage-text --log-teamcity teamcity.log
+      - name: Enable Xdebug
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          coverage: xdebug
 
-    - run: cat teamcity.log
-      if: success() || failure()
+      - name: PHPUnit
+        id: phpunit
+        run: |
+          vendor/bin/phpunit \
+            --coverage-clover coverage.clover.xml \
+            --coverage-text \
+            --log-teamcity teamcity.log
 
-    - run: composer require --dev uma/ocular:^2
+      - name: Show TeamCity log
+        if: steps.phpunit.outcome == 'failure'
+        run: cat teamcity.log
 
-    - name: Uploading code coverage
-      run: php vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover.xml
+      - name: Upload Report to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          fail_ci_if_error: true
