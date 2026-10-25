@@ -21,7 +21,7 @@ elseif (!defined('SMF')) {
 }
 
 remove_integration_function('integrate_pre_include', '$sourcedir/UltimateMenu/Subs-UltimateMenu.php');
-remove_integration_function('integrate_autoload', 'um_autoload');
+remove_integration_function('integrate_autoload', 'UltimateMenu/ClassMap-UltimateMenu.php|um_autoload');
 remove_integration_function('integrate_menu_buttons', 'UltimateMenu\Menu::main');
 remove_integration_function('integrate_admin_areas', 'um_admin_areas');
 remove_integration_function('integrate_load_theme', 'um_linking');

@@ -26,16 +26,6 @@ function um_get_settings(): void
 	}
 }
 
-/**
- * Add the menu button
- * Called by:
- *        integrate_autoload
- */
-function um_autoload(&$class_map)
-{
-	$class_map['UltimateMenu\\'] = 'UltimateMenu/';
-}
-
 function um_linking(): void
 {
 	global $modSettings, $context, $umSettings;

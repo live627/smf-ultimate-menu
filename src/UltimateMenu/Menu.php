@@ -28,14 +28,10 @@ class Menu
 	{
 		global $modSettings, $user_info, $scripturl;
 
-		if (!isset($modSettings['um_keys'])) {
-			return;
-		}
-
 		$is_admin = allowedTo('admin_forum');
 		$forum_prefix = $scripturl . '?';
 		$group_map = array_flip($user_info['groups']);
-		$um_keys = explode(',', $modSettings['um_keys']);
+		$um_keys = explode(',', ($modSettings['um_keys'] ?? ''));
 
 		// Build flat indexes
 		$nodes = $menu_buttons;
